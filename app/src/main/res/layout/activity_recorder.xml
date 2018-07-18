@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ty.misakalove.RecorderActivity">
+
+    <com.ty.misakalovelibrary.camera.ChangbaRecordingPreviewView
+        android:id="@+id/surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/page_padding"
+        >
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/a9t"/>
+
+        <TextView
+            style="@style/text_white_12"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/sl_music"
+            android:text="选择音乐"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <CheckBox
+                style="@style/cb_record_menu"
+                android:drawableTop="@drawable/sl_rotate"
+                android:text="翻转"/>
+
+            <CheckBox
+                style="@style/cb_record_menu"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="日系"/>
+
+            <CheckBox
+                style="@style/cb_record_menu"
+                android:layout_marginTop="@dimen/dp_20"
+                android:drawableTop="@drawable/ic_count_down"
+                android:text="倒计时"/>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_86"
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingLeft="@dimen/dp_22"
+            android:paddingRight="@dimen/dp_22">
+
+            <ImageView
+                android:id="@+id/iv_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_count_down"/>
+
+            <TextView
+                style="@style/text_white_12"
+                android:layout_alignLeft="@id/iv_item"
+                android:layout_alignRight="@id/iv_item"
+                android:layout_below="@+id/iv_item"
+                android:layout_marginTop="@dimen/dp_4"
+                android:gravity="center"
+                android:text="道具"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_record"/>
+
+            <ImageView
+                android:id="@+id/iv_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_count_down"/>
+
+            <TextView
+                style="@style/text_white_12"
+                android:layout_alignLeft="@id/iv_upload"
+                android:layout_alignRight="@id/iv_upload"
+                android:layout_below="@+id/iv_upload"
+                android:layout_marginTop="@dimen/dp_4"
+                android:gravity="center"
+                android:text="上传"/>
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</FrameLayout>
