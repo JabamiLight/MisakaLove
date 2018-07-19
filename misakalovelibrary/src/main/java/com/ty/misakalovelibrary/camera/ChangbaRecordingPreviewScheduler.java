@@ -193,53 +193,53 @@ public class ChangbaRecordingPreviewScheduler
         Log.d("problem", "onMemoryWarning called");
     }
 
-    // encoder
-    protected MediaCodecSurfaceEncoder surfaceEncoder;
-    Surface surface = null;
-
-    public void createMediaCodecSurfaceEncoderFromNative(int width, int height, int bitRate, int frameRate) {
-        try {
-            surfaceEncoder = new MediaCodecSurfaceEncoder(width, height, bitRate, frameRate);
-            surface = surfaceEncoder.getInputSurface();
-        } catch (Exception e) {
-            Log.e("problem", "createMediaCodecSurfaceEncoder failed");
-        }
-    }
-
-    public void hotConfigEncoderFromNative(int width, int height, int bitRate, int fps) {
-        try {
-            if (surfaceEncoder != null) {
-                surfaceEncoder.hotConfig(width, height, bitRate, fps);
-                surface = surfaceEncoder.getInputSurface();
-            }
-        } catch (Exception e) {
-            Log.e("problem", "hotConfigMediaCodecSurfaceEncoder failed");
-        }
-    }
-
-    public long pullH264StreamFromDrainEncoderFromNative(byte[] returnedData) {
-        return surfaceEncoder.pullH264StreamFromDrainEncoderFromNative(returnedData);
-    }
-
-    public long getLastPresentationTimeUsFromNative() {
-        return surfaceEncoder.getLastPresentationTimeUs();
-    }
-
-    public Surface getEncodeSurfaceFromNative() {
-        return surface;
-    }
-
-    public void reConfigureFromNative(int targetBitrate) {
-        if (null != surfaceEncoder) {
-            surfaceEncoder.reConfigureFromNative(targetBitrate);
-        }
-    }
-
-    public void closeMediaCodecCalledFromNative() {
-        if (null != surfaceEncoder) {
-            surfaceEncoder.shutdown();
-        }
-    }
+//    // encoder
+//    protected MediaCodecSurfaceEncoder surfaceEncoder;
+//    Surface surface = null;
+//
+//    public void createMediaCodecSurfaceEncoderFromNative(int width, int height, int bitRate, int frameRate) {
+//        try {
+//            surfaceEncoder = new MediaCodecSurfaceEncoder(width, height, bitRate, frameRate);
+//            surface = surfaceEncoder.getInputSurface();
+//        } catch (Exception e) {
+//            Log.e("problem", "createMediaCodecSurfaceEncoder failed");
+//        }
+//    }
+//
+//    public void hotConfigEncoderFromNative(int width, int height, int bitRate, int fps) {
+//        try {
+//            if (surfaceEncoder != null) {
+//                surfaceEncoder.hotConfig(width, height, bitRate, fps);
+//                surface = surfaceEncoder.getInputSurface();
+//            }
+//        } catch (Exception e) {
+//            Log.e("problem", "hotConfigMediaCodecSurfaceEncoder failed");
+//        }
+//    }
+//
+//    public long pullH264StreamFromDrainEncoderFromNative(byte[] returnedData) {
+//        return surfaceEncoder.pullH264StreamFromDrainEncoderFromNative(returnedData);
+//    }
+//
+//    public long getLastPresentationTimeUsFromNative() {
+//        return surfaceEncoder.getLastPresentationTimeUs();
+//    }
+//
+//    public Surface getEncodeSurfaceFromNative() {
+//        return surface;
+//    }
+//
+//    public void reConfigureFromNative(int targetBitrate) {
+//        if (null != surfaceEncoder) {
+//            surfaceEncoder.reConfigureFromNative(targetBitrate);
+//        }
+//    }
+//
+//    public void closeMediaCodecCalledFromNative() {
+//        if (null != surfaceEncoder) {
+//            surfaceEncoder.shutdown();
+//        }
+//    }
 
     public native void hotConfig(int bitRate, int fps, int gopSize);
     public native void setBeautifyParam(int key, float value);
