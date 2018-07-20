@@ -73,17 +73,17 @@ public class ChangbaRecordingPreviewScheduler
     private int defaultCameraFacingId = CameraInfo.CAMERA_FACING_FRONT;
 
     @Override
-    public void createSurface(Surface surface, int width, int height) {
-        startPreview(surface, width, height, defaultCameraFacingId);
+    public void createSurface(AssetManager assetManager, int width, int height) {
+        startPreview(assetManager, width, height, defaultCameraFacingId);
     }
 
-    private void startPreview(Surface surface, int width, int height, final int cameraFacingId) {
-        if (isFirst) {
-            prepareEGLContext(surface, width, height, cameraFacingId);
+    private void startPreview(AssetManager assetManager, int width, int height, final int cameraFacingId) {
+//        if (isFirst) {
+            prepareEGLContext(assetManager, width, height, cameraFacingId);
             isFirst = false;
-        } else {
-            createWindowSurface(surface);
-        }
+//        } else {
+//            createWindowSurface(surface);
+//        }
         isSurfaceExsist = true;
     }
 
@@ -94,7 +94,7 @@ public class ChangbaRecordingPreviewScheduler
                 if (null != holder) {
                     Surface surface = holder.getSurface();
                     if (null != surface) {
-                        startPreview(surface, mPreviewView.getWidth(), mPreviewView.getHeight(), cameraFacingId);
+//                        startPreview(surface, mPreviewView.getWidth(), mPreviewView.getHeight(), cameraFacingId);
                     }
                 }
             }
@@ -103,7 +103,7 @@ public class ChangbaRecordingPreviewScheduler
         }
     }
 
-    public native void prepareEGLContext(Surface surface, int width, int height, int cameraFacingId);
+    public native void prepareEGLContext(AssetManager surface, int width, int height, int cameraFacingId);
 
     public native void createWindowSurface(Surface surface);
 
@@ -112,7 +112,7 @@ public class ChangbaRecordingPreviewScheduler
     public native void hotConfigQuality(int maxBitrate, int avgBitrate, int fps);
 
     @Override
-    public native void resetRenderSize(int width, int height);
+    public native void resetRenderSize(Surface surface, int width, int height);
 
     @Override
     public void destroySurface() {

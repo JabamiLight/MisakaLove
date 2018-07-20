@@ -10,9 +10,10 @@
 #include "../CommonTools.h"
 #define LOG_TAG "AssetReader"
 class AssetReader {
+
+public:
     static JavaVM* g_jvm;
     static jobject  assetManager;
-public:
     static void init(JavaVM *g_jvm, jobject assetManager);
     static void readSource( const char* vertexFilePath,
                      const char* fragFilePath,

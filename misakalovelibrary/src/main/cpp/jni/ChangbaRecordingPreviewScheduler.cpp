@@ -1,6 +1,11 @@
 
 #include "com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler.h"
+
 #define LOG_TAG "ChangbaRecordingPreviewScheduler"
+
+CameraPreviewControler *previewController;
+
+jobject g_obj;
 
 void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_startEncoding(JNIEnv *,
                                                                                          jobject,
@@ -43,8 +48,43 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchCame
 }
 
 void
-Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_prepareEGLContext(JNIEnv *env, jobject obj, jobject surface, jint screenWidth, jint screenHeight,
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_prepareEGLContext(JNIEnv *env,
+                                                                                        jobject obj,
+                                                                                        jobject assetManager,
+                                                                                        jint screenWidth,
+                                                                                        jint screenHeight,
                                                                                         jint cameraFacingId) {
+    previewController = new CameraPreviewControler();
+    JavaVM *g_jvm = NULL;
+    env->GetJavaVM(&g_jvm);
+    g_obj = env->NewGlobalRef(obj);
+    AssetReader::init(g_jvm, env->NewGlobalRef(assetManager));
+    previewController->prepareEGLContext(g_jvm, g_obj, screenWidth, screenHeight,
+                                         cameraFacingId);
+}
+
+
+
+void
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_resetRenderSize(JNIEnv *env,
+                                                                                      jobject instance,
+                                                                                      jobject surface,
+                                                                                      jint width,
+                                                                                      jint height) {
+    if (NULL != previewController) {
+        ANativeWindow *window = ANativeWindow_fromSurface(env, surface);
+        previewController->resetRenderSize(window,width, height);
+    }
+
+}
+
+void
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_notifyFrameAvailable(JNIEnv *,
+                                                                                           jobject) {
+
+    if (NULL != previewController) {
+        previewController->notifyFrameAvailable();
+    }
 }
 
 void
@@ -90,11 +130,7 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_destroyEGL
 
 }
 
-void
-Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_notifyFrameAvailable(JNIEnv *,
-                                                                                           jobject) {
 
-}
 
 void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_updateTexMatrix(JNIEnv *,
                                                                                            jobject,
@@ -125,5 +161,4 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_creat
         JNIEnv *env, jobject instance, jobject surface) {
 
 }
-
 

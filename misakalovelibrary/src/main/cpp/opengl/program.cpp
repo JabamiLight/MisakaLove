@@ -3,6 +3,7 @@
 //
 
 #include <GLES3/gl3.h>
+#include <GLES2/gl2ext.h>
 #include "program.h"
 
 Program::Program(const char *vertexPath, const char *fragPath) {
@@ -26,7 +27,6 @@ void Program::destory() {
 
 
 void Program::render() {
-
     glViewport(0,0,width,height);
     glUseProgram(mGLProgId);
     glClearColor(0.0f,0.0f,0.0f,0.0f);
@@ -54,6 +54,7 @@ void Program::initCoord() {
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
     }
+    glUseProgram(mGLProgId);
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
@@ -66,6 +67,7 @@ void Program::initCoord() {
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+    mIsInitialized= true;
 
 }
 
@@ -93,5 +95,9 @@ int Program::initTexture() {
     }
     return 1;
 
+}
+
+GLuint Program::getTextureId() {
+    return textureId;
 }
 

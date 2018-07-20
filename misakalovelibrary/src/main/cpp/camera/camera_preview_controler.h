@@ -7,12 +7,15 @@
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
-#include "../message_queue/handler.h"
-#include <EGL/eglplatform.h>
-#include <EGL/egl.h>
+#include "../libcommon/message_queue/handler.h"
 #include "../libcommon/CommonTools.h"
 #include "../libcommon/egl_core/egl_core.h"
 #include "camera_preview_render.h"
+
+#define CAMERA_FACING_BACK                                        0
+#define CAMERA_FACING_FRONT                                        1
+
+class CameraPreviewHandler;
 
 #define LOG_TAG "CameraPreviewControler"
 enum RenderThreadMessage {
@@ -31,28 +34,37 @@ enum RenderThreadMessage {
 class CameraPreviewControler {
 public:
     CameraPreviewControler();
-    void prepareEGLContext( JavaVM *g_jvm,
+
+    void prepareEGLContext(JavaVM *g_jvm,
                            jobject obj, int screenWidth, int screenHeight,
                            int cameraFacingId);
 
     void initialize();
 
+    void renderFrame();
+
+    void createPreviewSurface();
+
+    void resetRenderSize(ANativeWindow *pJobject, jint i, jint i1);
+
+    void notifyFrameAvailable();
+
 private:
-    int screenWidth,screenHeight;
-    ANativeWindow* window;
-    JavaVM* g_jvm;
+    int screenWidth, screenHeight;
+    ANativeWindow *_window;
+    JavaVM *g_jvm;
     //用于回调
     jobject obj;
     EGLCore *eglCore;
-    CameraPreviewRender* renderer;
-
-    void createPreviewSurface();
+    CameraPreviewRender *renderer;
 
     void buildRenderInstance();
 
     void configCamera();
 
     void startCameraPreview();
+
+    static void *threadStartCallback(void *myself);
 
     bool isInSwitchingCamera;
     bool pauseFlag;
@@ -64,6 +76,14 @@ private:
     int cameraHeight;
     int textureWidth;
     int textureHeight;
+    pthread_t _threadId;
+    CameraPreviewHandler *handler;
+
+    MessageQueue *queue;
+
+    void draw();
+
+    void processMessage();
 };
 
 

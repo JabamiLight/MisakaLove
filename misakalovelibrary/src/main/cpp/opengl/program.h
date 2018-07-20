@@ -14,6 +14,7 @@ public:
     Program(const char* vertexPath, const char* fragPath);
     void init(int width,int height);
     void render();
+    GLuint getTextureId();
 
 protected:
     virtual ~Program();
@@ -25,6 +26,7 @@ protected:
     GLuint VBO;
     GLuint textureId;
     int width,height;
+
 
 private:
     void initCoord();

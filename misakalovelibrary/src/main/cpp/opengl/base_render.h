@@ -13,9 +13,7 @@ class BaseRender {
 protected:
     virtual void render()=0;
     virtual void init(int degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth, int cameraHeight)=0;
-
-    Program* program;
-
+    Program* showProgram;
 };
 
 

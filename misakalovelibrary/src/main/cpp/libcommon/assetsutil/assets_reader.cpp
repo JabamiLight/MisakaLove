@@ -4,19 +4,22 @@
 
 #include "assets_reader.h"
 
+
+JavaVM* AssetReader::g_jvm = nullptr;
+jobject AssetReader::assetManager = nullptr;
 void
 AssetReader::readSource(const char *vertexFilePath, const char *fragFilePath, char *&vertexContent,
                         char *&fragContent) {
     int status;
     JNIEnv *env;
     bool isAttached = false;
-    status = g_jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
+    status = AssetReader::g_jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
     if (status < 0) {
-        g_jvm->AttachCurrentThread(&env, NULL);//将当前线程注册到虚拟机中．
+        AssetReader::g_jvm->AttachCurrentThread(&env, NULL);//将当前线程注册到虚拟机中．
         isAttached = true;
     }
     LOGI("ReadAssets");
-    AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
+    AAssetManager *mgr = AAssetManager_fromJava(env, AssetReader::assetManager);
     if (mgr == NULL) {
         LOGI(" %s", "AAssetManager==NULL");
         return;
@@ -34,8 +37,7 @@ AssetReader::readSource(const char *vertexFilePath, const char *fragFilePath, ch
     }
     mallocContent(assetFrag, fragContent);
     if (isAttached)
-        g_jvm->DetachCurrentThread();
-
+        AssetReader::g_jvm->DetachCurrentThread();
 }
 
 
@@ -45,18 +47,18 @@ void AssetReader::init(JavaVM *g_jvm, jobject assetManager) {
 }
 
 void AssetReader::destory() {
-    if (assetManager) {
+    if (AssetReader::assetManager) {
         int status;
         JNIEnv *env;
         bool isAttached = false;
-        status = g_jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
+        status = AssetReader::g_jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
         if (status < 0) {
-            g_jvm->AttachCurrentThread(&env, NULL);//将当前线程注册到虚拟机中．
+            AssetReader::g_jvm->AttachCurrentThread(&env, NULL);//将当前线程注册到虚拟机中．
             isAttached = true;
         }
-        env->DeleteGlobalRef(assetManager);
+        env->DeleteGlobalRef(AssetReader::assetManager);
         if (isAttached)
-            g_jvm->DetachCurrentThread();
+            AssetReader::g_jvm->DetachCurrentThread();
         AssetReader::g_jvm=NULL;
         AssetReader::assetManager= nullptr;
     }

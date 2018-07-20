@@ -6,12 +6,13 @@
 #include <sys/time.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
-#define UINT64_C        uint64_t
-#define INT16_MAX        32767
-#define INT16_MIN       -32768
+//#define UINT64_C        uint64_t
+//#define INT16_MAX        32767
+//#define INT16_MIN       -32768
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 typedef signed short SInt16;
@@ -69,7 +70,7 @@ static inline int getIndexOfMaxValueInArray(long* array, int length) {
 
 static inline bool isAACSuffix(const char* accompanyPath){
 	bool ret = false;
-	char *suffix = strrchr(accompanyPath, '.');
+	const char *suffix = strrchr(accompanyPath, '.');
 //	LOGI("suffix is %s", suffix);
 	if (0 == strcmp(suffix, ".aac")) {
 		ret = true;
@@ -79,7 +80,7 @@ static inline bool isAACSuffix(const char* accompanyPath){
 
 static inline bool isPNGSuffix(const char* picFilePath){
 	bool ret = false;
-	char *suffix = strrchr(picFilePath, '.');
+	const char *suffix = strrchr(picFilePath, '.');
 //	LOGI("suffix is %s", suffix);
 	if (0 == strcmp(suffix, ".png")) {
 		ret = true;

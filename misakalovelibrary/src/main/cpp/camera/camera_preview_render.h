@@ -11,16 +11,14 @@
 class CameraPreviewRender: public BaseRender {
 
 
-protected:
-    void render() override;
 
 public:
-    CameraPreviewRender(const char *vertexPath, const char *fragmentPath);
-
-protected:
+    void render() override;
+    CameraPreviewRender();
     void init(int degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
               int cameraHeight) override;
 
+    GLuint getCameraTexId();
 };
 
 
