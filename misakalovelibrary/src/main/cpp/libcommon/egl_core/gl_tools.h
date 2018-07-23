@@ -30,15 +30,15 @@ static inline GLuint loadShader(GLenum shaderType, const char* pSource) {
 				char* buf = (char*) malloc(infoLen);
 				if (buf) {
 					glGetShaderInfoLog(shader, infoLen, NULL, buf);
-					GL_LOGI("Could not compile shader %d:\n%s\n", shaderType, buf);
+					GL_LOGE("Could not compile shader %d:\n%s\n", shaderType, buf);
 					free(buf);
 				}
 			} else {
-				GL_LOGI( "Guessing at GL_INFO_LOG_LENGTH size\n");
+				GL_LOGE( "Guessing at GL_INFO_LOG_LENGTH size\n");
 				char* buf = (char*) malloc(0x1000);
 				if (buf) {
 					glGetShaderInfoLog(shader, 0x1000, NULL, buf);
-					GL_LOGI("Could not compile shader %d:\n%s\n", shaderType, buf);
+					GL_LOGE("Could not compile shader %d:\n%s\n", shaderType, buf);
 					free(buf);
 				}
 			}

@@ -12,6 +12,10 @@ public class ChangbaRecordingPreviewScheduler
     private ChangbaRecordingPreviewView mPreviewView;
     private ChangbaVideoCamera mCamera;
 
+    static {
+        System.loadLibrary("native-lib");
+    }
+
     public ChangbaRecordingPreviewScheduler(ChangbaRecordingPreviewView previewView, ChangbaVideoCamera camera) {
         isStopped = false;
         this.mPreviewView = previewView;
@@ -73,17 +77,17 @@ public class ChangbaRecordingPreviewScheduler
     private int defaultCameraFacingId = CameraInfo.CAMERA_FACING_FRONT;
 
     @Override
-    public void createSurface(AssetManager assetManager, int width, int height) {
-        startPreview(assetManager, width, height, defaultCameraFacingId);
+    public void createSurface(Surface surface, AssetManager assetManager, int width, int height) {
+        startPreview(surface,assetManager, width, height, defaultCameraFacingId);
     }
 
-    private void startPreview(AssetManager assetManager, int width, int height, final int cameraFacingId) {
-//        if (isFirst) {
-            prepareEGLContext(assetManager, width, height, cameraFacingId);
+    private void startPreview(Surface surface,AssetManager assetManager, int width, int height, final int cameraFacingId) {
+        if (isFirst) {
+            prepareEGLContext(surface,assetManager, width, height, cameraFacingId);
             isFirst = false;
-//        } else {
-//            createWindowSurface(surface);
-//        }
+        } else {
+            createWindowSurface(surface);
+        }
         isSurfaceExsist = true;
     }
 
@@ -103,7 +107,7 @@ public class ChangbaRecordingPreviewScheduler
         }
     }
 
-    public native void prepareEGLContext(AssetManager surface, int width, int height, int cameraFacingId);
+    public native void prepareEGLContext(Surface surface1, AssetManager assetManager, int width, int height, int cameraFacingId);
 
     public native void createWindowSurface(Surface surface);
 

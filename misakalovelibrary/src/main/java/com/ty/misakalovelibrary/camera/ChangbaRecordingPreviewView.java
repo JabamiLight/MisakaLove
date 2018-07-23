@@ -2,6 +2,7 @@ package com.ty.misakalovelibrary.camera;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -9,20 +10,21 @@ import android.view.SurfaceView;
 
 public class ChangbaRecordingPreviewView extends SurfaceView implements Callback {
 	private static final String TAG = "ChangbaRecordingPreviewView";
-	
-	public ChangbaRecordingPreviewView(Context context) {
-		super(context);
+
+	public ChangbaRecordingPreviewView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		SurfaceHolder surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 	}
 
+
 	public void surfaceCreated(SurfaceHolder holder) {
-//		Surface surface = holder.getSurface();
+		Surface surface = holder.getSurface();
 		int width = getWidth();
 		int height = getHeight();
 		if(null != mCallback){
-			mCallback.createSurface(getContext().getAssets(), width, height);
+			mCallback.createSurface(surface,getContext().getAssets(), width, height);
 		}
 	}
 
@@ -44,7 +46,7 @@ public class ChangbaRecordingPreviewView extends SurfaceView implements Callback
 		this.mCallback = callback;
 	}
 	public interface ChangbaRecordingPreviewViewCallback{
-		public void createSurface(AssetManager surface, int width, int height);
+		public void createSurface(Surface surface, AssetManager assetManager, int width, int height);
 		public void resetRenderSize(Surface surface, int width, int height);
 		public void destroySurface();
 	}

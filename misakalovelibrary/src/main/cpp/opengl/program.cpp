@@ -4,6 +4,7 @@
 
 #include <GLES3/gl3.h>
 #include <GLES2/gl2ext.h>
+
 #include "program.h"
 
 Program::Program(const char *vertexPath, const char *fragPath) {
@@ -27,11 +28,14 @@ void Program::destory() {
 
 
 void Program::render() {
-    glViewport(0,0,width,height);
+//    glViewport(0,0,width,height);
+    glViewport(0,0,1000,1000);
+    glClearColor(0.0f,1.0f,1.0f,0.0f);
+     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(mGLProgId);
-    glClearColor(0.0f,0.0f,0.0f,0.0f);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
+    glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 }
@@ -46,9 +50,9 @@ void Program::init(int width, int height) {
 void Program::initCoord() {
     float vertices[] = {
             -1.0f, -1.0f, -0.0f, 0.0f, 0.0f,
-            1.0f,-1.0f, -0.5f, 1.0f, 0.0f,
-            -1.0f, 1.0f, -0.5f, 0.0f, 1.0f,
-            1.0f, 1.0f, -0.5f, 1.0f, 1.0f,
+            1.0f,-1.0f, -0.0f, 1.0f, 0.0f,
+            -1.0f, 1.0f, -0.0f, 0.0f, 1.0f,
+            1.0f, 1.0f, -0.0f, 1.0f, 1.0f,
     };
     if (VAO && VBO) {
         glDeleteVertexArrays(1, &VAO);

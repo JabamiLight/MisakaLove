@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPrev
  * Signature: (Ljava/lang/Object;III)V
  */
 JNIEXPORT void JNICALL Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_prepareEGLContext
-  (JNIEnv *, jobject, jobject, jint, jint, jint);
+  (JNIEnv *, jobject,jobject ,jobject, jint, jint, jint);
 
 /*
  * Class:     com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler

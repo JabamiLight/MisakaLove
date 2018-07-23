@@ -50,6 +50,7 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchCame
 void
 Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_prepareEGLContext(JNIEnv *env,
                                                                                         jobject obj,
+                                                                                        jobject surface,
                                                                                         jobject assetManager,
                                                                                         jint screenWidth,
                                                                                         jint screenHeight,
@@ -59,7 +60,8 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_prepareEGL
     env->GetJavaVM(&g_jvm);
     g_obj = env->NewGlobalRef(obj);
     AssetReader::init(g_jvm, env->NewGlobalRef(assetManager));
-    previewController->prepareEGLContext(g_jvm, g_obj, screenWidth, screenHeight,
+    ANativeWindow* window=ANativeWindow_fromSurface(env,surface);
+    previewController->prepareEGLContext(window, g_jvm, g_obj, screenWidth, screenHeight,
                                          cameraFacingId);
 }
 

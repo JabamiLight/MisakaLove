@@ -16,7 +16,7 @@ void CameraPreviewRender::init(int degress, bool isVFlip, int textureWidth, int 
 }
 
 CameraPreviewRender::CameraPreviewRender() {
-    showProgram= new CameraPreviewProgram("/common/vertexshader.glsl", "/common/fragmentshader.glsl");
+    showProgram= new CameraPreviewProgram("common/vertexshader.glsl", "common/fragmentshader.glsl");
 
 }
 

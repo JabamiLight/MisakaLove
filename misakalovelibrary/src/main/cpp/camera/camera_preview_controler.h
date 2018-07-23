@@ -35,9 +35,6 @@ class CameraPreviewControler {
 public:
     CameraPreviewControler();
 
-    void prepareEGLContext(JavaVM *g_jvm,
-                           jobject obj, int screenWidth, int screenHeight,
-                           int cameraFacingId);
 
     void initialize();
 
@@ -48,6 +45,9 @@ public:
     void resetRenderSize(ANativeWindow *pJobject, jint i, jint i1);
 
     void notifyFrameAvailable();
+
+    void
+    prepareEGLContext(ANativeWindow *pWindow, JavaVM *pVM, jobject pJobject, jint i, jint i1, jint i2);
 
 private:
     int screenWidth, screenHeight;
@@ -84,6 +84,11 @@ private:
     void draw();
 
     void processMessage();
+
+    void prepareEGLContext(ANativeWindow *_window, JavaVM *g_jvm, jobject obj, jint screenWidth,
+                           jint screenHeight, jint cameraFacingId, jint i);
+
+    void updateTexImage();
 };
 
 

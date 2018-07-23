@@ -79,7 +79,7 @@ public class ChangbaVideoCamera {
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public void setCameraPreviewTexture(int textureId) {
-		Log.i(TAG, "setCameraPreviewTexture...");
+		Log.i(TAG, "setCameraPreviewTexture..."+textureId);
 		mCameraSurfaceTexture = new SurfaceTexture(textureId);
 		try {
 			mCamera.setPreviewTexture(mCameraSurfaceTexture);
@@ -87,7 +87,7 @@ public class ChangbaVideoCamera {
 				@Override
 				public void onFrameAvailable(SurfaceTexture surfaceTexture) {
 					if (null != mCallback) {
-//						Log.d("RecordingPublisher", "surfaceTexture time stamp is "+surfaceTexture.getTimestamp()/1000000000.0f);
+						Log.d("RecordingPublisher", "surfaceTexture time stamp is "+surfaceTexture.getTimestamp()/1000000000.0f);
 						mCallback.notifyFrameAvailable();
 					}
 				}
