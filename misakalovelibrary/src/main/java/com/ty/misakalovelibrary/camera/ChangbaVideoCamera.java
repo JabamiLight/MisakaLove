@@ -197,14 +197,13 @@ public class ChangbaVideoCamera {
 			if (parameters.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
 				parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
 			}
-
+			int degress = getCameraDisplayOrientation((Activity) mContext, id);
 			try {
 				mCamera.setParameters(parameters);
 			} catch (Exception e) {
 				throw new CameraParamSettingException("视频参数设置错误");
 			}
 
-			int degress = getCameraDisplayOrientation((Activity) mContext, id);
 			int cameraFacing = getCameraFacing(id);
 			return new CameraConfigInfo(degress, previewWidth, previewHeight, cameraFacing);
 		} catch (Exception e) {
@@ -289,6 +288,7 @@ public class ChangbaVideoCamera {
 		} else { // back-facing
 			result = (info.orientation - degrees + 360) % 360;
 		}
+
 		return result;
 	}
 

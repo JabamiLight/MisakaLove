@@ -49,6 +49,16 @@ public:
     void
     prepareEGLContext(ANativeWindow *pWindow, JavaVM *pVM, jobject pJobject, jint i, jint i1, jint i2);
 
+    void destroyWindowSurface();
+
+    void destroy();
+
+    void destroyEGLContext();
+
+    void switchCameraFacing();
+
+    void switchCamera();
+
 private:
     int screenWidth, screenHeight;
     ANativeWindow *_window;
@@ -89,6 +99,10 @@ private:
                            jint screenHeight, jint cameraFacingId, jint i);
 
     void updateTexImage();
+
+    void destroyPreviewSurface();
+
+    void releaseCamera();
 };
 
 
@@ -112,9 +126,9 @@ public:
             case MSG_EGL_CREATE_PREVIEW_SURFACE:
                 previewController->createPreviewSurface();
                 break;
-//            case MSG_SWITCH_CAMERA_FACING:
-//                previewController->switchCamera();
-//                break;
+            case MSG_SWITCH_CAMERA_FACING:
+                previewController->switchCamera();
+                break;
 //            case MSG_SWITCH_FILTER:
 //                previewController->switchFilter();
 //                break;
@@ -127,9 +141,9 @@ public:
 //            case MSG_EGL_DESTROY_PREVIEW_SURFACE:
 //                previewController->destroyPreviewSurface();
 //                break;
-//            case MSG_EGL_THREAD_EXIT:
-//                previewController->destroy();
-//                break;
+            case MSG_EGL_THREAD_EXIT:
+                previewController->destroy();
+                break;
             case MSG_RENDER_FRAME:
                 previewController->renderFrame();
                 break;

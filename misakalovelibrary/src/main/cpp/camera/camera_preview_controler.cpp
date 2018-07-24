@@ -50,9 +50,8 @@ void CameraPreviewControler::initialize() {
     this->buildRenderInstance();
     this->configCamera();
     renderer->init(degress, facingId == CAMERA_FACING_FRONT, textureWidth, textureHeight,
-                   cameraWidth, cameraHeight);
+                   cameraWidth, cameraHeight, screenWidth, screenHeight);
     this->startCameraPreview();
-
     isInSwitchingCamera = false;
     pauseFlag = false;
     continueFlag = false;
@@ -175,6 +174,7 @@ void CameraPreviewControler::resetRenderSize(ANativeWindow *window, jint screenW
     if (this->screenHeight != screenHeight || this->screenWidth != screenWidth) {
         this->screenWidth = screenWidth;
         this->screenHeight = screenHeight;
+        renderer->resetSize(screenWidth, screenHeight);
         handler->postMessage(new Message(MSG_EGL_CREATE_PREVIEW_SURFACE));
     }
 
@@ -226,5 +226,104 @@ void CameraPreviewControler::updateTexImage() {
         LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
     }
 
+}
+
+void CameraPreviewControler::destroyWindowSurface() {
+    LOGI("enter MVRecordingPreviewController::destroyWindowSurface");
+    if (handler)
+        handler->postMessage(new Message(MSG_EGL_DESTROY_PREVIEW_SURFACE));
+}
+
+void CameraPreviewControler::destroy() {
+    LOGI("enter MVRecordingPreviewController::destroy...");
+    this->destroyPreviewSurface();
+    if (renderer) {
+        renderer->destory();
+        delete renderer;
+        renderer = NULL;
+    }
+    this->releaseCamera();
+    eglCore->release();
+    delete eglCore;
+    eglCore = NULL;
+    LOGI("leave MVRecordingPreviewController::destroy...");
+
+}
+
+void CameraPreviewControler::destroyPreviewSurface() {
+    if (EGL_NO_SURFACE != previewSurface) {
+        eglCore->releaseSurface(previewSurface);
+        previewSurface = EGL_NO_SURFACE;
+        if (_window) {
+            LOGI("VideoOutput Releasing surfaceWindow");
+            ANativeWindow_release(_window);
+            _window = NULL;
+        }
+    }
+}
+
+void CameraPreviewControler::releaseCamera() {
+    LOGI("MVRecordingPreviewController::releaseCamera");
+    JNIEnv *env;
+    if (g_jvm->AttachCurrentThread(&env, NULL) != JNI_OK) {
+        LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
+        return;
+    }
+    if (env == NULL) {
+        LOGI("getJNIEnv failed");
+        return;
+    }
+    jclass jcls = env->GetObjectClass(obj);
+    if (NULL != jcls) {
+        jmethodID releaseCameraCallback = env->GetMethodID(jcls, "releaseCameraFromNative", "()V");
+        if (NULL != releaseCameraCallback) {
+            env->CallVoidMethod(obj, releaseCameraCallback);
+        }
+    }
+    if (g_jvm->DetachCurrentThread() != JNI_OK) {
+        LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
+        return;
+    }
+
+}
+
+void CameraPreviewControler::destroyEGLContext() {
+    LOGI("Stopping MVRecordingPreviewController thread");
+    if (handler) {
+        handler->postMessage(new Message(MSG_EGL_THREAD_EXIT));
+        handler->postMessage(new Message(MESSAGE_QUEUE_LOOP_QUIT_FLAG));
+    }
+    pthread_join(_threadId, 0);
+    if (queue) {
+        queue->abort();
+        delete queue;
+        queue = NULL;
+    }
+    delete handler;
+    handler = NULL;
+    LOGI("MVRecordingPreviewController thread stopped");
+
+}
+
+void CameraPreviewControler::switchCameraFacing() {
+    LOGI("MVRecordingPreviewController::refereshCameraFacing");
+    isInSwitchingCamera = true;
+    /*notify render thread that camera has changed*/
+    if (facingId == CAMERA_FACING_BACK) {
+        facingId = CAMERA_FACING_FRONT;
+    } else {
+        facingId = CAMERA_FACING_BACK;
+    }
+    if (handler)
+        handler->postMessage(new Message(MSG_SWITCH_CAMERA_FACING));
+    LOGI("leave MVRecordingPreviewController::refereshCameraFacing");
+}
+
+void CameraPreviewControler::switchCamera() {
+    this->releaseCamera();
+    this->configCamera();
+    renderer->setDegree(degress, facingId == CAMERA_FACING_FRONT);
+    this->startCameraPreview();
+    isInSwitchingCamera = false;
 }
 

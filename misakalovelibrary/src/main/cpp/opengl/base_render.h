@@ -10,9 +10,16 @@
 
 class BaseRender {
 
+public:
+    void resetSize(int screenWidth,int screenHeigth);
+    void destory();
+    void setDegree(int ,bool);
+
 protected:
     virtual void render()=0;
-    virtual void init(int degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth, int cameraHeight)=0;
+    virtual void init(jint degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
+                          int cameraHeight, int i, int i1)=0;
+
     Program* showProgram;
 };
 

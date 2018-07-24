@@ -44,7 +44,9 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switc
 void
 Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchCameraFacing(JNIEnv *,
                                                                                          jobject) {
-
+    if (NULL != previewController) {
+        previewController->switchCameraFacing();
+    }
 }
 
 void
@@ -127,9 +129,20 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_destroyWin
 }
 
 void
-Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_destroyEGLContext(JNIEnv *,
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_destroyEGLContext(JNIEnv *env,
                                                                                         jobject) {
 
+
+    if (NULL != previewController) {
+        previewController->destroyEGLContext();
+        delete previewController;
+        previewController = NULL;
+
+        if (g_obj != 0) {
+            env->DeleteGlobalRef(g_obj);
+            g_obj = 0;
+        }
+    }
 }
 
 

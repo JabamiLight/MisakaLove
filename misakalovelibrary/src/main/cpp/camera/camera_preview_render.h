@@ -15,10 +15,11 @@ class CameraPreviewRender: public BaseRender {
 public:
     void render() override;
     CameraPreviewRender();
-    void init(int degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
-              int cameraHeight) override;
+    void init(jint degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
+                  int cameraHeight, int i, int i1) override;
 
     GLuint getCameraTexId();
+
 };
 
 

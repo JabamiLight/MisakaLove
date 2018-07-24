@@ -6,5 +6,4 @@ in vec2 yuvTexCoords;
 out vec4 FragColor;
 void main() {
   FragColor = texture(yuvTexSampler, yuvTexCoords);
-//  FragColor = vec4(1.0,1.0,1.0,1.0);
 }

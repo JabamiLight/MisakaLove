@@ -13,6 +13,7 @@
         android:layout_height="match_parent"/>
 
     <FrameLayout
+        android:id="@+id/fl_config"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/page_padding"
@@ -38,6 +39,7 @@
             android:orientation="vertical">
 
             <CheckBox
+                android:id="@+id/cb_rotate"
                 style="@style/cb_record_menu"
                 android:drawableTop="@drawable/sl_rotate"
                 android:text="翻转"/>
@@ -48,6 +50,7 @@
                 android:text="日系"/>
 
             <CheckBox
+                android:id="@+id/cb_count_down"
                 style="@style/cb_record_menu"
                 android:layout_marginTop="@dimen/dp_20"
                 android:drawableTop="@drawable/ic_count_down"

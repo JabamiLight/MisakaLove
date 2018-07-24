@@ -9,10 +9,9 @@ void CameraPreviewRender::render() {
 }
 
 
-
-void CameraPreviewRender::init(int degress, bool isVFlip, int textureWidth, int textureHeight,
-                               int cameraWidth, int cameraHeight) {
-    showProgram->init(textureWidth,textureHeight);
+void CameraPreviewRender::init(jint degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
+                               int cameraHeight, int screenWidth, int screenHeight) {
+    showProgram->init(degress, isVFlip, screenWidth, screenHeight);
 }
 
 CameraPreviewRender::CameraPreviewRender() {
@@ -23,4 +22,5 @@ CameraPreviewRender::CameraPreviewRender() {
 GLuint CameraPreviewRender::getCameraTexId() {
     return showProgram->getTextureId();
 }
+
 

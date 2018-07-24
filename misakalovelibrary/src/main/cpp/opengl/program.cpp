@@ -8,10 +8,10 @@
 #include "program.h"
 
 Program::Program(const char *vertexPath, const char *fragPath) {
-    char* vertex;
-    char* fragment;
-    AssetReader::readSource(vertexPath,fragPath,vertex,fragment);
-    mGLProgId=loadProgram(vertex,fragment);
+    char *vertex;
+    char *fragment;
+    AssetReader::readSource(vertexPath, fragPath, vertex, fragment);
+    mGLProgId = loadProgram(vertex, fragment);
 }
 
 Program::~Program() {
@@ -24,54 +24,108 @@ void Program::destory() {
         glDeleteProgram(mGLProgId);
         mGLProgId = 0;
     }
+    if (VAO && VBO) {
+        glDeleteVertexArrays(8, VAO);
+        glDeleteBuffers(9, VBO);
+    }
+    if(textureId){
+        glDeleteTextures(1,&textureId);
+    }
 }
 
 
 void Program::render() {
-//    glViewport(0,0,width,height);
-    glViewport(0,0,1000,1000);
-    glClearColor(0.0f,1.0f,1.0f,0.0f);
-     glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(0, 0, width, height);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(mGLProgId);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
-    glBindVertexArray(VAO);
+    glBindVertexArray(VAO[vaoIndex]);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
 }
 
-void Program::init(int width, int height) {
-    this->width=width;
-    this->height=height;
+void Program::init(int degress, bool isVFlip, int width, int height) {
+    this->width = width;
+    this->height = height;
+    chooseVertex(degress, isVFlip);
     initCoord();
     initTexture();
 }
 
 void Program::initCoord() {
     float vertices[] = {
-            -1.0f, -1.0f, -0.0f, 0.0f, 0.0f,
-            1.0f,-1.0f, -0.0f, 1.0f, 0.0f,
-            -1.0f, 1.0f, -0.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, -0.0f, 1.0f, 1.0f,
+            -1.0f, -1.0f,
+            1.0f, -1.0f,
+            -1.0f, 1.0f,
+            1.0f, 1.0f,
     };
-    if (VAO && VBO) {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-    }
+    float textCoord[] = {
+
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+
+            1.0f, 0.0f,
+            0.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+
+            //«∞÷√…„œÒÕ∑æµœÒ
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 0.0f,
+
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+    };
+
+    VBO = new GLuint[9];
+    VAO = new GLuint[8];
     glUseProgram(mGLProgId);
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glGenVertexArrays(8, VAO);
+    glGenBuffers(9, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), NULL);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          reinterpret_cast<const void *>(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    for (int i = 0; i < 8; i++) {
+        glBindVertexArray(VAO[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
+        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), textCoord + i * 8, GL_STATIC_DRAW);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(1);
+    }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    mIsInitialized= true;
+    mIsInitialized = true;
 
 }
 
@@ -103,5 +157,31 @@ int Program::initTexture() {
 
 GLuint Program::getTextureId() {
     return textureId;
+}
+
+void Program::resetSize(int screenWidth, int screenHeight) {
+    this->width = screenWidth;
+    this->height = screenHeight;
+}
+
+void Program::chooseVertex(int degress, bool flip) {
+    switch (degress) {
+        case 90:
+            vaoIndex = 1;
+            break;
+        case 180:
+            vaoIndex = 2;
+            break;
+        case 270:
+            vaoIndex = 3;
+            break;
+        case 0:
+        default:
+            vaoIndex = 0;
+            break;
+    }
+    if (flip) {
+        vaoIndex+=4;
+    }
 }
 
