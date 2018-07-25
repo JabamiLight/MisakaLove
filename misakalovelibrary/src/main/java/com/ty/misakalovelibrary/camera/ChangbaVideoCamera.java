@@ -21,10 +21,10 @@ import java.util.List;
 public class ChangbaVideoCamera {
 	private static final String TAG = "ChangbaVideoCamera";
 
-	public static int VIDEO_WIDTH = 640;
-	public static int DEFAULT_VIDEO_WIDTH = 640;
-	public static int VIDEO_HEIGHT = 480;
-	public static int DEFAULT_VIDEO_HEIGHT = 480;
+	public static int VIDEO_WIDTH = 720;
+	public static int DEFAULT_VIDEO_WIDTH = 720;
+	public static int VIDEO_HEIGHT = 1280;
+	public static int DEFAULT_VIDEO_HEIGHT = 1280;
 	public static int videoFrameRate = 24;
 
 	public static void forcePreviewSize_640_480() {
@@ -87,7 +87,7 @@ public class ChangbaVideoCamera {
 				@Override
 				public void onFrameAvailable(SurfaceTexture surfaceTexture) {
 					if (null != mCallback) {
-						Log.d("RecordingPublisher", "surfaceTexture time stamp is "+surfaceTexture.getTimestamp()/1000000000.0f);
+//						Log.d("RecordingPublisher", "surfaceTexture time stamp is "+surfaceTexture.getTimestamp()/1000000000.0f);
 						mCallback.notifyFrameAvailable();
 					}
 				}
@@ -145,8 +145,8 @@ public class ChangbaVideoCamera {
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	private CameraConfigInfo setUpCamera(final int id) throws CameraParamSettingException {
-		 forcePreviewSize_640_480();
-//		forcePreviewSize_1280_720();
+//		 forcePreviewSize_640_480();
+		forcePreviewSize_1280_720();
 		// printStackTrace(CameraLoader.class);
 		try {
 			// 1、开启Camera

@@ -113,8 +113,8 @@ void CameraPreviewControler::configCamera() {
 //			textureWidth = previewMin >= 480 ? 480 : previewMin;
 //			textureHeight = textureWidth;
 
-            textureWidth = 360;
-            textureHeight = 640;
+            textureWidth = cameraWidth;
+            textureHeight = cameraHeight;
 //			textureWidth = 720;
 //			textureHeight = 1280;
             LOGI("camera : {%d, %d}", previewWidth, previewHeight);

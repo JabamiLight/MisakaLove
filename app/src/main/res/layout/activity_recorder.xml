@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ty.misakalove.RecorderActivity">
+    tools:context="com.ty.misakalove.activity.RecorderActivity">
 
     <com.ty.misakalovelibrary.camera.ChangbaRecordingPreviewView
         android:id="@+id/surface"
@@ -44,10 +44,26 @@
                 android:drawableTop="@drawable/sl_rotate"
                 android:text="翻转"/>
 
-            <CheckBox
-                style="@style/cb_record_menu"
-                android:layout_marginTop="@dimen/dp_20"
-                android:text="日系"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_filter"
+                    style="@style/cb_record_menu"
+                    android:layout_width="@dimen/dp_31"
+                    android:layout_height="@dimen/dp_31"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:src="@drawable/ic_launcher_foreground"
+                    />
+
+                <TextView
+                    style="@style/text_white_12"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:text="日系"/>
+            </LinearLayout>
 
             <CheckBox
                 android:id="@+id/cb_count_down"
@@ -107,5 +123,12 @@
         </RelativeLayout>
 
     </FrameLayout>
+
+    <include
+        layout="@layout/include_filter_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="gone"/>
 
 </FrameLayout>

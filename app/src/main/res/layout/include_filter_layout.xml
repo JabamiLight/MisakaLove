@@ -2,12 +2,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_filter"
+    android:background="@drawable/shape_round_whiter"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="@dimen/page_padding"
     android:orientation="vertical">
 
 
     <LinearLayout
+        android:padding="@dimen/dp_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -28,12 +32,11 @@
 
     </LinearLayout>
 
-
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_filter"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

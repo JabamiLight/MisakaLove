@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.4.1)
 add_subdirectory(./opengl)
 add_subdirectory(./libcommon)
 add_subdirectory(./camera)
+add_subdirectory(./libeditcore)
 add_library( # Sets the name of the library.
              native-lib
              SHARED

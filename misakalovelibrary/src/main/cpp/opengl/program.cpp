@@ -28,8 +28,8 @@ void Program::destory() {
         glDeleteVertexArrays(8, VAO);
         glDeleteBuffers(9, VBO);
     }
-    if(textureId){
-        glDeleteTextures(1,&textureId);
+    if (textureId) {
+        glDeleteTextures(1, &textureId);
     }
 }
 
@@ -104,27 +104,28 @@ void Program::initCoord() {
             1.0f, 0.0f,
 
     };
-
-    VBO = new GLuint[9];
-    VAO = new GLuint[8];
-    glUseProgram(mGLProgId);
-    glGenVertexArrays(8, VAO);
-    glGenBuffers(9, VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    for (int i = 0; i < 8; i++) {
-        glBindVertexArray(VAO[i]);
+    if (!VAO && !VBO) {
+        VBO = new GLuint[9];
+        VAO = new GLuint[8];
+        glUseProgram(mGLProgId);
+        glGenVertexArrays(8, VAO);
+        glGenBuffers(9, VBO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-        glEnableVertexAttribArray(0);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        for (int i = 0; i < 8; i++) {
+            glBindVertexArray(VAO[i]);
+            glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
+            glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+            glEnableVertexAttribArray(0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
-        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), textCoord + i * 8, GL_STATIC_DRAW);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-        glEnableVertexAttribArray(1);
+            glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
+            glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), textCoord + i * 8, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+            glEnableVertexAttribArray(1);
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
     }
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
     mIsInitialized = true;
 
 }
@@ -181,7 +182,7 @@ void Program::chooseVertex(int degress, bool flip) {
             break;
     }
     if (flip) {
-        vaoIndex+=4;
+        vaoIndex += 4;
     }
 }
 

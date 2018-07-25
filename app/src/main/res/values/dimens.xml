@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="dp_31">31dp</dimen>
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_2">2dp</dimen>
     <dimen name="dp_3">3dp</dimen>
@@ -62,5 +63,4 @@
 
 
     <dimen name="page_padding">16dp</dimen>
-
 </resources>

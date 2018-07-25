@@ -23,12 +23,10 @@ protected:
     GLuint mGLProgId;
     bool mIsInitialized;
     GLuint mTextureLocation;
-    GLuint* VAO;
-    GLuint* VBO;
+    GLuint* VAO= nullptr;
+    GLuint* VBO= nullptr;
     GLuint textureId;
     int width,height;
-    float* vertices;
-    float* textureVertex;
     int vaoIndex=0;
 
 private:

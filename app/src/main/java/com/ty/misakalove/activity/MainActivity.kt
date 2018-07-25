@@ -1,9 +1,10 @@
-package com.ty.misakalove
+package com.ty.misakalove.activity
 
 import android.Manifest
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.tbruyelle.rxpermissions2.RxPermissions
+import com.ty.misakalove.R
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
