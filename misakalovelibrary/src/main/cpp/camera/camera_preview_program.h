@@ -7,12 +7,14 @@
 
 
 #include "../opengl/program.h"
-
+#include <GLES2/gl2ext.h>
 class CameraPreviewProgram: public Program {
 public:
     CameraPreviewProgram(const char *vertexPath, const char *fragPath);
 
-protected:
+    int initTexture() override;
+
+    void render() override;
 };
 
 

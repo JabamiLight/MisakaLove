@@ -28,6 +28,8 @@ public:
     void process();
 
     void addFilter(Program* program);
+
+    GLuint getAfterTextureId();
 };
 
 

@@ -6,7 +6,8 @@
 #include <GLES2/gl2ext.h>
 
 #include "program.h"
-
+GLuint* Program::VAO= nullptr;
+GLuint* Program::VBO= nullptr;
 Program::Program(const char *vertexPath, const char *fragPath) {
     char *vertex;
     char *fragment;
@@ -24,9 +25,9 @@ void Program::destory() {
         glDeleteProgram(mGLProgId);
         mGLProgId = 0;
     }
-    if (VAO && VBO) {
-        glDeleteVertexArrays(8, VAO);
-        glDeleteBuffers(9, VBO);
+    if (Program::VAO && Program::VBO) {
+        glDeleteVertexArrays(8, Program::VAO);
+        glDeleteBuffers(9, Program::VBO);
     }
     if (textureId) {
         glDeleteTextures(1, &textureId);
@@ -40,8 +41,8 @@ void Program::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(mGLProgId);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
-    glBindVertexArray(VAO[vaoIndex]);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glBindVertexArray(Program::VAO[vaoIndex]);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
@@ -54,71 +55,73 @@ void Program::init(int degress, bool isVFlip, int width, int height) {
 }
 
 void Program::initCoord() {
-    float vertices[] = {
-            -1.0f, -1.0f,
-            1.0f, -1.0f,
-            -1.0f, 1.0f,
-            1.0f, 1.0f,
-    };
-    float textCoord[] = {
 
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            0.0f, 0.0f,
-            1.0f, 0.0f,
+    if (!Program::VAO && !Program::VBO) {
+        float vertices[] = {
+                -1.0f, -1.0f,
+                1.0f, -1.0f,
+                -1.0f, 1.0f,
+                1.0f, 1.0f,
+        };
+        float textCoord[] = {
 
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 1.0f,
-            0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                0.0f, 0.0f,
+                1.0f, 0.0f,
 
-            1.0f, 0.0f,
-            0.0f, 0.0f,
-            1.0f, 1.0f,
-            0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f,
 
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-            1.0f, 0.0f,
-            1.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 0.0f,
+                1.0f, 1.0f,
+                0.0f, 1.0f,
 
-            //«∞÷√…„œÒÕ∑æµœÒ
-            0.0f, 1.0f,
-            0.0f, 0.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f,
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                1.0f, 1.0f,
 
-            1.0f, 0.0f,
-            1.0f, 1.0f,
-            0.0f, 0.0f,
-            0.0f, 1.0f,
+                //«∞÷√…„œÒÕ∑æµœÒ
+                0.0f, 1.0f,
+                0.0f, 0.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
 
-            1.0f, 1.0f,
-            0.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 0.0f,
+                1.0f, 0.0f,
+                1.0f, 1.0f,
+                0.0f, 0.0f,
+                0.0f, 1.0f,
 
-            0.0f, 1.0f,
-            0.0f, 0.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f,
+                1.0f, 1.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 0.0f,
 
-    };
-    if (!VAO && !VBO) {
-        VBO = new GLuint[9];
-        VAO = new GLuint[8];
+                0.0f, 1.0f,
+                0.0f, 0.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+        };
+
+        Program::VBO = new GLuint[9];
+        Program::VAO = new GLuint[8];
         glUseProgram(mGLProgId);
-        glGenVertexArrays(8, VAO);
-        glGenBuffers(9, VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
+        glGenVertexArrays(8, Program::VAO);
+        glGenBuffers(9, Program::VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, Program::VBO[8]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
         for (int i = 0; i < 8; i++) {
-            glBindVertexArray(VAO[i]);
-            glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
+            glBindVertexArray(Program::VAO[i]);
+            glBindBuffer(GL_ARRAY_BUFFER, Program::VBO[8]);
             glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
             glEnableVertexAttribArray(0);
 
-            glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
+            glBindBuffer(GL_ARRAY_BUFFER, Program::VBO[i]);
             glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), textCoord + i * 8, GL_STATIC_DRAW);
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
             glEnableVertexAttribArray(1);
@@ -132,23 +135,23 @@ void Program::initCoord() {
 
 int Program::initTexture() {
     glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
     if (checkGlError("glBindTexture")) {
         return -1;
     }
-    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     if (checkGlError("glTexParameteri")) {
         return -1;
     }
-    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     if (checkGlError("glTexParameteri")) {
         return -1;
     }
-    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     if (checkGlError("glTexParameteri")) {
         return -1;
     }
-    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     if (checkGlError("glTexParameteri")) {
         return -1;
     }
@@ -184,5 +187,9 @@ void Program::chooseVertex(int degress, bool flip) {
     if (flip) {
         vaoIndex += 4;
     }
+}
+
+void Program::setTextureId(GLuint textureId) {
+    Program::textureId = textureId;
 }
 

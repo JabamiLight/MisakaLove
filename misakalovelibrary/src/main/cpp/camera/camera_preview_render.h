@@ -8,6 +8,8 @@
 
 #include "../opengl/base_render.h"
 #include "camera_preview_program.h"
+#include "../libeditcore/filter_program.h"
+
 class CameraPreviewRender: public BaseRender {
 
 
@@ -17,7 +19,6 @@ public:
     CameraPreviewRender();
     void init(jint degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
                   int cameraHeight, int i, int i1) override;
-
     GLuint getCameraTexId();
 
 };

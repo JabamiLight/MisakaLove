@@ -13,25 +13,30 @@ class Program {
 public:
     Program(const char* vertexPath, const char* fragPath);
     void init(int width, bool height, int i, int i1);
-    void render();
+
+    virtual void render();
     GLuint getTextureId();
     void resetSize(int screenWidth,int screenHeight);
     void destory();
     virtual ~Program();
     void chooseVertex(int degress, bool flip);
+    void setTextureId(GLuint textureId);
+    void initCoord();
+
+    virtual int initTexture();
 protected:
     GLuint mGLProgId;
     bool mIsInitialized;
     GLuint mTextureLocation;
-    GLuint* VAO= nullptr;
-    GLuint* VBO= nullptr;
+    static GLuint* VAO;
+    static GLuint* VBO;
     GLuint textureId;
     int width,height;
     int vaoIndex=0;
 
-private:
-    void initCoord();
-    int initTexture();
+
+
+
 };
 
 

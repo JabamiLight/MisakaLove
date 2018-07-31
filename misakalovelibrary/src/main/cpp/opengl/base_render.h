@@ -7,6 +7,7 @@
 
 #include <GLES3/gl3.h>
 #include "program.h"
+#include "../libeditcore/video_effect_core.h"
 
 class BaseRender {
 
@@ -21,6 +22,8 @@ protected:
                           int cameraHeight, int i, int i1)=0;
 
     Program* showProgram;
+    Program* previewProgram;
+    VideoEffectCore* videoEffectCore;
 };
 
 
