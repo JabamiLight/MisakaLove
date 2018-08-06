@@ -9,10 +9,15 @@ void BaseRender::resetSize(int screenWidth, int screenHeigth) {
 }
 
 void BaseRender::destory() {
-
     showProgram->destory();
     delete showProgram;
     showProgram= nullptr;
+    if (Program::VAO && Program::VBO) {
+        glDeleteVertexArrays(8, Program::VAO);
+        glDeleteBuffers(9, Program::VBO);
+        Program::VAO= nullptr;
+        Program::VBO= nullptr;
+    }
 }
 
 void BaseRender::setDegree(int degree, bool isFlip) {

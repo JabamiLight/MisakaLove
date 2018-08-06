@@ -25,10 +25,6 @@ void Program::destory() {
         glDeleteProgram(mGLProgId);
         mGLProgId = 0;
     }
-    if (Program::VAO && Program::VBO) {
-        glDeleteVertexArrays(8, Program::VAO);
-        glDeleteBuffers(9, Program::VBO);
-    }
     if (textureId) {
         glDeleteTextures(1, &textureId);
     }
@@ -86,10 +82,10 @@ void Program::initCoord() {
                 1.0f, 1.0f,
 
                 //«∞÷√…„œÒÕ∑æµœÒ
-                0.0f, 1.0f,
                 0.0f, 0.0f,
-                1.0f, 1.0f,
                 1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
 
                 1.0f, 0.0f,
                 1.0f, 1.0f,
@@ -130,7 +126,6 @@ void Program::initCoord() {
         glBindVertexArray(0);
     }
     mIsInitialized = true;
-
 }
 
 int Program::initTexture() {

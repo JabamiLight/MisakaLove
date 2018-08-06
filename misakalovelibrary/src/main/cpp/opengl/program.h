@@ -19,22 +19,21 @@ public:
     void resetSize(int screenWidth,int screenHeight);
     void destory();
     virtual ~Program();
-    void chooseVertex(int degress, bool flip);
+
+    virtual void chooseVertex(int degress, bool flip);
     void setTextureId(GLuint textureId);
     void initCoord();
 
     virtual int initTexture();
+    static GLuint* VAO;
+    static GLuint* VBO;
 protected:
     GLuint mGLProgId;
     bool mIsInitialized;
     GLuint mTextureLocation;
-    static GLuint* VAO;
-    static GLuint* VBO;
     GLuint textureId;
     int width,height;
     int vaoIndex=0;
-
-
 
 
 };

@@ -46,12 +46,19 @@ class RecorderActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onBackPressed() {
         previewScheduler?.stop()
+        super.onBackPressed()
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.iv_close -> finish()
+            R.id.iv_close -> {
+                previewScheduler?.stop()
+                finish()
+            }
             R.id.cb_rotate -> previewScheduler?.switchCameraFacing()
             R.id.iv_filter->{
                 fl_config.visibility=View.GONE

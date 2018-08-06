@@ -31,4 +31,8 @@ GLuint CameraPreviewRender::getCameraTexId() {
     return previewProgram->getTextureId();
 }
 
+void CameraPreviewRender::destory() {
+    BaseRender::destory();
+}
+
 

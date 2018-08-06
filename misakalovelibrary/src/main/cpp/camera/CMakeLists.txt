@@ -10,4 +10,5 @@ target_link_libraries(  camera_preview_core
                        libcommon
                        render_core
                        video_edit_core
+                       libpng_core
                         )

@@ -8,7 +8,6 @@
 CameraPreviewProgram::CameraPreviewProgram(const char *vertexPath, const char *fragPath)
         : Program(vertexPath, fragPath) {
 
-
 }
 
 int CameraPreviewProgram::initTexture() {
@@ -36,6 +35,9 @@ int CameraPreviewProgram::initTexture() {
     return 1;
 }
 
+
+
+
 void CameraPreviewProgram::render() {
         glViewport(0, 0, width, height);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -45,4 +47,26 @@ void CameraPreviewProgram::render() {
         glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
         glBindVertexArray(Program::VAO[vaoIndex]);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+
+void CameraPreviewProgram::chooseVertex(int degress, bool flip) {
+    switch (degress) {
+        case 90:
+            vaoIndex = 2;
+            break;
+        case 180:
+            vaoIndex = 3;
+            break;
+        case 270:
+            vaoIndex = 0;
+            break;
+        case 0:
+        default:
+            vaoIndex = 1;
+            break;
+    }
+    if (flip) {
+        vaoIndex += 4;
+    }
 }

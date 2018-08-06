@@ -21,6 +21,8 @@ public:
                   int cameraHeight, int i, int i1) override;
     GLuint getCameraTexId();
 
+    void destory() override;
+
 };
 
 
