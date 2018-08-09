@@ -32,7 +32,6 @@ class RecorderActivity : AppCompatActivity(), View.OnClickListener {
         initView();
     }
 
-
     private fun initView() {
         iv_close.setOnClickListener(this)
         cb_rotate.setOnClickListener(this)

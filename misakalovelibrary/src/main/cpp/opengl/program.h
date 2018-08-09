@@ -4,7 +4,7 @@
 
 #ifndef MISAKALOVE_PROGRAM_H
 #define MISAKALOVE_PROGRAM_H
-
+#define COMMON_VERTEX_SHADER "common/vertexshader.glsl"
 
 #include "../libcommon/egl_core/gl_tools.h"
 #include "../libcommon/assetsutil/assets_reader.h"
@@ -25,6 +25,8 @@ public:
     void initCoord();
 
     virtual int initTexture();
+
+    virtual void initLocation();
     static GLuint* VAO;
     static GLuint* VBO;
 protected:
@@ -35,6 +37,7 @@ protected:
     int width,height;
     int vaoIndex=0;
 
+    virtual void preRender();
 
 };
 

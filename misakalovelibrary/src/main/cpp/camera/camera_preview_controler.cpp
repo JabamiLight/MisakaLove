@@ -4,6 +4,8 @@
 
 #include "camera_preview_controler.h"
 
+#define LOG_TAG "CameraPreviewControler"
+
 
 CameraPreviewControler::CameraPreviewControler() {
 
@@ -154,8 +156,9 @@ void CameraPreviewControler::startCameraPreview() {
 
 void CameraPreviewControler::renderFrame() {
     updateTexImage();
-
-    draw();
+    if (previewSurface != EGL_NO_SURFACE) {
+        draw();
+    }
 }
 
 void CameraPreviewControler::draw() {
@@ -247,7 +250,6 @@ void CameraPreviewControler::destroy() {
     delete eglCore;
     eglCore = NULL;
     LOGI("leave MVRecordingPreviewController::destroy...");
-
 }
 
 void CameraPreviewControler::destroyPreviewSurface() {
@@ -325,5 +327,15 @@ void CameraPreviewControler::switchCamera() {
     renderer->setDegree(degress, facingId == CAMERA_FACING_FRONT);
     this->startCameraPreview();
     isInSwitchingCamera = false;
+}
+
+void CameraPreviewControler::createWindowSurface(ANativeWindow *window) {
+    LOGI("enter MVRecordingPreviewController::createWindowSurface");
+    if (this->_window == NULL) {
+        this->_window = window;
+        if (handler)
+            handler->postMessage(new Message(MSG_EGL_CREATE_PREVIEW_SURFACE));
+    }
+
 }
 

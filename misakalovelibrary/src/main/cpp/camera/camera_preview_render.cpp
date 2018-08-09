@@ -23,7 +23,7 @@ void CameraPreviewRender::init(jint degress, bool isVFlip, int textureWidth, int
 
 CameraPreviewRender::CameraPreviewRender() {
     previewProgram=new CameraPreviewProgram("common/vertexshader.glsl","common/fragmentshader.glsl");
-    showProgram=new FilterProgram("common/vertexshader.glsl","filter/gray.glsl");
+    showProgram=new AmaroFilter();
     videoEffectCore=new VideoEffectCore();
 }
 

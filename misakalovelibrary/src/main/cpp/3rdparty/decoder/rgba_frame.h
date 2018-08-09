@@ -1,6 +1,5 @@
 #ifndef VIDEO_EFFECT_RGBA_FRAME_H
 #define VIDEO_EFFECT_RGBA_FRAME_H
-#include <string>
 #include <cstring>
 
 class RGBAFrame {

@@ -22,6 +22,7 @@ public:
 	virtual ~PngDecoder();
 	/** 打开本地文件不需要传递 探针的参数以及重试策略 **/
 	int openFile(char *pngFilePath);
+	int openAssetsFile(const char* pngFilePath);
 	RGBAFrame* getRGBAFrame();
 	void closeFile();
 

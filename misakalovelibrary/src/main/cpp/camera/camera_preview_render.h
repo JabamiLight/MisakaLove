@@ -9,6 +9,7 @@
 #include "../opengl/base_render.h"
 #include "camera_preview_program.h"
 #include "../libeditcore/filter_program.h"
+#include "../libeditcore/filter/amaro_filter.h"
 
 class CameraPreviewRender: public BaseRender {
 

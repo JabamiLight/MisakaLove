@@ -17,7 +17,6 @@
 
 class CameraPreviewHandler;
 
-#define LOG_TAG "CameraPreviewControler"
 enum RenderThreadMessage {
     MSG_RENDER_FRAME = 0,
     MSG_EGL_THREAD_CREATE,
@@ -58,6 +57,10 @@ public:
     void switchCameraFacing();
 
     void switchCamera();
+
+    void destroyPreviewSurface();
+
+    void createWindowSurface(ANativeWindow *pWindow);
 
 private:
     int screenWidth, screenHeight;
@@ -100,8 +103,6 @@ private:
 
     void updateTexImage();
 
-    void destroyPreviewSurface();
-
     void releaseCamera();
 };
 
@@ -138,9 +139,9 @@ public:
 //            case MSG_STOP_RECORDING:
 //                previewController->stopRecording();
 //                break;
-//            case MSG_EGL_DESTROY_PREVIEW_SURFACE:
-//                previewController->destroyPreviewSurface();
-//                break;
+            case MSG_EGL_DESTROY_PREVIEW_SURFACE:
+                previewController->destroyPreviewSurface();
+                break;
             case MSG_EGL_THREAD_EXIT:
                 previewController->destroy();
                 break;

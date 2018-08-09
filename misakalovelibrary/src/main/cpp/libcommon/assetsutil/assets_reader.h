@@ -8,7 +8,6 @@
 #include <jni.h>
 #include <android/asset_manager_jni.h>
 #include "../CommonTools.h"
-#define LOG_TAG "AssetReader"
 class AssetReader {
 
 public:
@@ -19,16 +18,10 @@ public:
                      const char* fragFilePath,
                      char*& vertexContent,
                      char*& fragContent);
+    static int readPngSource(const char* pngPaht,byte*& data);
 
     static void destory();
-    static void mallocContent(AAsset *pAsset, char* &content) {
-        off_t  bufferSize=AAsset_getLength(pAsset);
-        LOGI("file size: %d\n",bufferSize);
-        content=new char[bufferSize+1];
-        content[bufferSize]=0;
-        int numBytesRead=AAsset_read(pAsset,content,bufferSize);
-        AAsset_close(pAsset);
-    }
+    static void mallocContent(AAsset *pAsset, char* &content);
 
 };
 

@@ -4,6 +4,6 @@ add_library(render_core
             STATIC
             ${RENDER_SOURCE})
 
-target_link_libraries( render_core
+target_link_libraries(render_core
                      GLESv3
                     )

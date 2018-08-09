@@ -36,18 +36,12 @@ int CameraPreviewProgram::initTexture() {
 }
 
 
-
-
-void CameraPreviewProgram::render() {
-        glViewport(0, 0, width, height);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(mGLProgId);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
-        glBindVertexArray(Program::VAO[vaoIndex]);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+void CameraPreviewProgram::preRender() {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
 }
+
+
 
 
 void CameraPreviewProgram::chooseVertex(int degress, bool flip) {

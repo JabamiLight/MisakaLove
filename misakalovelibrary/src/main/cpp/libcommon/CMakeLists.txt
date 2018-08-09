@@ -1,17 +1,13 @@
 
-file(GLOB MESSAGE_QUEUQ_SOURCE ./message_queue/*.cpp)
-file(GLOB EGL_CORE_SOURCE ./egl_core/*.cpp)
-file(GLOB ASSETS_UTIL_SOURCE ./assetsutil/*.cpp)
-
+file(GLOB_RECURSE COMMON_SOURCE *.c*)
 add_library(libcommon
             STATIC
-            ${MESSAGE_QUEUQ_SOURCE}
-            ${EGL_CORE_SOURCE}
-            ${ASSETS_UTIL_SOURCE}
-            )
+            ${COMMON_SOURCE})
+
 
 target_link_libraries(libcommon
                        z
+                       lib_png
                        android
                        GLESv3
                        EGL

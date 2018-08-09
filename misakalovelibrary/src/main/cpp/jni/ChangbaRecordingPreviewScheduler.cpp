@@ -169,11 +169,20 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setBeautif
 
 void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_destroyWindowSurface(
         JNIEnv *env, jobject instance) {
+    if (NULL != previewController) {
+        previewController->destroyWindowSurface();
+    }
+
 
 }
 
 void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_createWindowSurface(
         JNIEnv *env, jobject instance, jobject surface) {
-
+    if (surface != NULL && NULL != previewController) {
+        ANativeWindow *window = ANativeWindow_fromSurface(env, surface);
+        if (window != NULL) {
+            previewController->createWindowSurface(window);
+        }
+    }
 }
 

@@ -14,9 +14,11 @@ public:
 
     int initTexture() override;
 
-    void render() override;
 
     void chooseVertex(int degress, bool flip) override;
+
+protected:
+    void preRender() override;
 };
 
 

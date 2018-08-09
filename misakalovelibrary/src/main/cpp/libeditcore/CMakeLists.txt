@@ -1,9 +1,10 @@
 
-file(GLOB EDIT_SOURCE *.cpp)
+file(GLOB_RECURSE EDIT_SOURCE *.c*)
 add_library(video_edit_core
             STATIC
             ${EDIT_SOURCE})
 
 target_link_libraries(video_edit_core
-                     GLESv3
+                    libcommon
+                    lib_png
                     )
