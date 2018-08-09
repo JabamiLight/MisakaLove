@@ -8,6 +8,7 @@
 
 #include "../libcommon/egl_core/gl_tools.h"
 #include "../libcommon/assetsutil/assets_reader.h"
+#include "../libcommon/openglutils/opengl_utils.h"
 
 class Program {
 public:

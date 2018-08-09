@@ -6,7 +6,6 @@
 #define MISAKALOVE_AMARO_FILTER_H
 
 #include "../../opengl/program.h"
-#include "../../libcommon/openglutils/opengl_utils.h"
 
 
 class AmaroFilter: public Program {

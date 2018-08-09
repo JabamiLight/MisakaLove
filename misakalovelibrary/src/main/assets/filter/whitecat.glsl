@@ -1,7 +1,10 @@
-varying highp vec2 textureCoordinate;
+#version 300 es
+
+in highp vec2 textureCoordinate;
 precision highp float;
 uniform sampler2D inputImageTexture; 
 uniform sampler2D curve; 
+ out vec4 FragColor;
 
 vec3 rgb2hsv(vec3 c) 
 { 
@@ -33,7 +36,7 @@ void main()
 	highp float greenCurveValue;
 	highp float blueCurveValue; 
 
-	textureColor = texture2D( inputImageTexture, vec2(xCoordinate, yCoordinate)); 
+	textureColor = texture( inputImageTexture, vec2(xCoordinate, yCoordinate)); 
 
 	// step1 20% opacity  ExclusionBlending 
     mediump vec4 textureColor2 = textureColor; 
@@ -42,17 +45,17 @@ void main()
 	textureColor = (textureColor2 - textureColor) * 0.2 + textureColor; 
 
     // step2 curve 
-    redCurveValue = texture2D(curve, vec2(textureColor.r, 0.0)).r; 
-	greenCurveValue = texture2D(curve, vec2(textureColor.g, 0.0)).g; 
-	blueCurveValue = texture2D(curve, vec2(textureColor.b, 0.0)).b; 
+    redCurveValue = texture(curve, vec2(textureColor.r, 0.0)).r; 
+	greenCurveValue = texture(curve, vec2(textureColor.g, 0.0)).g; 
+	blueCurveValue = texture(curve, vec2(textureColor.b, 0.0)).b; 
 
-    redCurveValue = texture2D(curve, vec2(redCurveValue, 1.0)).r; 
-	greenCurveValue = texture2D(curve, vec2(greenCurveValue, 1.0)).r;
-	blueCurveValue = texture2D(curve, vec2(blueCurveValue, 1.0)).r; 
+    redCurveValue = texture(curve, vec2(redCurveValue, 1.0)).r; 
+	greenCurveValue = texture(curve, vec2(greenCurveValue, 1.0)).r;
+	blueCurveValue = texture(curve, vec2(blueCurveValue, 1.0)).r; 
 
-	redCurveValue = texture2D(curve, vec2(redCurveValue, 1.0)).g; 
-	greenCurveValue = texture2D(curve, vec2(greenCurveValue, 1.0)).g; 
-	blueCurveValue = texture2D(curve, vec2(blueCurveValue, 1.0)).g; 
+	redCurveValue = texture(curve, vec2(redCurveValue, 1.0)).g; 
+	greenCurveValue = texture(curve, vec2(greenCurveValue, 1.0)).g; 
+	blueCurveValue = texture(curve, vec2(blueCurveValue, 1.0)).g; 
 
 
 	vec3 tColor = vec3(redCurveValue, greenCurveValue, blueCurveValue); 
@@ -95,6 +98,6 @@ void main()
 	textureColor = vec4(ra, ga, ba, 1.0); 
 	textureColor = (textureColor - base) * 0.1 + base; 
 
-	gl_FragColor = vec4(textureColor.r, textureColor.g, textureColor.b, 1.0); 
+	FragColor = vec4(textureColor.r, textureColor.g, textureColor.b, 1.0);
 } 
 	

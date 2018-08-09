@@ -3,7 +3,6 @@
 //
 
 #include "video_effect_core.h"
-#include "filter_program.h"
 
 
 void VideoEffectCore::initTexture() {
