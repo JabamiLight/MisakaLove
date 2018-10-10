@@ -16,23 +16,41 @@ void CameraPreviewRender::init(jint degress, bool isVFlip, int textureWidth, int
     showProgram->init(degress, isVFlip, screenWidth, screenHeight);
 //    Program* p=new FilterProgram("common/vertexshader.glsl","filter/gray.glsl");
 //    p->init(degress,isVFlip,screenWidth,screenHeight);
-    previewProgram->init(degress,isVFlip,screenWidth,screenHeight);
-    videoEffectCore->init(screenWidth,screenHeight);
-    videoEffectCore->addFilter(previewProgram);
+    videoEffectCore->init(degress, isVFlip, screenWidth, screenHeight);
+//    previewProgram->init(degress,isVFlip,screenWidth,screenHeight);
+//    videoEffectCore->addFilter(previewProgram);
 }
 
 CameraPreviewRender::CameraPreviewRender() {
-    previewProgram=new CameraPreviewProgram("common/vertexshader.glsl","common/fragmentshader.glsl");
-    showProgram=new CoolFilter();
+//    previewProgram=new CoolFilter();
+    showProgram=new ShowProgram();
     videoEffectCore=new VideoEffectCore();
 }
 
 GLuint CameraPreviewRender::getCameraTexId() {
-    return previewProgram->getTextureId();
+    return videoEffectCore->getESTextureId();
 }
 
 void CameraPreviewRender::destory() {
     BaseRender::destory();
+    delete videoEffectCore;
+}
+
+void CameraPreviewRender::switchFilter(uint index) {
+    switch (index){
+        case 0:
+            videoEffectCore->clearFilter();
+            break;
+        case 22:
+           videoEffectCore->addFilter(new CoolFilter());
+            break;
+        case 1:
+           videoEffectCore->addFilter(new WhiteCatFilter());
+            break;
+        case 4:
+            break;
+    }
+
 }
 
 

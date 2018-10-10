@@ -6,16 +6,14 @@
 #define MISAKALOVE_CAMERA_PREVIEW_PROGRAM_H
 
 
-#include "../opengl/program.h"
+#include "../../opengl/program.h"
 #include <GLES2/gl2ext.h>
 class CameraPreviewProgram: public Program {
 public:
-    CameraPreviewProgram(const char *vertexPath, const char *fragPath);
+    CameraPreviewProgram();
 
     int initTexture() override;
 
-
-    void chooseVertex(int degress, bool flip) override;
 
 protected:
     void preRender() override;

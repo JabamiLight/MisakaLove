@@ -8,18 +8,24 @@
 #include "../opengl/program.h"
 #include <list>
 #include <GLES2/gl2ext.h>
+#include "common/camera_preview_program.h"
+
 using namespace std;
 
 class VideoEffectCore {
 
 private:
     list<Program*> filterPrograms;
-    GLuint afterEditTextureId;
+    Program* copyCommonProgram;
+    GLuint* processTextureIds;
     GLuint cameraTextureId;
+    uint8_t processTextureIndex=0;
     GLuint FBO;
+    jint  degress;
+    bool isVFilp;
     int textureWidth,textureHeight;
 public:
-    void init(int textureWidth,int textureHeight);
+    void init(jint textureWidth, bool textureHeight, int i, int i1);
 
     void initTexture();
 
@@ -30,6 +36,12 @@ public:
     void addFilter(Program* program);
 
     GLuint getAfterTextureId();
+
+    GLuint getESTextureId();
+
+    virtual ~VideoEffectCore();
+
+    void clearFilter();
 };
 
 

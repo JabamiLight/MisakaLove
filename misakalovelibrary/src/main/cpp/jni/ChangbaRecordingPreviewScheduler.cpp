@@ -22,15 +22,6 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_stopE
 }
 
 void
-Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter(JNIEnv *,
-                                                                                          jobject,
-                                                                                          jint,
-                                                                                          jobject,
-                                                                                          jstring) {
-
-}
-
-void
 Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPauseRecordingPreviewState(
         JNIEnv *, jobject) {
 
@@ -184,5 +175,18 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_creat
             previewController->createWindowSurface(window);
         }
     }
+}
+
+ void
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter(JNIEnv *env,
+                                                                                          jobject instance,
+                                                                                          jint filterType) {
+
+
+     if(previewController!= nullptr){
+         previewController->switchPreviewFilter(filterType);
+     }
+
+
 }
 

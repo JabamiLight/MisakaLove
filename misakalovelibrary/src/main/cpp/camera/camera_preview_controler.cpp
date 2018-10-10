@@ -339,3 +339,14 @@ void CameraPreviewControler::createWindowSurface(ANativeWindow *window) {
 
 }
 
+void CameraPreviewControler::switchFilter() {
+    renderer->switchFilter(filterType);
+}
+
+void CameraPreviewControler::switchPreviewFilter(uint filterType) {
+    this->filterType = filterType;
+    if (handler)
+        handler->postMessage(new Message(MSG_SWITCH_FILTER));
+
+}
+

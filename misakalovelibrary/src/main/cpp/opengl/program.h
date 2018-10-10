@@ -13,7 +13,7 @@
 class Program {
 public:
     Program(const char* vertexPath, const char* fragPath);
-    void init(int width, bool height, int i, int i1);
+    void init(int degress, bool isVFlip, int width, int height);
 
     virtual void render();
     GLuint getTextureId();

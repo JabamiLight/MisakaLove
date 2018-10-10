@@ -60,9 +60,10 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_filter"
                     style="@style/text_white_12"
                     android:layout_marginTop="@dimen/dp_4"
-                    android:text="日系"/>
+                    android:text="Original"/>
             </LinearLayout>
 
             <CheckBox

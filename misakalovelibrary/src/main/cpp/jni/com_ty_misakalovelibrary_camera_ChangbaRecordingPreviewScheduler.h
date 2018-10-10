@@ -30,8 +30,6 @@ JNIEXPORT void JNICALL Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPrev
  * Method:    switchPreviewFilter
  * Signature: (ILjava/lang/Object;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter
-  (JNIEnv *, jobject, jint, jobject, jstring);
 
 /*
  * Class:     com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler
@@ -153,7 +151,10 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_resetRende
                                                                                       jobject surface,
                                                                                       jint width,
                                                                                       jint height) ;
-
+JNIEXPORT void JNICALL
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter(JNIEnv *env,
+                                                                                      jobject instance,
+                                                                                      jint filterType) ;
 
 
 

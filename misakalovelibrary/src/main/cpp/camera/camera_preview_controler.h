@@ -62,6 +62,10 @@ public:
 
     void createWindowSurface(ANativeWindow *pWindow);
 
+    void switchFilter();
+
+    void switchPreviewFilter(uint filterType);
+
 private:
     int screenWidth, screenHeight;
     ANativeWindow *_window;
@@ -91,6 +95,7 @@ private:
     int textureHeight;
     pthread_t _threadId;
     CameraPreviewHandler *handler;
+    uint filterType;
 
     MessageQueue *queue;
 
@@ -104,6 +109,7 @@ private:
     void updateTexImage();
 
     void releaseCamera();
+
 };
 
 
@@ -130,9 +136,9 @@ public:
             case MSG_SWITCH_CAMERA_FACING:
                 previewController->switchCamera();
                 break;
-//            case MSG_SWITCH_FILTER:
-//                previewController->switchFilter();
-//                break;
+            case MSG_SWITCH_FILTER:
+                previewController->switchFilter();
+                break;
 //            case MSG_START_RECORDING:
 //                previewController->startRecording();
 //                break;

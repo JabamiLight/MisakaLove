@@ -5,10 +5,6 @@
 #include "camera_preview_program.h"
 
 
-CameraPreviewProgram::CameraPreviewProgram(const char *vertexPath, const char *fragPath)
-        : Program(vertexPath, fragPath) {
-
-}
 
 int CameraPreviewProgram::initTexture() {
     glGenTextures(1, &textureId);
@@ -44,23 +40,10 @@ void CameraPreviewProgram::preRender() {
 
 
 
-void CameraPreviewProgram::chooseVertex(int degress, bool flip) {
-    switch (degress) {
-        case 90:
-            vaoIndex = 2;
-            break;
-        case 180:
-            vaoIndex = 3;
-            break;
-        case 270:
-            vaoIndex = 0;
-            break;
-        case 0:
-        default:
-            vaoIndex = 1;
-            break;
-    }
-    if (flip) {
-        vaoIndex += 4;
-    }
+
+
+CameraPreviewProgram::CameraPreviewProgram() : Program("common/vertexshader.glsl","common/camerafragmentshader.glsl") {
+
 }
+
+

@@ -8,9 +8,10 @@
 
 #include "../opengl/base_render.h"
 #include "../libeditcore/filter/white_cat_filter.h"
-#include "camera_preview_program.h"
+#include "../libeditcore/common/camera_preview_program.h"
 #include "../libeditcore/filter/cool_filter.h"
 #include "../libeditcore/filter/amaro_filter.h"
+#include "../libeditcore/common/show_program.h"
 
 class CameraPreviewRender: public BaseRender {
 
@@ -25,6 +26,8 @@ public:
 
     void destory() override;
 
+
+    void switchFilter(uint index);
 };
 
 

@@ -71,7 +71,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterHold
                 selected = position;
                 notifyItemChanged(lastSelected);
                 notifyItemChanged(position);
-//                onFilterChangeListener.onFilterChanged(filters[position]);
+                onFilterChangeListener.onFilterChanged(filters[position]);
             }
         });
     }
@@ -94,7 +94,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterHold
     }
 
     public interface onFilterChangeListener{
-//        void onFilterChanged(MagicFilterType filterType);
+        void onFilterChanged(MagicFilterType filterType);
     }
 
     private onFilterChangeListener onFilterChangeListener;
