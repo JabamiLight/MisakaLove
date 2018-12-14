@@ -40,8 +40,6 @@ void CameraPreviewProgram::preRender() {
 
 
 
-
-
 CameraPreviewProgram::CameraPreviewProgram() : Program("common/vertexshader.glsl","common/camerafragmentshader.glsl") {
 
 }

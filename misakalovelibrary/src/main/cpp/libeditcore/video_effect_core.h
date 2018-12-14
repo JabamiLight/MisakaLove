@@ -9,6 +9,7 @@
 #include <list>
 #include <GLES2/gl2ext.h>
 #include "common/camera_preview_program.h"
+#include "../libcommon/CommonTools.h"
 
 using namespace std;
 
@@ -42,6 +43,9 @@ public:
     virtual ~VideoEffectCore();
 
     void clearFilter();
+
+
+    void *ptr;
 };
 
 

@@ -52,6 +52,13 @@ void VideoEffectCore::init(jint degress, bool isVFlip, int textureWidth, int tex
 void VideoEffectCore::process() {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     copyCommonProgram->render();
+    if(!ptr){
+        ptr=new u_char[textureWidth*textureHeight*4];
+    }
+    long long curTime = getCurrentTime();
+    glReadPixels(0, 0, textureWidth, textureHeight, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
+    LOGD("读取pixel时间%lld  高度 %d, 宽度 %d", getCurrentTime() - curTime,textureWidth,textureHeight);
+
     list<Program *>::iterator iter;
     for (iter = filterPrograms.begin(); iter != filterPrograms.end(); iter++) {
         (*iter)->setTextureId(processTextureIds[processTextureIndex]);

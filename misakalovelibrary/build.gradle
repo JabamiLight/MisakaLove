@@ -3,9 +3,9 @@ apply plugin: 'com.android.library'
 ext {
     boolean isWindow = isWindowsOS();
     if(isWindow){
-        native_sdk_path = rootDir.getAbsolutePath().replace('\\','/') + "/app"
+        native_sdk_path = rootDir.getAbsolutePath().replace('\\','/')
     }else{
-        native_sdk_path = file(rootDir.getAbsolutePath() + "/app")
+        native_sdk_path = file(rootDir.getAbsolutePath() )
     }
 }
 /** 判断是否为Windows操作系统 */
@@ -35,6 +35,11 @@ android {
         ndk {
             abiFilters 'armeabi-v7a'
         }
+        sourceSets {
+            main {
+                jniLibs.srcDirs = ['libs']
+            }
+        }
     }
 
     buildTypes {
@@ -44,7 +49,7 @@ android {
             externalNativeBuild {
                 cmake {
                     arguments '-DANDROID_PLATFORM=android-27', '-DANDROID_TOOLCHAIN=clang',
-                            '-DANDROID_ARM_NEON=TRUE', '-DANDROID_STL=gnustl_static',
+                            '-DANDROID_ARM_NEON=TRUE',
                             "-DPATH_TO_MEDIACORE:STRING=${native_sdk_path}"
                     cFlags '-O3', '-DGL_GLEXT_PROTOTYPES', '-DEGL_EGLEXT_PROTOTYPES', '-fsigned-char', "-I${native_sdk_path}", '-Wformat','-mfpu=neon', '-mfloat-abi=softfp -frtti' // full optimization, char data type is signed
                     // 编译优化，设置函式是否能被 inline 的伪指令长度
@@ -69,13 +74,12 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "org.jetbrains.anko:anko:$anko_version"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
 }
 
 apply plugin: 'kotlin-android'
