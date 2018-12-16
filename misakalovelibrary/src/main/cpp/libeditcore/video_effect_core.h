@@ -5,6 +5,8 @@
 #ifndef MISAKALOVE_VIDEO_EFFECT_PROGRAM_H
 #define MISAKALOVE_VIDEO_EFFECT_PROGRAM_H
 
+
+#define LOG_TAG "VideoEffectCore"
 #include "../opengl/program.h"
 #include <list>
 #include <GLES2/gl2ext.h>

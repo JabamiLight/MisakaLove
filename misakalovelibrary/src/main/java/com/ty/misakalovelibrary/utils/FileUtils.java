@@ -17,20 +17,41 @@
 package com.ty.misakalovelibrary.utils;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 /**
  * Created by Tzutalin on 2016/3/30.
  */
 public class FileUtils {
-    public static final void copyFileFromRawToOthers(@NonNull final Context context, @RawRes int id, @NonNull final String targetPath) {
-        InputStream in = context.getResources().openRawResource(id);
-        FileOutputStream out = null;
+    public static final void copyFileFromRawToOthers( final Context context,  String path,final String targetPath) {
+        AssetManager assetManager=context.getAssets();
+        InputStream in = null;
         try {
-            out = new FileOutputStream(targetPath);
+            in = assetManager.open(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        FileOutputStream out = null;
+        File file = new File(targetPath);
+        if(file.exists()){
+            return ;
+        }
+        try {
+            if(!file.getParentFile().exists()) {
+                try {
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            out = new FileOutputStream(file);
             byte[] buff = new byte[1024];
             int read = 0;
             while ((read = in.read(buff)) > 0) {

@@ -230,6 +230,7 @@ public class ChangbaVideoCamera {
                 }
             } catch (Exception e1) {
             }
+            
         }
         return mHasPermission;
     }

@@ -12,9 +12,6 @@
 
 #include "android/log.h"
 
-#ifndef LOG_TAG
-#define LOG_TAG "tedu"
-#endif
 #ifndef IS_DEBUG
 #define IS_DEBUG 1
 #endif
