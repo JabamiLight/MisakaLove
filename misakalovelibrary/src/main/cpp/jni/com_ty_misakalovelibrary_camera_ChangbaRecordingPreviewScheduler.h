@@ -9,6 +9,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define JNI_METHOD(METHOD_NAME) \
+JNICALL  Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_##METHOD_NAME
+
 /*
  * Class:     com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler
  * Method:    startEncoding
@@ -155,6 +159,11 @@ JNIEXPORT void JNICALL
 Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter(JNIEnv *env,
                                                                                       jobject instance,
                                                                                       jint filterType) ;
+
+
+//JNIEXPORT void JNI_METHOD(switchPreviewFilte23r)(JNIEnv *env, jobject instance, jint filterType) ;
+
+
 
 
 

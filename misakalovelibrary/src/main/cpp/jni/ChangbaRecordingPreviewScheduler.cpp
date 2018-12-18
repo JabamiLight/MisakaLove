@@ -164,7 +164,6 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_destr
         previewController->destroyWindowSurface();
     }
 
-
 }
 
 void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_createWindowSurface(
@@ -181,8 +180,6 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_creat
 Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter(JNIEnv *env,
                                                                                           jobject instance,
                                                                                           jint filterType) {
-
-
      if(previewController!= nullptr){
          previewController->switchPreviewFilter(filterType);
      }
