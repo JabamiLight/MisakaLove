@@ -3,29 +3,64 @@ package com.ty.misakalovelibrary.camera;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
+import android.view.SurfaceView;
 
 import com.ty.misakalovelibrary.camera.exception.CameraParamSettingException;
+import com.zeusee.zmobileapi.STUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
+import zeusees.tracking.Face;
+import zeusees.tracking.FaceTracking;
+
+
 public class ChangbaVideoCamera {
     private static final String TAG = "ChangbaVideoCamera";
-
+    private static final int MESSAGE_DRAW_POINTS = 100;
     public static int VIDEO_WIDTH = 720;
     public static int DEFAULT_VIDEO_WIDTH = 720;
     public static int VIDEO_HEIGHT = 1280;
     public static int DEFAULT_VIDEO_HEIGHT = 1280;
     public static int videoFrameRate = 24;
+    //几个赋值的buffer
+    private byte[] mPreBuffer;//首先分配一块内存作为缓冲区，size的计算方式见第四点中
+    private byte[] mNv21Data;
+    private byte[] mTmpBuffer;
+    Matrix matrix = new Matrix();
+    private HandlerThread mHandlerThread;
+    private Object lockObj = new Object();
+    private Handler mHandler;
+    private FaceTracking mMultiTrack106 = null;
+    private int frameIndex;
+    private Paint mPaint=new Paint();
+
+    private Camera mCamera;
+    private SurfaceTexture mCameraSurfaceTexture;
+    private Context mContext;
+
+
+    //测试surface
+    private SurfaceView TestSurfaceView;
+
 
     public static void forcePreviewSize_640_480() {
         VIDEO_WIDTH = 640;
@@ -39,11 +74,8 @@ public class ChangbaVideoCamera {
         videoFrameRate = 24;
     }
 
-    private Camera mCamera;
-    private SurfaceTexture mCameraSurfaceTexture;
-    private Context mContext;
 
-    public ChangbaVideoCamera(Context context) {
+    public ChangbaVideoCamera(Context context, ChangbaRecordingPreviewView surface) {
         this.mContext = context;
     }
 
@@ -92,6 +124,15 @@ public class ChangbaVideoCamera {
 // .getTimestamp()/1000000000.0f);
                         mCallback.notifyFrameAvailable();
                     }
+                }
+            });
+            mCamera.addCallbackBuffer(mPreBuffer);
+            mCamera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback() {
+                @Override
+                public void onPreviewFrame(byte[] data, Camera camera) {
+
+
+                    mCamera.addCallbackBuffer(mPreBuffer);
                 }
             });
             mCamera.startPreview();
@@ -172,6 +213,7 @@ public class ChangbaVideoCamera {
             } else {
                 throw new CameraParamSettingException("视频参数设置错误:设置预览图像格式异常");
             }
+            initBufferAndDetect(parameters);
 
             // 3、设置预览照片的尺寸
             List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
@@ -214,6 +256,93 @@ public class ChangbaVideoCamera {
         } catch (Exception e) {
             throw new CameraParamSettingException(e.getMessage());
         }
+
+    }
+
+    private void initBufferAndDetect(Parameters parameters) {
+        mPreBuffer = new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
+                (parameters.getPreviewFormat()) / 8];
+        mNv21Data = new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
+                (parameters.getPreviewFormat()) / 8];
+        mTmpBuffer=new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
+                (parameters.getPreviewFormat()) / 8];
+        mMultiTrack106 = new FaceTracking(mContext, "/sdcard/ZeuseesFaceTracking/models");
+        mHandlerThread = new HandlerThread("DrawFacePointsThread");
+        mHandlerThread.start();
+        mHandler = new Handler(mHandlerThread.getLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == MESSAGE_DRAW_POINTS) {
+                    synchronized (lockObj) {
+                        handleDrawPoints();
+                    }
+                }
+            }
+        };
+    }
+
+    private void handleDrawPoints() {
+
+        synchronized (mNv21Data) {
+//            System.arraycopy(NV21_mirror(mNv21Data, PREVIEW_WIDTH, PREVIEW_HEIGHT), 0, mTmpBuffer, 0, mNv21Data.length);
+            System.arraycopy(mNv21Data, 0, mTmpBuffer, 0, mNv21Data.length);
+        }
+
+        if (frameIndex == 0) {
+            mMultiTrack106.FaceTrackingInit(mTmpBuffer, DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT);
+        } else {
+            mMultiTrack106.Update(mTmpBuffer, DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT);
+        }
+        List<Face> faceActions = mMultiTrack106.getTrackingInfo();
+
+
+        if (faceActions != null) {
+
+            if (!TestSurfaceView.getHolder().getSurface().isValid()) {
+                return;
+            }
+
+            Canvas canvas = TestSurfaceView.getHolder().lockCanvas();
+            if (canvas == null)
+                return;
+
+            canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+            canvas.setMatrix(matrix);
+            boolean rotate270 = true;
+//            boolean rotate270 = mCameraInfo.orientation == 270;
+            for (Face r : faceActions) {
+
+                Rect rect = new Rect(DEFAULT_VIDEO_HEIGHT - r.left, r.top, DEFAULT_VIDEO_HEIGHT - r.right, r.bottom);
+
+                PointF[] points = new PointF[106];
+                for (int i = 0; i < 106; i++) {
+                    points[i] = new PointF(r.landmarks[i * 2], r.landmarks[i * 2 + 1]);
+
+
+                }
+
+                float[] visibles = new float[106];
+
+
+                for (int i = 0; i < points.length; i++) {
+                    visibles[i] = 1.0f;
+
+
+                    if (rotate270) {
+                        points[i].x = DEFAULT_VIDEO_HEIGHT - points[i].x;
+
+                    }
+
+                }
+
+                STUtils.drawFaceRect(canvas, rect, DEFAULT_VIDEO_HEIGHT,
+                        DEFAULT_VIDEO_WIDTH, true);
+                STUtils.drawPoints(canvas, mPaint, points, visibles, DEFAULT_VIDEO_HEIGHT,
+                        DEFAULT_VIDEO_WIDTH, true);
+
+            }
+            TestSurfaceView.getHolder().unlockCanvasAndPost(canvas);
+        }
     }
 
     private boolean hasPermission() {
@@ -230,7 +359,7 @@ public class ChangbaVideoCamera {
                 }
             } catch (Exception e1) {
             }
-            
+
         }
         return mHasPermission;
     }
