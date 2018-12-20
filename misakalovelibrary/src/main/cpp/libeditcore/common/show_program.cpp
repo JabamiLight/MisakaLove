@@ -9,13 +9,13 @@ ShowProgram::ShowProgram() : Program(COMMON_VERTEX_SHADER, "common/commonfragmen
 void ShowProgram::chooseVertex(int degress, bool flip) {
     switch (degress) {
         case 90:
-            vaoIndex = 0;
+            vaoIndex = 2;
             break;
         case 180:
             vaoIndex = 3;
             break;
         case 270:
-            vaoIndex = 0;
+            vaoIndex = 2;
             break;
         case 0:
         default:

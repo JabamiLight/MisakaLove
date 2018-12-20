@@ -76,8 +76,8 @@ public class FloatingCameraWindow {
             mScreenMaxHeight = display.getHeight();
         }
         // Default window size
-        mWindowWidth = mScreenMaxWidth / 2;
-        mWindowHeight = mScreenMaxHeight / 2;
+        mWindowWidth = mScreenMaxWidth ;
+        mWindowHeight = mScreenMaxHeight ;
 
         mWindowWidth = mWindowWidth > 0 && mWindowWidth < mScreenMaxWidth ? mWindowWidth : mScreenMaxWidth;
         mWindowHeight = mWindowHeight > 0 && mWindowHeight < mScreenMaxHeight ? mWindowHeight : mScreenMaxHeight;
@@ -109,6 +109,7 @@ public class FloatingCameraWindow {
                 if (mWindowManager == null || mRootView == null) {
                     mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
                     mRootView = new FloatCamView(FloatingCameraWindow.this);
+
                     mWindowManager.addView(mRootView, initWindowParameter());
                 }
             }
@@ -131,7 +132,12 @@ public class FloatingCameraWindow {
     private WindowManager.LayoutParams initWindowParameter() {
         mWindowParam = new WindowManager.LayoutParams();
 
-        mWindowParam.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){//6.0+
+            mWindowParam.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        }else {
+            mWindowParam.type =  WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }
         mWindowParam.format = 1;
         mWindowParam.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         mWindowParam.flags = mWindowParam.flags | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
@@ -149,12 +155,12 @@ public class FloatingCameraWindow {
 
     public void setRGBBitmap(final Bitmap rgb) {
         checkInit();
-//        mUIHandler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mRootView.setRGBImageView(rgb);
-//            }
-//        });
+        mUIHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mRootView.setRGBImageView(rgb);
+            }
+        });
     }
 
     public void setFPS(final float fps) {

@@ -132,7 +132,6 @@ public class ChangbaVideoCamera {
                     synchronized (mNv21Data) {
                         System.arraycopy(data, 0, mNv21Data, 0, data.length);
                     }
-
                     mHandler.removeMessages(MESSAGE_DRAW_POINTS);
                     mHandler.sendEmptyMessage(MESSAGE_DRAW_POINTS);
                     mCamera.addCallbackBuffer(mPreBuffer);
@@ -278,7 +277,7 @@ public class ChangbaVideoCamera {
             public void handleMessage(Message msg) {
                 if (msg.what == MESSAGE_DRAW_POINTS) {
                     synchronized (lockObj) {
-//                        handleDrawPoints();
+                        handleDrawPoints();
                     }
                 }
             }
@@ -338,10 +337,10 @@ public class ChangbaVideoCamera {
                 STUtils.drawPoints(canvas, mPaint, points, visibles, DEFAULT_VIDEO_HEIGHT,
                         DEFAULT_VIDEO_WIDTH, true);
 
-                if(mWindow==null){
-                    mWindow=new FloatingCameraWindow(mContext);
-                }
-                mWindow.setRGBBitmap(mCroppedBitmap);
+//                if(mWindow==null){
+//                    mWindow=new FloatingCameraWindow(mContext);
+//                }
+//                mWindow.setRGBBitmap(mCroppedBitmap);
             }
         }
     }
