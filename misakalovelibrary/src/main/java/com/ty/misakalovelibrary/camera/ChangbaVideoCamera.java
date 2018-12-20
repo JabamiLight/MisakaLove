@@ -3,6 +3,7 @@ package com.ty.misakalovelibrary.camera;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -21,9 +22,9 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
-import android.view.SurfaceView;
 
 import com.ty.misakalovelibrary.camera.exception.CameraParamSettingException;
+import com.ty.misakalovelibrary.widget.FloatingCameraWindow;
 import com.zeusee.zmobileapi.STUtils;
 
 import java.lang.reflect.Field;
@@ -45,6 +46,8 @@ public class ChangbaVideoCamera {
     private byte[] mPreBuffer;//首先分配一块内存作为缓冲区，size的计算方式见第四点中
     private byte[] mNv21Data;
     private byte[] mTmpBuffer;
+    private Bitmap mCroppedBitmap;
+    private FloatingCameraWindow mWindow;
     Matrix matrix = new Matrix();
     private HandlerThread mHandlerThread;
     private Object lockObj = new Object();
@@ -56,10 +59,6 @@ public class ChangbaVideoCamera {
     private Camera mCamera;
     private SurfaceTexture mCameraSurfaceTexture;
     private Context mContext;
-
-
-    //测试surface
-    private SurfaceView TestSurfaceView;
 
 
     public static void forcePreviewSize_640_480() {
@@ -75,7 +74,7 @@ public class ChangbaVideoCamera {
     }
 
 
-    public ChangbaVideoCamera(Context context, ChangbaRecordingPreviewView surface) {
+    public ChangbaVideoCamera(Context context) {
         this.mContext = context;
     }
 
@@ -130,8 +129,12 @@ public class ChangbaVideoCamera {
             mCamera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback() {
                 @Override
                 public void onPreviewFrame(byte[] data, Camera camera) {
+                    synchronized (mNv21Data) {
+                        System.arraycopy(data, 0, mNv21Data, 0, data.length);
+                    }
 
-
+                    mHandler.removeMessages(MESSAGE_DRAW_POINTS);
+                    mHandler.sendEmptyMessage(MESSAGE_DRAW_POINTS);
                     mCamera.addCallbackBuffer(mPreBuffer);
                 }
             });
@@ -266,6 +269,7 @@ public class ChangbaVideoCamera {
                 (parameters.getPreviewFormat()) / 8];
         mTmpBuffer=new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
                 (parameters.getPreviewFormat()) / 8];
+        mCroppedBitmap=Bitmap.createBitmap(DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT, Bitmap.Config.ARGB_8888);
         mMultiTrack106 = new FaceTracking(mContext, "/sdcard/ZeuseesFaceTracking/models");
         mHandlerThread = new HandlerThread("DrawFacePointsThread");
         mHandlerThread.start();
@@ -274,7 +278,7 @@ public class ChangbaVideoCamera {
             public void handleMessage(Message msg) {
                 if (msg.what == MESSAGE_DRAW_POINTS) {
                     synchronized (lockObj) {
-                        handleDrawPoints();
+//                        handleDrawPoints();
                     }
                 }
             }
@@ -293,18 +297,12 @@ public class ChangbaVideoCamera {
         } else {
             mMultiTrack106.Update(mTmpBuffer, DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT);
         }
+        frameIndex++;
         List<Face> faceActions = mMultiTrack106.getTrackingInfo();
-
 
         if (faceActions != null) {
 
-            if (!TestSurfaceView.getHolder().getSurface().isValid()) {
-                return;
-            }
-
-            Canvas canvas = TestSurfaceView.getHolder().lockCanvas();
-            if (canvas == null)
-                return;
+            Canvas canvas = new Canvas(mCroppedBitmap);
 
             canvas.drawColor(0, PorterDuff.Mode.CLEAR);
             canvas.setMatrix(matrix);
@@ -340,8 +338,11 @@ public class ChangbaVideoCamera {
                 STUtils.drawPoints(canvas, mPaint, points, visibles, DEFAULT_VIDEO_HEIGHT,
                         DEFAULT_VIDEO_WIDTH, true);
 
+                if(mWindow==null){
+                    mWindow=new FloatingCameraWindow(mContext);
+                }
+                mWindow.setRGBBitmap(mCroppedBitmap);
             }
-            TestSurfaceView.getHolder().unlockCanvasAndPost(canvas);
         }
     }
 

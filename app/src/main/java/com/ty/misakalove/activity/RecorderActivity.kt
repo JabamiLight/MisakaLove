@@ -28,7 +28,7 @@ class RecorderActivity : AppCompatActivity(), View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_recorder)
-        videoCamera = ChangbaVideoCamera(this,surface)
+        videoCamera = ChangbaVideoCamera(this)
         previewScheduler = ChangbaRecordingPreviewScheduler(surface, videoCamera);
         initView();
     }

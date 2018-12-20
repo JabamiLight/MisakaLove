@@ -164,9 +164,9 @@ void CameraPreviewControler::renderFrame() {
 void CameraPreviewControler::draw() {
     eglCore->makeCurrent(previewSurface);
     renderer->render();
-//    if (!eglCore->swapBuffers(previewSurface)) {
-//        LOGE("eglSwapBuffers(previewSurface) returned error %d", eglGetError());
-//    }
+    if (!eglCore->swapBuffers(previewSurface)) {
+        LOGE("eglSwapBuffers(previewSurface) returned error %d", eglGetError());
+    }
 }
 
 void CameraPreviewControler::resetRenderSize(ANativeWindow *window, jint screenWidth,
