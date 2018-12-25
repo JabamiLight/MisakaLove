@@ -12,12 +12,17 @@
 #include "../libeditcore/filter/cool_filter.h"
 #include "../libeditcore/filter/amaro_filter.h"
 #include "../libeditcore/common/show_program.h"
+#include "../libeditcore/beauty/beauty_filter.h"
+#include "../3rdparty/facedet/face.h"
 
 class CameraPreviewRender: public BaseRender {
 
 
 
+
 public:
+    Face* face;
+
     void render() override;
     CameraPreviewRender();
     void init(jint degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
@@ -25,7 +30,6 @@ public:
     GLuint getCameraTexId();
 
     void destory() override;
-
 
     void switchFilter(uint index);
 };

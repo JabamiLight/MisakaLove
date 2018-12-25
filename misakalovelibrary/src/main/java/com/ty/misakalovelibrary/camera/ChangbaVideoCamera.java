@@ -51,14 +51,18 @@ public class ChangbaVideoCamera {
     Matrix matrix = new Matrix();
     private HandlerThread mHandlerThread;
     private Object lockObj = new Object();
+    private Object lockFace = new Object();
     private Handler mHandler;
     private FaceTracking mMultiTrack106 = null;
     private int frameIndex;
-    private Paint mPaint=new Paint();
+    private Paint mPaint = new Paint();
 
     private Camera mCamera;
     private SurfaceTexture mCameraSurfaceTexture;
     private Context mContext;
+
+    private Face firstFace;
+
 
 
     public static void forcePreviewSize_640_480() {
@@ -266,9 +270,10 @@ public class ChangbaVideoCamera {
                 (parameters.getPreviewFormat()) / 8];
         mNv21Data = new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
                 (parameters.getPreviewFormat()) / 8];
-        mTmpBuffer=new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
+        mTmpBuffer = new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
                 (parameters.getPreviewFormat()) / 8];
-        mCroppedBitmap=Bitmap.createBitmap(DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT, Bitmap.Config.ARGB_8888);
+        mCroppedBitmap = Bitmap.createBitmap(DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT, Bitmap.Config
+                .ARGB_8888);
         mMultiTrack106 = new FaceTracking(mContext, "/sdcard/ZeuseesFaceTracking/models");
         mHandlerThread = new HandlerThread("DrawFacePointsThread");
         mHandlerThread.start();
@@ -287,7 +292,8 @@ public class ChangbaVideoCamera {
     private void handleDrawPoints() {
 
         synchronized (mNv21Data) {
-//            System.arraycopy(NV21_mirror(mNv21Data, PREVIEW_WIDTH, PREVIEW_HEIGHT), 0, mTmpBuffer, 0, mNv21Data.length);
+//            System.arraycopy(NV21_mirror(mNv21Data, PREVIEW_WIDTH, PREVIEW_HEIGHT), 0, mTmpBuffer, 0,
+// mNv21Data.length);
             System.arraycopy(mNv21Data, 0, mTmpBuffer, 0, mNv21Data.length);
         }
 
@@ -298,8 +304,17 @@ public class ChangbaVideoCamera {
         }
         frameIndex++;
         List<Face> faceActions = mMultiTrack106.getTrackingInfo();
+        if (faceActions != null && faceActions.isEmpty()) {
+            synchronized (lockFace) {
+//                firstFace = faceActions.get(0);
+            }
+        }
+//        testface(faceActions);
+    }
 
+    private void testface(List<Face> faceActions) {
         if (faceActions != null) {
+
 
             Canvas canvas = new Canvas(mCroppedBitmap);
 
@@ -309,7 +324,8 @@ public class ChangbaVideoCamera {
 //            boolean rotate270 = mCameraInfo.orientation == 270;
             for (Face r : faceActions) {
 
-                Rect rect = new Rect(DEFAULT_VIDEO_HEIGHT - r.left, r.top, DEFAULT_VIDEO_HEIGHT - r.right, r.bottom);
+                Rect rect = new Rect(DEFAULT_VIDEO_HEIGHT - r.left, r.top, DEFAULT_VIDEO_HEIGHT - r.right,
+                        r.bottom);
 
                 PointF[] points = new PointF[106];
                 for (int i = 0; i < 106; i++) {
@@ -337,10 +353,10 @@ public class ChangbaVideoCamera {
                 STUtils.drawPoints(canvas, mPaint, points, visibles, DEFAULT_VIDEO_HEIGHT,
                         DEFAULT_VIDEO_WIDTH, true);
 
-//                if(mWindow==null){
-//                    mWindow=new FloatingCameraWindow(mContext);
-//                }
-//                mWindow.setRGBBitmap(mCroppedBitmap);
+                if (mWindow == null) {
+                    mWindow = new FloatingCameraWindow(mContext);
+                }
+                mWindow.setRGBBitmap(mCroppedBitmap);
             }
         }
     }

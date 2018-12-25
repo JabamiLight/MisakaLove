@@ -19,12 +19,16 @@ void CameraPreviewRender::init(jint degress, bool isVFlip, int textureWidth, int
     videoEffectCore->init(degress, isVFlip, screenWidth, screenHeight);
 //    previewProgram->init(degress,isVFlip,screenWidth,screenHeight);
 //    videoEffectCore->addFilter(previewProgram);
+
+    videoEffectCore->addFilter(new BeautyFilter());
 }
 
 CameraPreviewRender::CameraPreviewRender() {
 //    previewProgram=new CoolFilter();
     showProgram=new ShowProgram();
     videoEffectCore=new VideoEffectCore();
+
+
 }
 
 GLuint CameraPreviewRender::getCameraTexId() {
