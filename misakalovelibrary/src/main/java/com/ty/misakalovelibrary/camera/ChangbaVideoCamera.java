@@ -304,9 +304,10 @@ public class ChangbaVideoCamera {
         }
         frameIndex++;
         List<Face> faceActions = mMultiTrack106.getTrackingInfo();
-        if (faceActions != null && faceActions.isEmpty()) {
+        if (faceActions != null && !faceActions.isEmpty()) {
             synchronized (lockFace) {
-//                firstFace = faceActions.get(0);
+                firstFace = faceActions.get(0);
+                
             }
         }
 //        testface(faceActions);
@@ -455,6 +456,8 @@ public class ChangbaVideoCamera {
         public void notifyFrameAvailable();
 
         public void updateTexMatrix(float texMatrix[]);
+        
+        public void setFaceInfo(Face faceInfo);
     }
 
     public void setCallback(ChangbaVideoCameraCallback callback) {

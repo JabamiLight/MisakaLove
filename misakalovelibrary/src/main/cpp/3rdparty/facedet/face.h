@@ -8,6 +8,8 @@
 
 class Face {
 
+
+public:
      int ID;
      int left;
      int top;
@@ -15,7 +17,8 @@ class Face {
      int bottom;
      int height;
      int width;
-     int landmarks[212];
+     int* landmarks;
+
 
 };
 

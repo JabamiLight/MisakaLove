@@ -147,6 +147,10 @@ Message::Message(int what, int arg1, int arg2, void* obj) {
 	this->obj = obj;
 }
 Message::~Message() {
+	if(obj){
+		delete obj;
+		obj= nullptr;
+	}
 }
 
 int Message::execute(){

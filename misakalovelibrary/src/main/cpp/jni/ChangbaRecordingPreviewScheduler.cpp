@@ -53,11 +53,10 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_prepareEGL
     env->GetJavaVM(&g_jvm);
     g_obj = env->NewGlobalRef(obj);
     AssetReader::init(g_jvm, env->NewGlobalRef(assetManager));
-    ANativeWindow* window=ANativeWindow_fromSurface(env,surface);
+    ANativeWindow *window = ANativeWindow_fromSurface(env, surface);
     previewController->prepareEGLContext(window, g_jvm, g_obj, screenWidth, screenHeight,
                                          cameraFacingId);
 }
-
 
 
 void
@@ -68,7 +67,7 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_resetRende
                                                                                       jint height) {
     if (NULL != previewController) {
         ANativeWindow *window = ANativeWindow_fromSurface(env, surface);
-        previewController->resetRenderSize(window,width, height);
+        previewController->resetRenderSize(window, width, height);
     }
 
 }
@@ -137,7 +136,6 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_destroyEGL
 }
 
 
-
 void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_updateTexMatrix(JNIEnv *,
                                                                                            jobject,
                                                                                            jfloatArray) {
@@ -176,13 +174,33 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_creat
     }
 }
 
- void
-Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter(JNIEnv *env,
-                                                                                          jobject instance,
-                                                                                          jint filterType) {
-     if(previewController!= nullptr){
-         previewController->switchPreviewFilter(filterType);
-     }
+void
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_switchPreviewFilter(
+        JNIEnv *env,
+        jobject instance,
+        jint filterType) {
+    if (previewController != nullptr) {
+        previewController->switchPreviewFilter(filterType);
+    }
+
+
+}
+
+void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFaceInfo(JNIEnv *env,
+                                                                                       jobject instance,
+                                                                                       jint ID,
+                                                                                       jint left,
+                                                                                       jint top,
+                                                                                       jint right,
+                                                                                       jint bottom,
+                                                                                       jint height,
+                                                                                       jint width,
+                                                                                       jintArray landmarks) {
+    jint *points = env->GetIntArrayElements(landmarks, JNI_FALSE);
+    if (previewController != nullptr) {
+        previewController->setFaceInfo(ID,left,top,right,bottom,height,width,points);
+    }
+    env->ReleaseIntArrayElements(landmarks,points,0);
 
 
 }

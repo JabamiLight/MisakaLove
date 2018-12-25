@@ -350,3 +350,26 @@ void CameraPreviewControler::switchPreviewFilter(uint filterType) {
 
 }
 
+void
+CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bottom, int height,
+                                    int width, int *landmarks) {
+
+    Face* face=new Face();
+    face->ID=ID;
+    face->left=left;
+    face->top=top;
+    face->right=right;
+    face->bottom=bottom;
+    face->height=height;
+    face->width=width;
+    face->landmarks=new int[212];
+    std::memcpy(landmarks,face->landmarks,212);
+    Message *msg = new Message(MSG_UPDATE_FACE_INFO,face);
+    if (handler)
+        handler->postMessage(msg);
+}
+
+void CameraPreviewControler::setFaceInfo(Message *pMessage) {
+    renderer->face= static_cast<Face *>(pMessage->getObj());
+}
+

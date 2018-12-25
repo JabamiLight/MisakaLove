@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
+import zeusees.tracking.Face;
+
 public class ChangbaRecordingPreviewScheduler
         implements ChangbaVideoCamera.ChangbaVideoCameraCallback, ChangbaRecordingPreviewView.ChangbaRecordingPreviewViewCallback {
     private static final String TAG = "ChangbaRecordingPreviewScheduler";
@@ -114,6 +116,19 @@ public class ChangbaRecordingPreviewScheduler
     public native void adaptiveVideoQuality(int maxBitRate, int avgBitRate, int fps);
 
     public native void hotConfigQuality(int maxBitrate, int avgBitrate, int fps);
+    
+    public native void setFaceInfo(
+            int ID,
+            int left,
+            int top,
+            int right,
+            int bottom,
+            int height,
+            int width,
+            int[] landmarks
+    );
+    
+    
 
     @Override
     public native void resetRenderSize(Surface surface, int width, int height);
@@ -160,7 +175,22 @@ public class ChangbaRecordingPreviewScheduler
 
     @Override
     public native void updateTexMatrix(float texMatrix[]);
-
+    
+    @Override
+    public void setFaceInfo(Face faceInfo) {
+        setFaceInfo(
+                faceInfo.ID,
+                faceInfo.left,
+                faceInfo.top,
+                faceInfo.right,
+                faceInfo.bottom,
+                faceInfo.height,
+                faceInfo.width,
+                faceInfo.landmarks
+        );
+    
+    }
+    
     private CameraConfigInfo mConfigInfo;
 
     /**

@@ -25,6 +25,7 @@ enum RenderThreadMessage {
     MSG_SWITCH_FILTER,
     MSG_START_RECORDING,
     MSG_STOP_RECORDING,
+    MSG_UPDATE_FACE_INFO,
     MSG_EGL_DESTROY_PREVIEW_SURFACE,
     MSG_EGL_THREAD_EXIT
 };
@@ -65,6 +66,17 @@ public:
     void switchFilter();
 
     void switchPreviewFilter(uint filterType);
+
+    void setFaceInfo(int ID,
+                      int left,
+                      int top,
+                      int right,
+                      int bottom,
+                      int height,
+                      int width,
+                      int* landmarks);
+
+    void setFaceInfo(Message *pMessage);
 
 private:
     int screenWidth, screenHeight;
@@ -138,6 +150,9 @@ public:
                 break;
             case MSG_SWITCH_FILTER:
                 previewController->switchFilter();
+                break;
+            case MSG_UPDATE_FACE_INFO:
+                previewController->setFaceInfo(msg);
                 break;
 //            case MSG_START_RECORDING:
 //                previewController->startRecording();
