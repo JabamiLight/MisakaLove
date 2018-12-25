@@ -12,6 +12,7 @@
 #include <GLES2/gl2ext.h>
 #include "common/camera_preview_program.h"
 #include "../libcommon/CommonTools.h"
+#include "../3rdparty/facedet/detector.h"
 
 using namespace std;
 

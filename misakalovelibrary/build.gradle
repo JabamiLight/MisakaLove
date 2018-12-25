@@ -1,27 +1,6 @@
 apply plugin: 'com.android.library'
-
-ext {
-    boolean isWindow = isWindowsOS();
-    if(isWindow){
-        native_sdk_path = rootDir.getAbsolutePath().replace('\\','/')
-    }else{
-        native_sdk_path = file(rootDir.getAbsolutePath() )
-    }
-}
-/** 判断是否为Windows操作系统 */
-boolean isWindowsOS(){
-    boolean isWindowsOS = false;
-    String osName = System.getProperty("os.name");
-    println("os.name=" + osName);
-    if(osName == null || "".equals(osName)) {
-        return false;
-    }
-    if(osName.toLowerCase().indexOf("windows") > -1){
-        isWindowsOS = true;
-    }
-    return isWindowsOS;
-}
-
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
@@ -65,7 +44,6 @@ android {
         }
     }
 
-
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
@@ -75,15 +53,56 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api "org.jetbrains.anko:anko:$anko_version"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    api 'io.reactivex.rxjava2:rxjava:2.2.0'
+    api fileTree(include: ['*.jar','*.aar'], dir: 'libs/libaars')
+
+    //kotlin
+    api rootProject.ext.dep.kotlinStdlibJre7
+    api rootProject.ext.dep.kotlinAnko
+
+
+    // Google Support Library.
+    api rootProject.ext.dep.supportAppcompatV7
+    api rootProject.ext.dep.supportRecyclerViewV7
+    api rootProject.ext.dep.supportGridLayoutV7
+    api rootProject.ext.dep.supportCardViewV7
+    api rootProject.ext.dep.supportDesign
+    api rootProject.ext.dep.supportVectorDrawable
+    api rootProject.ext.dep.supportConstraintLayout
+    api rootProject.ext.dep.supportPercent
+    api rootProject.ext.dep.supportTransition
+    // Multi-dex.
+    api rootProject.ext.dep.supportMultidex
+
+    // Rx-Java.
+    api rootProject.ext.dep.rxJava
+    api rootProject.ext.dep.rxAndroid
+    // Rx-Binding.
+    api rootProject.ext.dep.rxBinding
+    api rootProject.ext.dep.rxBindingRecyclerViewV7
+    // Rx-Permissions.
+    api rootProject.ext.dep.rxPermissions
+
+    // JSON.
+    api rootProject.ext.dep.gson
+
+    // View Binding.
+    api rootProject.ext.dep.butterKnife
+    annotationProcessor rootProject.ext.dep.butterKnifeCompiler
+    kapt rootProject.ext.dep.butterKnifeCompiler
+
+    // Image loader.
+    api rootProject.ext.dep.glide
+
+    // Leak Detection.
+    api rootProject.ext.dep.leakcanary
+    releaseApi rootProject.ext.dep.leakcanaryNoOp
+
+    testImplementation rootProject.ext.dep.testJunit
+    testImplementation rootProject.ext.dep.testMockito
+    testImplementation rootProject.ext.dep.leakcanaryNoOp
+
+    androidTestImplementation(rootProject.ext.dep.testEspressoCore, {
+        exclude group: "com.android.support", module: "support-annotations"
+    })
 }
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

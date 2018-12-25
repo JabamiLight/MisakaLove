@@ -4,9 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.tbruyelle.rxpermissions2.RxPermissions
-import com.ty.misakalove.MyApplication
 import com.ty.misakalove.R
-import com.ty.misakalovelibrary.utils.FileUtils
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                     .flatMap {
                         if (it) {
                             Observable.create<String> {
-                                FileUtils.copyFileFromRawToOthers(MyApplication.instance, "detfaces/shape_predictor_68_face_landmarks.dat", "/sdcard/misakaLove/shape_predictor_68_face_landmarks.dat")
+//                                FileUtils.copyFileFromRawToOthers(MyApplication.instance, "detfaces/shape_predictor_68_face_landmarks.dat", "/sdcard/misakaLove/shape_predictor_68_face_landmarks.dat")
                                 it.onNext("复制文件成功")
                             }.subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())

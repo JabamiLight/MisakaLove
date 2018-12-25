@@ -1,42 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_filter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/ll_filter"
     android:background="@drawable/shape_round_whiter"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="@dimen/page_padding"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="@dimen/page_padding">
 
 
     <LinearLayout
-        android:padding="@dimen/dp_10"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10">
 
         <TextView
+            android:id="@+id/tv_filter_list"
             style="@style/text_black_12"
             android:layout_weight="1"
             android:text="滤镜"/>
 
         <TextView
+            android:id="@+id/tv_beauty"
             style="@style/text_black_12"
             android:layout_weight="1"
-            android:text="磨皮"/>
+            android:text="美颜"/>
 
-        <TextView
-            style="@style/text_black_12"
-            android:layout_weight="1"
-            android:text="大眼瘦脸"/>
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_filter"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager">
     </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_builty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:padding="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/text_black_12"
+                android:text="大眼"/>
+            <SeekBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="0"/>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/text_black_12"
+                android:text="瘦脸"/>
+            <SeekBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="0"/>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/text_black_12"
+                android:text="磨皮"/>
+            <SeekBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="0"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </LinearLayout>

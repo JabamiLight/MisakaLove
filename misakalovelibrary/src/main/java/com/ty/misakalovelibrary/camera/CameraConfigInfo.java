@@ -11,6 +11,8 @@ public class CameraConfigInfo {
 		this.textureWidth = textureWidth;
 		this.textureHeight = textureHeight;
 		this.cameraFacingId = cameraFacingId;
+
+
 	}
 
 	public int getDegress() {
