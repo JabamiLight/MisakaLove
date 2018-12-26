@@ -359,13 +359,13 @@ public class ChangbaVideoCamera {
 //                        DEFAULT_VIDEO_WIDTH, true);
                 if (canvas != null) {
                     int strokeWidth = Math.max(DEFAULT_VIDEO_HEIGHT / 240, 2);
-
+                    mPaint.setTextSize(25);
                     for(int i = 0; i < points.length; ++i) {
                         PointF p = points[i];
                         if (true) {
                             p.x = (float)DEFAULT_VIDEO_HEIGHT - p.x;
                         }
-                        if ((double)visibles[i] < 0.5D) {
+                        if (i%2==0) {
                             mPaint.setColor(Color.rgb(255, 20, 20));
                         } else {
                             mPaint.setColor(Color.rgb(57, 168, 243));
