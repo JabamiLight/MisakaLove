@@ -3,3 +3,17 @@
 //
 
 #include "face.h"
+
+
+Face::~Face() {
+    if(points){
+        delete []points;
+    }
+
+}
+
+Pointf::Pointf(int i, int i1) {
+
+}
+
+Pointf::Pointf() {}

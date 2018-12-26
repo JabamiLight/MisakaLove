@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -189,6 +190,9 @@ public class ChangbaVideoCamera {
                 mCamera.release();
                 mCamera = null;
             }
+            if(mWindow!=null){
+                mWindow.release();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -307,10 +311,10 @@ public class ChangbaVideoCamera {
         if (faceActions != null && !faceActions.isEmpty()) {
             synchronized (lockFace) {
                 firstFace = faceActions.get(0);
-                
+                mCallback.setFaceInfo(firstFace);
             }
         }
-//        testface(faceActions);
+        testface(faceActions);
     }
 
     private void testface(List<Face> faceActions) {
@@ -351,8 +355,25 @@ public class ChangbaVideoCamera {
 
                 STUtils.drawFaceRect(canvas, rect, DEFAULT_VIDEO_HEIGHT,
                         DEFAULT_VIDEO_WIDTH, true);
-                STUtils.drawPoints(canvas, mPaint, points, visibles, DEFAULT_VIDEO_HEIGHT,
-                        DEFAULT_VIDEO_WIDTH, true);
+//                STUtils.drawPoints(canvas, mPaint, points, visibles, DEFAULT_VIDEO_HEIGHT,
+//                        DEFAULT_VIDEO_WIDTH, true);
+                if (canvas != null) {
+                    int strokeWidth = Math.max(DEFAULT_VIDEO_HEIGHT / 240, 2);
+
+                    for(int i = 0; i < points.length; ++i) {
+                        PointF p = points[i];
+                        if (true) {
+                            p.x = (float)DEFAULT_VIDEO_HEIGHT - p.x;
+                        }
+                        if ((double)visibles[i] < 0.5D) {
+                            mPaint.setColor(Color.rgb(255, 20, 20));
+                        } else {
+                            mPaint.setColor(Color.rgb(57, 168, 243));
+                        }
+
+                        canvas.drawText(""+i,p.x, p.y, mPaint);
+                    }
+                }
 
                 if (mWindow == null) {
                     mWindow = new FloatingCameraWindow(mContext);

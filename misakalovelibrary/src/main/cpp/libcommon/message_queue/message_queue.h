@@ -14,7 +14,7 @@ private:
 	int what;
 	int arg1;
 	int arg2;
-	void* obj;
+	void* obj= nullptr;
 
 public:
 	Message();

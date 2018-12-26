@@ -362,8 +362,17 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
     face->bottom=bottom;
     face->height=height;
     face->width=width;
-    face->landmarks=new int[212];
-    std::memcpy(landmarks,face->landmarks,212);
+    face->points = new Pointf[106];
+    for (int i = 0; i < 106; i++) {
+        face->points[i] = Pointf(landmarks[i * 2], landmarks[i * 2 + 1]);
+    }
+    if(degress==270){
+        for (int i = 0; i < 106; i++) {
+            face->points[i].x = cameraWidth -  face->points[i].x;
+        }
+    } else{
+
+    }
     Message *msg = new Message(MSG_UPDATE_FACE_INFO,face);
     if (handler)
         handler->postMessage(msg);
