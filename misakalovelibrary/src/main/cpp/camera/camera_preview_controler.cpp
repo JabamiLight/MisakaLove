@@ -163,6 +163,7 @@ void CameraPreviewControler::renderFrame() {
 
 void CameraPreviewControler::draw() {
     eglCore->makeCurrent(previewSurface);
+    setFaceInfo();
     renderer->render();
     if (!eglCore->swapBuffers(previewSurface)) {
         LOGE("eglSwapBuffers(previewSurface) returned error %d", eglGetError());
@@ -354,31 +355,42 @@ void
 CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bottom, int height,
                                     int width, int *landmarks) {
 
-    Face* face=new Face();
-    face->ID=ID;
-    face->left=left;
-    face->top=top;
-    face->right=right;
-    face->bottom=bottom;
-    face->height=height;
-    face->width=width;
+
+    pthread_mutex_lock(&mutex);
+    //java线程中传递的人脸信息
+    if (face == nullptr){
+        face = new Face();
+    }
+    face->ID = ID;
+    face->left = left;
+    face->top = top;
+    face->right = right;
+    face->bottom = bottom;
+    face->height = height;
+    face->width = width;
+    face->cameraWidth = cameraWidth;
+    face->cameraHeight = cameraHeight;
     face->points = new Pointf[106];
     for (int i = 0; i < 106; i++) {
-        face->points[i] = Pointf(landmarks[i * 2], landmarks[i * 2 + 1]);
+        face->points[i].x = landmarks[i * 2];
+        face->points[i].y = landmarks[i * 2 + 1];
     }
-    if(degress==270){
+    if (degress == 270) {
         for (int i = 0; i < 106; i++) {
-            face->points[i].x = cameraWidth -  face->points[i].x;
+            face->points[i].x = face->points[i].x;
         }
-    } else{
+    } else {
 
     }
-    Message *msg = new Message(MSG_UPDATE_FACE_INFO,face);
-    if (handler)
-        handler->postMessage(msg);
+    pthread_mutex_unlock(&mutex);
 }
 
-void CameraPreviewControler::setFaceInfo(Message *pMessage) {
-    renderer->face= static_cast<Face *>(pMessage->getObj());
+void CameraPreviewControler::setFaceInfo() {
+    pthread_mutex_lock(&mutex);
+    if(face){
+        renderer->setFaceInfo(face);
+    }
+    pthread_mutex_unlock(&mutex);
+
 }
 

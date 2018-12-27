@@ -65,7 +65,6 @@ public class ChangbaVideoCamera {
     private Face firstFace;
 
 
-
     public static void forcePreviewSize_640_480() {
         VIDEO_WIDTH = 640;
         VIDEO_HEIGHT = 480;
@@ -190,7 +189,7 @@ public class ChangbaVideoCamera {
                 mCamera.release();
                 mCamera = null;
             }
-            if(mWindow!=null){
+            if (mWindow != null) {
                 mWindow.release();
             }
         } catch (Exception e) {
@@ -314,7 +313,7 @@ public class ChangbaVideoCamera {
                 mCallback.setFaceInfo(firstFace);
             }
         }
-        testface(faceActions);
+//        testface(faceActions);
     }
 
     private void testface(List<Face> faceActions) {
@@ -345,13 +344,13 @@ public class ChangbaVideoCamera {
                 for (int i = 0; i < points.length; i++) {
                     visibles[i] = 1.0f;
 
-
                     if (rotate270) {
                         points[i].x = DEFAULT_VIDEO_HEIGHT - points[i].x;
 
                     }
 
                 }
+                Log.d("tedu", "testface: " + points[72].x);
 
                 STUtils.drawFaceRect(canvas, rect, DEFAULT_VIDEO_HEIGHT,
                         DEFAULT_VIDEO_WIDTH, true);
@@ -360,18 +359,21 @@ public class ChangbaVideoCamera {
                 if (canvas != null) {
                     int strokeWidth = Math.max(DEFAULT_VIDEO_HEIGHT / 240, 2);
                     mPaint.setTextSize(25);
-                    for(int i = 0; i < points.length; ++i) {
+                    for (int i = 0; i < points.length; ++i) {
                         PointF p = points[i];
                         if (true) {
-                            p.x = (float)DEFAULT_VIDEO_HEIGHT - p.x;
+                            p.x = (float) DEFAULT_VIDEO_HEIGHT - p.x;
                         }
-                        if (i%2==0) {
+                        if (i % 2 == 0) {
                             mPaint.setColor(Color.rgb(255, 20, 20));
                         } else {
                             mPaint.setColor(Color.rgb(57, 168, 243));
                         }
+                        if (i == 72) {
+                            canvas.drawText("" + p.x + " " + p.y, p.x, p.y, mPaint);
+                        }
+//                        canvas.drawText(""+i,p.x, p.y, mPaint);
 
-                        canvas.drawText(""+i,p.x, p.y, mPaint);
                     }
                 }
 
@@ -477,7 +479,7 @@ public class ChangbaVideoCamera {
         public void notifyFrameAvailable();
 
         public void updateTexMatrix(float texMatrix[]);
-        
+
         public void setFaceInfo(Face faceInfo);
     }
 

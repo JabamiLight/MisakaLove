@@ -26,6 +26,8 @@ public:
      int bottom;
      int height;
      int width;
+     int cameraWidth,cameraHeight;
+     bool isInvalid= false;
      Pointf* points;
 
      ~Face();

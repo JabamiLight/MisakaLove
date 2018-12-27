@@ -12,7 +12,7 @@ Face::~Face() {
 
 }
 
-Pointf::Pointf(int i, int i1) {
+Pointf::Pointf(int i, int i1):x(i) ,y(i1){
 
 }
 

@@ -4,11 +4,15 @@ uniform sampler2D inputImageTexture;
 in vec2 textureCoordinate;
 out vec4 FragColor;
 
-uniform highp float scaleRatio;// 缩放系数，0无缩放，大于0则放大
-uniform highp float radius;// 缩放算法的作用域半径
-uniform highp vec2 leftEyeCenterPosition; // 左眼控制点，越远变形越小
-uniform highp vec2 rightEyeCenterPosition; // 右眼控制点
+uniform float scaleRatio;// 缩放系数，0无缩放，大于0则放大
+uniform float radius;// 缩放算法的作用域半径
+uniform vec2 leftEyeCenterPosition; // 左眼控制点，越远变形越小
+uniform vec2 rightEyeCenterPosition; // 右眼控制点
 uniform float aspectRatio; // 所处理图像的宽高比
+
+
+int flag=0;
+
 
 highp vec2 warpPositionToUse(vec2 centerPostion, vec2 currentPosition, float radius, float scaleRatio, float aspectRatio)
 {
@@ -29,6 +33,9 @@ highp vec2 warpPositionToUse(vec2 centerPostion, vec2 currentPosition, float rad
     {
         float alpha = 1.0 - scaleRatio * pow(r / radius - 1.0, 2.0);
         positionToUse = centerPostion + alpha * (currentPosition - centerPostion);
+        flag=1;
+    }else{
+    flag=0;
     }
 
     return positionToUse;
@@ -39,8 +46,22 @@ highp vec2 warpPositionToUse(vec2 centerPostion, vec2 currentPosition, float rad
 void main() {
 
     vec2 positionToUse = warpPositionToUse(leftEyeCenterPosition, textureCoordinate, radius, scaleRatio, aspectRatio);
+
     positionToUse = warpPositionToUse(rightEyeCenterPosition, positionToUse, radius, scaleRatio, aspectRatio);
 
+
+    if(flag==1){
+
+    FragColor = vec4(1.0);
+    }else{
+
     FragColor = texture(inputImageTexture, positionToUse);
-//     FragColor = texture(inputImageTexture, textureCoordinate);
+    }
+
+
 }
+
+
+
+
+

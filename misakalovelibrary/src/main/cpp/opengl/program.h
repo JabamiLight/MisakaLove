@@ -38,6 +38,7 @@ protected:
     int width,height;
     int vaoIndex=0;
 
+    virtual void preInit();
     virtual void preRender();
 
 };

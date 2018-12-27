@@ -21,7 +21,7 @@ AmaroFilter::~AmaroFilter() {
     glDeleteTextures(3, inputTexture);
 }
 
-void AmaroFilter::preRender() {
+void AmaroFilter::preInit() {
     glUniform1f(mGLStrengthLocation, 1.0f);
     glUniform1i(inputTextureLocation[0], 1);
     glUniform1i(inputTextureLocation[1], 2);
@@ -29,7 +29,6 @@ void AmaroFilter::preRender() {
 }
 
 void AmaroFilter::initLocation() {
-    glUseProgram(mGLProgId);
     mGLStrengthLocation = glGetUniformLocation(mGLProgId, "strength");
     inputTextureLocation[0] = glGetUniformLocation(mGLProgId, "inputImageTexture2");
     inputTextureLocation[1] = glGetUniformLocation(mGLProgId, "inputImageTexture3");

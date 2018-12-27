@@ -20,7 +20,7 @@ void CameraPreviewRender::init(jint degress, bool isVFlip, int textureWidth, int
 //    previewProgram->init(degress,isVFlip,screenWidth,screenHeight);
 //    videoEffectCore->addFilter(previewProgram);
 
-    videoEffectCore->addFilter(new BeautyFilter());
+    videoEffectCore->addFilter(new BeautyFilter(), EFFECT_BEAUTY);
 }
 
 CameraPreviewRender::CameraPreviewRender() {
@@ -46,14 +46,19 @@ void CameraPreviewRender::switchFilter(uint index) {
             videoEffectCore->clearFilter();
             break;
         case 22:
-           videoEffectCore->addFilter(new CoolFilter());
+            videoEffectCore->addFilter(new CoolFilter(), EFFECT_FILTER);
             break;
         case 1:
-           videoEffectCore->addFilter(new WhiteCatFilter());
+            videoEffectCore->addFilter(new WhiteCatFilter(), EFFECT_FILTER);
             break;
         case 4:
             break;
     }
+
+}
+
+void CameraPreviewRender::setFaceInfo(Face *pFace) {
+    videoEffectCore->setFaceInfo(pFace);
 
 }
 

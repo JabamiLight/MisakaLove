@@ -7,9 +7,9 @@
 
 
 #include "../../opengl/program.h"
+#include "../../3rdparty/facedet/face.h"
 
 class BeautyFilter : public Program{
-
 
 
 //    float scaleRatio;// 缩放系数，0无缩放，大于0则放大
@@ -18,20 +18,24 @@ class BeautyFilter : public Program{
 //    vec2 rightEyeCenterPosition; // 右眼控制点
 //    aspectRatio; // 所处理图像的宽高比
 private:
-    GLint scaleRatio;
-    GLint radius;
+    GLint scaleRatioLocation;
+    GLint radiusLocation;
     GLint leftEyeCenterPosition;
     GLint rightEyeCenterPosition;
-    GLint aspectRatio;
+    GLint aspectRatioLocation;
+
+    float scale,radius;
+    Pointf leftEyePoint;
+    Pointf RightEyePoint;
 
 public:
     BeautyFilter();
     void initLocation() override;
+    void setFaceInfo(Face* face);
 
 
 protected:
     void preRender() override;
-
 
 };
 

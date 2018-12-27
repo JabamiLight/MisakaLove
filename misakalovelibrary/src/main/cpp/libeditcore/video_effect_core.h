@@ -13,13 +13,21 @@
 #include "common/camera_preview_program.h"
 #include "../libcommon/CommonTools.h"
 #include "../3rdparty/facedet/detector.h"
+#include "filter/cool_filter.h"
+#include "../3rdparty/facedet/face.h"
+#include "beauty/beauty_filter.h"
 
+#include <map>
+#define EFFECT_FILTER 1
+#define EFFECT_BEAUTY 2
 using namespace std;
 
 class VideoEffectCore {
 
+
+
 private:
-    list<Program*> filterPrograms;
+    map<int,Program*> filterPrograms;
     Program* copyCommonProgram;
     GLuint* processTextureIds;
     GLuint cameraTextureId;
@@ -28,6 +36,7 @@ private:
     jint  degress;
     bool isVFilp;
     int textureWidth,textureHeight;
+
 public:
     void init(jint textureWidth, bool textureHeight, int i, int i1);
 
@@ -37,7 +46,7 @@ public:
 
     void process();
 
-    void addFilter(Program* program);
+    void addFilter(Program *program, int i);
 
     GLuint getAfterTextureId();
 
@@ -47,6 +56,12 @@ public:
 
     void clearFilter();
 
+
+    /**
+     * 设置人脸数据给program
+     */
+
+    void setFaceInfo(Face* face);
 
     void *ptr;
 };

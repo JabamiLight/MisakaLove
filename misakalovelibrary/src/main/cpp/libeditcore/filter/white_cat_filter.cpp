@@ -35,7 +35,7 @@ void WhiteCatFilter::initLocation() {
     mToneCurveTextureUniformLocation=glGetUniformLocation(mGLProgId,"curve");
 }
 
-void WhiteCatFilter::preRender(){
+void WhiteCatFilter::preInit(){
     glUniform1i(mToneCurveTextureUniformLocation,1);
 }
 

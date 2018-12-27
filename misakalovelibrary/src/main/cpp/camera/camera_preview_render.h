@@ -32,6 +32,8 @@ public:
     void destory() override;
 
     void switchFilter(uint index);
+
+    void setFaceInfo(Face *pFace);
 };
 
 

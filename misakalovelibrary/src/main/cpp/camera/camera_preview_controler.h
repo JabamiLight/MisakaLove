@@ -76,16 +76,21 @@ public:
                       int width,
                       int* landmarks);
 
-    void setFaceInfo(Message *pMessage);
+    void setFaceInfo();
 
 private:
     int screenWidth, screenHeight;
     ANativeWindow *_window;
     JavaVM *g_jvm;
+    Face *face= nullptr;
     //用于回调
     jobject obj;
     EGLCore *eglCore;
     CameraPreviewRender *renderer;
+
+
+    //人脸数据互斥锁
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
     void buildRenderInstance();
 
@@ -122,6 +127,7 @@ private:
 
     void releaseCamera();
 
+
 };
 
 
@@ -152,7 +158,7 @@ public:
                 previewController->switchFilter();
                 break;
             case MSG_UPDATE_FACE_INFO:
-                previewController->setFaceInfo(msg);
+//                previewController->setFaceInfo(msg);
                 break;
 //            case MSG_START_RECORDING:
 //                previewController->startRecording();

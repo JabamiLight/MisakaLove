@@ -32,7 +32,7 @@ int CameraPreviewProgram::initTexture() {
 }
 
 
-void CameraPreviewProgram::preRender() {
+void CameraPreviewProgram::preInit() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_EXTERNAL_OES, textureId);
 }

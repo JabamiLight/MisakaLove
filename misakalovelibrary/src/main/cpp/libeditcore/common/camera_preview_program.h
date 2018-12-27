@@ -16,7 +16,7 @@ public:
 
 
 protected:
-    void preRender() override;
+    void preInit() override;
 };
 
 

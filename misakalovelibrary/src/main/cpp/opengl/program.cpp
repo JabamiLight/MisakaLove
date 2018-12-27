@@ -32,10 +32,11 @@ void Program::destory() {
 
 
 void Program::render() {
+    glUseProgram(mGLProgId);
+    preRender();
     glViewport(0, 0, width, height);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(mGLProgId);
     glBindVertexArray(Program::VAO[vaoIndex]);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
@@ -46,8 +47,9 @@ void Program::init(int degress, bool isVFlip, int width, int height) {
     chooseVertex(degress, isVFlip);
     initCoord();
     initTexture();
+    glUseProgram(mGLProgId);
     initLocation();
-    preRender();
+    preInit();
 }
 
 void Program::initCoord() {
@@ -203,6 +205,10 @@ void Program::setTextureId(GLuint textureId) {
 
 
 void Program::initLocation() {
+
+}
+
+void Program::preInit() {
 
 }
 

@@ -11,7 +11,7 @@
 class AmaroFilter: public Program {
 
 protected:
-    void preRender() override;
+    void preInit() override;
 
 private:
     GLuint inputTexture[3]={0, 0, 0};

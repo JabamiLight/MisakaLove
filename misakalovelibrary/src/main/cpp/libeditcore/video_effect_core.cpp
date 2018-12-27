@@ -3,6 +3,7 @@
 //
 
 #include "video_effect_core.h"
+#include "filter/cool_filter.h"
 
 
 VideoEffectCore::~VideoEffectCore() {
@@ -52,21 +53,21 @@ void VideoEffectCore::init(jint degress, bool isVFlip, int textureWidth, int tex
 void VideoEffectCore::process() {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     copyCommonProgram->render();
-    list<Program *>::iterator iter;
+    map<int, Program*>::iterator iter;
     for (iter = filterPrograms.begin(); iter != filterPrograms.end(); iter++) {
-        (*iter)->setTextureId(processTextureIds[processTextureIndex]);
+        iter->second->setTextureId(processTextureIds[processTextureIndex]);
         processTextureIndex= static_cast<uint8_t>((processTextureIndex + 1) % 2);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                                processTextureIds[processTextureIndex], 0);
-        (*iter)->render();
+        iter->second->render();
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void VideoEffectCore::addFilter(Program *program) {
+void VideoEffectCore::addFilter(Program *program, int i) {
     filterPrograms.clear();
     program->init(0, true,textureWidth,textureHeight);
-    filterPrograms.push_back(program);
+    filterPrograms.insert(pair<int,Program*>(i,program));
 }
 
 GLuint VideoEffectCore::getAfterTextureId() {
@@ -79,6 +80,12 @@ GLuint VideoEffectCore::getESTextureId() {
 
 void VideoEffectCore::clearFilter() {
     filterPrograms.clear();
+
+}
+
+void VideoEffectCore::setFaceInfo(Face *face) {
+    map<int, Program*>::iterator iter=filterPrograms.find(EFFECT_BEAUTY);
+    static_cast<BeautyFilter*>(iter->second)->setFaceInfo(face);
 
 }
 

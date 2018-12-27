@@ -18,7 +18,7 @@ public:
 
 
 protected:
-    void preRender() override;
+    void preInit() override;
 
 public:
     void initLocation() override;
