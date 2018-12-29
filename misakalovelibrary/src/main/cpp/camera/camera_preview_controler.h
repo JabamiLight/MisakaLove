@@ -15,6 +15,7 @@
 #define CAMERA_FACING_BACK                                        0
 #define CAMERA_FACING_FRONT                                        1
 
+
 class CameraPreviewHandler;
 
 enum RenderThreadMessage {
@@ -128,6 +129,7 @@ private:
     void releaseCamera();
 
 
+    void readCurFaceInfo();
 };
 
 
@@ -158,7 +160,7 @@ public:
                 previewController->switchFilter();
                 break;
             case MSG_UPDATE_FACE_INFO:
-//                previewController->setFaceInfo(msg);
+                previewController->setFaceInfo();
                 break;
 //            case MSG_START_RECORDING:
 //                previewController->startRecording();

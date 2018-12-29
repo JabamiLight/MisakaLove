@@ -38,10 +38,10 @@ import zeusees.tracking.FaceTracking;
 public class ChangbaVideoCamera {
     private static final String TAG = "ChangbaVideoCamera";
     private static final int MESSAGE_DRAW_POINTS = 100;
-    public static int VIDEO_WIDTH = 720;
-    public static int DEFAULT_VIDEO_WIDTH = 720;
-    public static int VIDEO_HEIGHT = 1280;
-    public static int DEFAULT_VIDEO_HEIGHT = 1280;
+    public static int VIDEO_WIDTH = 864;
+    public static int DEFAULT_VIDEO_W = 1280;
+    public static int VIDEO_HEIGHT = 480;
+    public static int DEFAULT_VIDEO_H = 720;
     public static int videoFrameRate = 24;
     //几个赋值的buffer
     private byte[] mPreBuffer;//首先分配一块内存作为缓冲区，size的计算方式见第四点中
@@ -55,7 +55,7 @@ public class ChangbaVideoCamera {
     private Object lockFace = new Object();
     private Handler mHandler;
     private FaceTracking mMultiTrack106 = null;
-    private int frameIndex;
+    private byte frameIndex;
     private Paint mPaint = new Paint();
 
     private Camera mCamera;
@@ -63,6 +63,7 @@ public class ChangbaVideoCamera {
     private Context mContext;
 
     private Face firstFace;
+    private Camera.Face faceDets;
 
 
     public static void forcePreviewSize_640_480() {
@@ -74,6 +75,12 @@ public class ChangbaVideoCamera {
     public static void forcePreviewSize_1280_720() {
         VIDEO_WIDTH = 1280;
         VIDEO_HEIGHT = 720;
+        videoFrameRate = 24;
+    }
+
+    public static void forcePreviewSize_864_480() {
+        VIDEO_WIDTH = 864;
+        VIDEO_HEIGHT = 480;
         videoFrameRate = 24;
     }
 
@@ -123,9 +130,9 @@ public class ChangbaVideoCamera {
                 @Override
                 public void onFrameAvailable(SurfaceTexture surfaceTexture) {
                     if (null != mCallback) {
-//						Log.d("RecordingPublisher", "surfaceTexture time stamp is "+surfaceTexture
+//						Log.v("tedu", "surfaceTexture time stamp is "+surfaceTexture
 // .getTimestamp()/1000000000.0f);
-                        mCallback.notifyFrameAvailable();
+
                     }
                 }
             });
@@ -136,7 +143,6 @@ public class ChangbaVideoCamera {
                     synchronized (mNv21Data) {
                         System.arraycopy(data, 0, mNv21Data, 0, data.length);
                     }
-                    mHandler.removeMessages(MESSAGE_DRAW_POINTS);
                     mHandler.sendEmptyMessage(MESSAGE_DRAW_POINTS);
                     mCamera.addCallbackBuffer(mPreBuffer);
                 }
@@ -155,7 +161,7 @@ public class ChangbaVideoCamera {
                 mCameraSurfaceTexture.updateTexImage();
 
                 //去掉这个没用的调用
-//				float[] mTmpMatrix = new float[16];
+//				float[] mTmpMatrix = new floathandleDrawPoints[16];
 //				mCameraSurfaceTexture.getTransformMatrix(mTmpMatrix);
 //				
 //				if (null != mCallback) {
@@ -200,7 +206,8 @@ public class ChangbaVideoCamera {
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private CameraConfigInfo setUpCamera(final int id) throws CameraParamSettingException {
 //		 forcePreviewSize_640_480();
-        forcePreviewSize_1280_720();
+//        forcePreviewSize_1280_720();
+        forcePreviewSize_864_480();
         // printStackTrace(CameraLoader.class);
         try {
             // 1、开启Camera
@@ -228,19 +235,21 @@ public class ChangbaVideoCamera {
             List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
             int previewWidth = VIDEO_WIDTH;
             int previewHeight = VIDEO_HEIGHT;
+
+
             boolean isSupportPreviewSize = isSupportPreviewSize(supportedPreviewSizes, previewWidth,
                     previewHeight);
 
             if (isSupportPreviewSize) {
                 parameters.setPreviewSize(previewWidth, previewHeight);
             } else {
-                previewWidth = DEFAULT_VIDEO_WIDTH;
-                previewHeight = DEFAULT_VIDEO_HEIGHT;
+                previewWidth = DEFAULT_VIDEO_H;
+                previewHeight = DEFAULT_VIDEO_W;
                 isSupportPreviewSize = isSupportPreviewSize(
                         supportedPreviewSizes, previewWidth, previewHeight);
                 if (isSupportPreviewSize) {
-                    VIDEO_WIDTH = DEFAULT_VIDEO_WIDTH;
-                    VIDEO_HEIGHT = DEFAULT_VIDEO_HEIGHT;
+                    VIDEO_WIDTH = DEFAULT_VIDEO_H;
+                    VIDEO_HEIGHT = DEFAULT_VIDEO_W;
                     parameters.setPreviewSize(previewWidth, previewHeight);
                 } else {
                     throw new CameraParamSettingException("视频参数设置错误:设置预览的尺寸异常");
@@ -254,6 +263,7 @@ public class ChangbaVideoCamera {
                 parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
             }
             int degress = getCameraDisplayOrientation((Activity) mContext, id);
+
             try {
                 mCamera.setParameters(parameters);
             } catch (Exception e) {
@@ -269,13 +279,13 @@ public class ChangbaVideoCamera {
     }
 
     private void initBufferAndDetect(Parameters parameters) {
-        mPreBuffer = new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
+        mPreBuffer = new byte[VIDEO_HEIGHT * VIDEO_WIDTH * ImageFormat.getBitsPerPixel
                 (parameters.getPreviewFormat()) / 8];
-        mNv21Data = new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
+        mNv21Data = new byte[VIDEO_HEIGHT * VIDEO_WIDTH * ImageFormat.getBitsPerPixel
                 (parameters.getPreviewFormat()) / 8];
-        mTmpBuffer = new byte[DEFAULT_VIDEO_WIDTH * DEFAULT_VIDEO_HEIGHT * ImageFormat.getBitsPerPixel
+        mTmpBuffer = new byte[VIDEO_HEIGHT * VIDEO_WIDTH * ImageFormat.getBitsPerPixel
                 (parameters.getPreviewFormat()) / 8];
-        mCroppedBitmap = Bitmap.createBitmap(DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT, Bitmap.Config
+        mCroppedBitmap = Bitmap.createBitmap(VIDEO_HEIGHT, VIDEO_WIDTH, Bitmap.Config
                 .ARGB_8888);
         mMultiTrack106 = new FaceTracking(mContext, "/sdcard/ZeuseesFaceTracking/models");
         mHandlerThread = new HandlerThread("DrawFacePointsThread");
@@ -299,12 +309,35 @@ public class ChangbaVideoCamera {
 // mNv21Data.length);
             System.arraycopy(mNv21Data, 0, mTmpBuffer, 0, mNv21Data.length);
         }
-
+        long cur = System.currentTimeMillis();
         if (frameIndex == 0) {
-            mMultiTrack106.FaceTrackingInit(mTmpBuffer, DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT);
+            mMultiTrack106.FaceTrackingInit(mTmpBuffer, VIDEO_HEIGHT, VIDEO_WIDTH);
         } else {
-            mMultiTrack106.Update(mTmpBuffer, DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT);
+            mMultiTrack106.Update(mTmpBuffer, VIDEO_HEIGHT, VIDEO_WIDTH);
         }
+        Log.d("tedu", "handleDrawPoints: "+(System.currentTimeMillis()-cur));
+        List<Face> faceActions = mMultiTrack106.getTrackingInfo();
+        if (faceActions != null && !faceActions.isEmpty()) {
+            synchronized (lockFace) {
+                firstFace = faceActions.get(0);
+                mCallback.setFaceInfo(firstFace);
+            }
+        }
+        frameIndex++;
+//        Log.d("tedu", "handleDrawPoints: +++" + (cur - System.currentTimeMillis()));
+        mCallback.notifyFrameAvailable();
+//        testface(faceActions);
+    }
+
+    private void handleDrawPointsDirec(byte[] mTmpBuffer) {
+
+        long cur = System.currentTimeMillis();
+        if (frameIndex == 0) {
+            mMultiTrack106.FaceTrackingInit(mTmpBuffer, VIDEO_HEIGHT, VIDEO_WIDTH);
+        } else {
+            mMultiTrack106.Update(mTmpBuffer, VIDEO_HEIGHT, VIDEO_WIDTH);
+        }
+//        Log.d("tedu", "handleDrawPoints: +++" + (cur - System.currentTimeMillis()));
         frameIndex++;
         List<Face> faceActions = mMultiTrack106.getTrackingInfo();
         if (faceActions != null && !faceActions.isEmpty()) {
@@ -313,28 +346,23 @@ public class ChangbaVideoCamera {
                 mCallback.setFaceInfo(firstFace);
             }
         }
+        mCallback.notifyFrameAvailable();
 //        testface(faceActions);
     }
 
     private void testface(List<Face> faceActions) {
         if (faceActions != null) {
-
-
             Canvas canvas = new Canvas(mCroppedBitmap);
-
             canvas.drawColor(0, PorterDuff.Mode.CLEAR);
             canvas.setMatrix(matrix);
             boolean rotate270 = true;
 //            boolean rotate270 = mCameraInfo.orientation == 270;
             for (Face r : faceActions) {
-
-                Rect rect = new Rect(DEFAULT_VIDEO_HEIGHT - r.left, r.top, DEFAULT_VIDEO_HEIGHT - r.right,
+                Rect rect = new Rect(VIDEO_WIDTH - r.left, r.top, VIDEO_WIDTH - r.right,
                         r.bottom);
-
                 PointF[] points = new PointF[106];
                 for (int i = 0; i < 106; i++) {
                     points[i] = new PointF(r.landmarks[i * 2], r.landmarks[i * 2 + 1]);
-
 
                 }
 
@@ -345,34 +373,34 @@ public class ChangbaVideoCamera {
                     visibles[i] = 1.0f;
 
                     if (rotate270) {
-                        points[i].x = DEFAULT_VIDEO_HEIGHT - points[i].x;
+                        points[i].x = VIDEO_WIDTH - points[i].x;
 
                     }
 
                 }
                 Log.d("tedu", "testface: " + points[72].x);
 
-                STUtils.drawFaceRect(canvas, rect, DEFAULT_VIDEO_HEIGHT,
-                        DEFAULT_VIDEO_WIDTH, true);
-//                STUtils.drawPoints(canvas, mPaint, points, visibles, DEFAULT_VIDEO_HEIGHT,
-//                        DEFAULT_VIDEO_WIDTH, true);
+                STUtils.drawFaceRect(canvas, rect, VIDEO_WIDTH,
+                        VIDEO_HEIGHT, true);
+//                STUtils.drawPoints(canvas, mPaint, points, visibles, VIDEO_WIDTH,
+//                        VIDEO_HEIGHT, true);
                 if (canvas != null) {
-                    int strokeWidth = Math.max(DEFAULT_VIDEO_HEIGHT / 240, 2);
+                    int strokeWidth = Math.max(VIDEO_WIDTH / 240, 2);
                     mPaint.setTextSize(25);
                     for (int i = 0; i < points.length; ++i) {
                         PointF p = points[i];
                         if (true) {
-                            p.x = (float) DEFAULT_VIDEO_HEIGHT - p.x;
+                            p.x = (float) VIDEO_WIDTH - p.x;
                         }
                         if (i % 2 == 0) {
                             mPaint.setColor(Color.rgb(255, 20, 20));
                         } else {
                             mPaint.setColor(Color.rgb(57, 168, 243));
                         }
-                        if (i == 72) {
-                            canvas.drawText("" + p.x + " " + p.y, p.x, p.y, mPaint);
-                        }
-//                        canvas.drawText(""+i,p.x, p.y, mPaint);
+//                        if (i == 72) {
+//                            canvas.drawText("" + p.x + " " + p.y, p.x, p.y, mPaint);
+//                        }
+                        canvas.drawText("" + i, p.x, p.y, mPaint);
 
                     }
                 }
@@ -486,4 +514,59 @@ public class ChangbaVideoCamera {
     public void setCallback(ChangbaVideoCameraCallback callback) {
         this.mCallback = callback;
     }
+
+    public void setFaceInfo() {
+        synchronized (lockFace) {
+            if (firstFace != null)
+                mCallback.setFaceInfo(firstFace);
+        }
+
+    }
+
+
+    /**
+     * 通过对比得到与宽高比最接近的预览尺寸（如果有相同尺寸，优先选择）
+     *
+     * @param isPortrait    是否竖屏
+     * @param surfaceWidth  需要被进行对比的原宽
+     * @param surfaceHeight 需要被进行对比的原高
+     * @param preSizeList   需要对比的预览尺寸列表
+     * @return 得到与原宽高比例最接近的尺寸
+     */
+    public static Camera.Size getCloselyPreSize(boolean isPortrait, int surfaceWidth, int surfaceHeight,
+                                                List<Camera.Size> preSizeList) {
+        int reqTmpWidth;
+        int reqTmpHeight;
+        // 当屏幕为垂直的时候需要把宽高值进行调换，保证宽大于高
+        if (isPortrait) {
+            reqTmpWidth = surfaceHeight;
+            reqTmpHeight = surfaceWidth;
+        } else {
+            reqTmpWidth = surfaceWidth;
+            reqTmpHeight = surfaceHeight;
+        }
+        //先查找preview中是否存在与surfaceview相同宽高的尺寸
+        for (Camera.Size size : preSizeList) {
+            if ((size.width == reqTmpWidth) && (size.height == reqTmpHeight)) {
+                return size;
+            }
+        }
+
+        // 得到与传入的宽高比最接近的size
+        float reqRatio = ((float) reqTmpWidth) / reqTmpHeight;
+        float curRatio, deltaRatio;
+        float deltaRatioMin = Float.MAX_VALUE;
+        Camera.Size retSize = null;
+        for (Camera.Size size : preSizeList) {
+            curRatio = ((float) size.width) / size.height;
+            deltaRatio = Math.abs(reqRatio - curRatio);
+            if (deltaRatio < deltaRatioMin) {
+                deltaRatioMin = deltaRatio;
+                retSize = size;
+            }
+        }
+
+        return retSize;
+    }
+
 }

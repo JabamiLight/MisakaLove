@@ -275,4 +275,5 @@ inline int strindex(char *s1, char *s2) {
 	return nPos;
 }
 
+
 #endif //SONG_STUDIO_COMMON

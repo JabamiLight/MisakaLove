@@ -215,6 +215,12 @@ public class ChangbaRecordingPreviewScheduler
     public void updateTexImageFromNative() {
         mCamera.updateTexImage();
     }
+    /**
+     * 获取人脸信息
+     **/
+    public void readCurFaceInfo() {
+        mCamera.setFaceInfo();
+    }
 
     /**
      * 释放掉当前的Camera

@@ -153,6 +153,23 @@ void CameraPreviewControler::startCameraPreview() {
         return;
     }
 }
+inline int fps()
+{
+    static int fps = 0;
+    static int lastTime = getCurrentTime(); // ms
+    static int frameCount = 0;
+
+    ++frameCount;
+
+    int curTime = getCurrentTime();
+    if (curTime - lastTime > 1000) // 取固定时间间隔为1秒
+    {
+        fps = frameCount;
+        frameCount = 0;
+        lastTime = curTime;
+    }
+    return fps;
+}
 
 void CameraPreviewControler::renderFrame() {
     updateTexImage();
@@ -161,9 +178,9 @@ void CameraPreviewControler::renderFrame() {
     }
 }
 
+
 void CameraPreviewControler::draw() {
     eglCore->makeCurrent(previewSurface);
-    setFaceInfo();
     renderer->render();
     if (!eglCore->swapBuffers(previewSurface)) {
         LOGE("eglSwapBuffers(previewSurface) returned error %d", eglGetError());
@@ -229,7 +246,6 @@ void CameraPreviewControler::updateTexImage() {
     if (g_jvm->DetachCurrentThread() != JNI_OK) {
         LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
     }
-
 }
 
 void CameraPreviewControler::destroyWindowSurface() {
@@ -356,7 +372,6 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
                                     int width, int *landmarks) {
 
 
-    pthread_mutex_lock(&mutex);
     //java线程中传递的人脸信息
     if (face == nullptr){
         face = new Face();
@@ -382,15 +397,36 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
     } else {
 
     }
-    pthread_mutex_unlock(&mutex);
+    Message *msg = new Message(MSG_UPDATE_FACE_INFO);
+    if (handler)
+        handler->postMessage(msg);
 }
 
 void CameraPreviewControler::setFaceInfo() {
-    pthread_mutex_lock(&mutex);
-    if(face){
-        renderer->setFaceInfo(face);
-    }
-    pthread_mutex_unlock(&mutex);
+    renderer->setFaceInfo(face);
+}
 
+
+void CameraPreviewControler::readCurFaceInfo() {
+    JNIEnv *env;
+    if (g_jvm->AttachCurrentThread(&env, NULL) != JNI_OK) {
+        LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
+        return;
+    }
+    if (env == NULL) {
+        LOGI("getJNIEnv failed");
+        return;
+    }
+    jclass jcls = env->GetObjectClass(obj);
+    if (NULL != jcls) {
+        jmethodID updateTexImageCallback = env->GetMethodID(jcls, "readCurFaceInfo",
+                                                            "()V");
+        if (NULL != updateTexImageCallback) {
+            env->CallVoidMethod(obj, updateTexImageCallback);
+        }
+    }
+    if (g_jvm->DetachCurrentThread() != JNI_OK) {
+        LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
+    }
 }
 
