@@ -64,6 +64,8 @@ public:
     void setFaceInfo(Face* face);
 
     void *ptr;
+
+    void setBeautyPara(float i);
 };
 
 

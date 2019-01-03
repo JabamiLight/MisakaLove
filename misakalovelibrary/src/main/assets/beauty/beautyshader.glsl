@@ -10,7 +10,7 @@ uniform vec2 leftEyeCenterPosition; // 左眼控制点，越远变形越小
 uniform vec2 rightEyeCenterPosition; // 右眼控制点
 uniform float aspectRatio; // 所处理图像的宽高比
 uniform int faceValidate;
-
+int flag;
 
 highp vec2 warpPositionToUse(vec2 centerPostion, vec2 currentPosition, float radius, float scaleRatio, float aspectRatio)
 {
@@ -27,8 +27,10 @@ highp vec2 warpPositionToUse(vec2 centerPostion, vec2 currentPosition, float rad
 
     float r = distance(currentPositionToUse, centerPostionToUse);
 
+    flag=0;
     if(r < radius)
     {
+        flag=1;
         float alpha = 1.0 - scaleRatio * pow(r / radius - 1.0, 2.0);
         positionToUse = centerPostion + alpha * (currentPosition - centerPostion);
     }
@@ -44,7 +46,15 @@ void main() {
     if(faceValidate==1){
         vec2 positionToUse = warpPositionToUse(leftEyeCenterPosition, textureCoordinate, radius, scaleRatio, aspectRatio);
         positionToUse = warpPositionToUse(rightEyeCenterPosition, positionToUse, radius, scaleRatio, aspectRatio);
-        FragColor = texture(inputImageTexture, positionToUse);
+
+        if(flag==1){
+
+            FragColor = vec4(1.0,1.0,1.0,1.0);
+        }else{
+
+            FragColor = texture(inputImageTexture, positionToUse);
+        }
+
     }else if(faceValidate==0){
          FragColor = texture(inputImageTexture, textureCoordinate);
     }

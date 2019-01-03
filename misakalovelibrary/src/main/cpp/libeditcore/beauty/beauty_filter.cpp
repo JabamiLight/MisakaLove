@@ -23,8 +23,7 @@ void BeautyFilter::setFaceInfo(Face *face) {
         leftEyePoint.y = face->points[72].y / face->cameraWidth;
         RightEyePoint.x = 1.0f - face->points[52].x / face->cameraHeight;
         RightEyePoint.y = face->points[52].y / face->cameraWidth;
-        radius = (face->points[35].x - face->points[72].x) / face->cameraHeight;
-        scale = 0.7;
+        radius = (face->points[59].x - face->points[72].x) / face->cameraHeight;
         faceValidate=1;
     } else{
         faceValidate=0;

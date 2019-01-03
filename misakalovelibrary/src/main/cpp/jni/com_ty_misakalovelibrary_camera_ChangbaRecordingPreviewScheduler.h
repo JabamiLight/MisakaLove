@@ -189,6 +189,12 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFaceInf
         jintArray landmarks,
         jboolean invalidate
 ) ;
+JNIEXPORT void JNICALL
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setBeautyParams(
+        JNIEnv *env,
+        jobject instance,
+        jint eyeProgress
+) ;
 
 
 //JNIEXPORT void JNI_METHOD(switchPreviewFilte23r)(JNIEnv *env, jobject instance, jint filterType) ;

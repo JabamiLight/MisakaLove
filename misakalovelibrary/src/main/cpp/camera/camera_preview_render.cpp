@@ -59,6 +59,10 @@ void CameraPreviewRender::switchFilter(uint index) {
 
 void CameraPreviewRender::setFaceInfo(Face *pFace) {
     videoEffectCore->setFaceInfo(pFace);
+}
+
+void CameraPreviewRender::setBeautyPara(float i) {
+    videoEffectCore->setBeautyPara(i);
 
 }
 

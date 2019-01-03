@@ -201,14 +201,22 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFa
 ) {
 
     if (!previewController) return;
-
     if (isValidate) {
-
         jint *points = env->GetIntArrayElements(landmarks, JNI_FALSE);
         previewController->setFaceInfo(ID, left, top, right, bottom, height, width, points);
         env->ReleaseIntArrayElements(landmarks, points, 0);
     } else {
         previewController->notFoundFaceInfo();
     }
+}
+
+void
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setBeautyParams(JNIEnv *env,
+                                                                                      jobject instance,
+                                                                                      jint eyeProgress) {
+    if (!previewController) return;
+    previewController->setBeautyPara(eyeProgress);
+
+
 }
 

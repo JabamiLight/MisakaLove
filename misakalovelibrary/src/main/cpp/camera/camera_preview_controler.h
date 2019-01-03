@@ -27,6 +27,7 @@ enum RenderThreadMessage {
     MSG_START_RECORDING,
     MSG_STOP_RECORDING,
     MSG_UPDATE_FACE_INFO,
+    MSG_SET_BEAUTY_PARA,
     MSG_EGL_DESTROY_PREVIEW_SURFACE,
     MSG_EGL_THREAD_EXIT
 };
@@ -81,11 +82,17 @@ public:
 
     void notFoundFaceInfo();
 
+    void setBeautyPara(int i);
+
+    void setBeautyPara();
+
 private:
     int screenWidth, screenHeight;
     ANativeWindow *_window;
     JavaVM *g_jvm;
     Face *face= nullptr;
+    BeautyPara para;
+
     //用于回调
     jobject obj;
     EGLCore *eglCore;
@@ -164,6 +171,9 @@ public:
                 break;
             case MSG_UPDATE_FACE_INFO:
                 previewController->setFaceInfo();
+                break;
+            case MSG_SET_BEAUTY_PARA:
+                previewController->setBeautyPara();
                 break;
 //            case MSG_START_RECORDING:
 //                previewController->startRecording();

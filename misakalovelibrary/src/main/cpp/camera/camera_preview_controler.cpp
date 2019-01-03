@@ -181,13 +181,11 @@ void CameraPreviewControler::renderFrame() {
 
 void CameraPreviewControler::draw() {
     eglCore->makeCurrent(previewSurface);
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&cond, &mutex);
-    pthread_mutex_unlock(&mutex);
     renderer->render();
     if (!eglCore->swapBuffers(previewSurface)) {
         LOGE("eglSwapBuffers(previewSurface) returned error %d", eglGetError());
     }
+
 }
 
 void CameraPreviewControler::resetRenderSize(ANativeWindow *window, jint screenWidth,
@@ -269,6 +267,10 @@ void CameraPreviewControler::destroy() {
     eglCore->release();
     delete eglCore;
     eglCore = NULL;
+    if(face){
+        delete face;
+        face= nullptr;
+    }
     LOGI("leave MVRecordingPreviewController::destroy...");
 }
 
@@ -376,8 +378,6 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
                                     int height,
                                     int width, int *landmarks) {
 
-    pthread_mutex_lock(&mutex);
-    //java线程中传递的人脸信息
     if (face == nullptr) {
         face = new Face();
     }
@@ -404,8 +404,6 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
 
     }
     renderer->setFaceInfo(face);
-    pthread_cond_signal(&cond);
-    pthread_mutex_unlock(&mutex);
 
 }
 
@@ -438,13 +436,20 @@ void CameraPreviewControler::readCurFaceInfo() {
 }
 
 void CameraPreviewControler::notFoundFaceInfo() {
-    pthread_mutex_lock(&mutex);
     if (face == nullptr) {
         face = new Face();
     }
     face->isInvalid = false;
     renderer->setFaceInfo(face);
-    pthread_cond_signal(&cond);
-    pthread_mutex_unlock(&mutex);
+}
+
+void CameraPreviewControler::setBeautyPara(int i) {
+    para.eyeScale=0.2f*i/100;
+    if (handler)
+        handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
+}
+
+void CameraPreviewControler::setBeautyPara() {
+    renderer->setBeautyPara(para.eyeScale);
 }
 

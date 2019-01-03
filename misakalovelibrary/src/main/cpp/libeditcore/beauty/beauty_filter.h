@@ -17,7 +17,7 @@ class BeautyFilter : public Program{
 //    vec2 leftEyeCenterPosition; // 左眼控制点，越远变形越小
 //    vec2 rightEyeCenterPosition; // 右眼控制点
 //    aspectRatio; // 所处理图像的宽高比
-private:
+public:
     GLint scaleRatioLocation;
     GLint radiusLocation;
     GLint leftEyeCenterPosition;
@@ -30,11 +30,9 @@ private:
     Pointf RightEyePoint;
     int faceValidate;
 
-public:
     BeautyFilter();
     void initLocation() override;
     void setFaceInfo(Face* face);
-
 
 protected:
     void preRender() override;

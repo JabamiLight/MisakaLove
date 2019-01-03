@@ -51,6 +51,7 @@
                 style="@style/text_black_12"
                 android:text="大眼"/>
             <SeekBar
+                android:id="@+id/sb_eyes"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

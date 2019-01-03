@@ -15,6 +15,12 @@
 #include "../libeditcore/beauty/beauty_filter.h"
 #include "../3rdparty/facedet/face.h"
 
+
+
+struct BeautyPara{
+    float eyeScale=0;
+};
+
 class CameraPreviewRender: public BaseRender {
 
 
@@ -34,6 +40,8 @@ public:
     void switchFilter(uint index);
 
     void setFaceInfo(Face *pFace);
+
+    void setBeautyPara(float i);
 };
 
 
