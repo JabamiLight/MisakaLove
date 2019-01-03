@@ -153,8 +153,8 @@ void CameraPreviewControler::startCameraPreview() {
         return;
     }
 }
-inline int fps()
-{
+
+inline int fps() {
     static int fps = 0;
     static int lastTime = getCurrentTime(); // ms
     static int frameCount = 0;
@@ -181,6 +181,9 @@ void CameraPreviewControler::renderFrame() {
 
 void CameraPreviewControler::draw() {
     eglCore->makeCurrent(previewSurface);
+    pthread_mutex_lock(&mutex);
+    pthread_cond_wait(&cond, &mutex);
+    pthread_mutex_unlock(&mutex);
     renderer->render();
     if (!eglCore->swapBuffers(previewSurface)) {
         LOGE("eglSwapBuffers(previewSurface) returned error %d", eglGetError());
@@ -294,7 +297,8 @@ void CameraPreviewControler::releaseCamera() {
     }
     jclass jcls = env->GetObjectClass(obj);
     if (NULL != jcls) {
-        jmethodID releaseCameraCallback = env->GetMethodID(jcls, "releaseCameraFromNative", "()V");
+        jmethodID releaseCameraCallback = env->GetMethodID(jcls, "releaseCameraFromNative",
+                                                           "()V");
         if (NULL != releaseCameraCallback) {
             env->CallVoidMethod(obj, releaseCameraCallback);
         }
@@ -368,12 +372,13 @@ void CameraPreviewControler::switchPreviewFilter(uint filterType) {
 }
 
 void
-CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bottom, int height,
+CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bottom,
+                                    int height,
                                     int width, int *landmarks) {
 
-
+    pthread_mutex_lock(&mutex);
     //java线程中传递的人脸信息
-    if (face == nullptr){
+    if (face == nullptr) {
         face = new Face();
     }
     face->ID = ID;
@@ -386,6 +391,7 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
     face->cameraWidth = cameraWidth;
     face->cameraHeight = cameraHeight;
     face->points = new Pointf[106];
+    face->isInvalid = true;
     for (int i = 0; i < 106; i++) {
         face->points[i].x = landmarks[i * 2];
         face->points[i].y = landmarks[i * 2 + 1];
@@ -397,9 +403,10 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
     } else {
 
     }
-    Message *msg = new Message(MSG_UPDATE_FACE_INFO);
-    if (handler)
-        handler->postMessage(msg);
+    renderer->setFaceInfo(face);
+    pthread_cond_signal(&cond);
+    pthread_mutex_unlock(&mutex);
+
 }
 
 void CameraPreviewControler::setFaceInfo() {
@@ -428,5 +435,16 @@ void CameraPreviewControler::readCurFaceInfo() {
     if (g_jvm->DetachCurrentThread() != JNI_OK) {
         LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
     }
+}
+
+void CameraPreviewControler::notFoundFaceInfo() {
+    pthread_mutex_lock(&mutex);
+    if (face == nullptr) {
+        face = new Face();
+    }
+    face->isInvalid = false;
+    renderer->setFaceInfo(face);
+    pthread_cond_signal(&cond);
+    pthread_mutex_unlock(&mutex);
 }
 

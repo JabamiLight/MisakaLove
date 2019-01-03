@@ -132,7 +132,7 @@ public class ChangbaVideoCamera {
                     if (null != mCallback) {
 //						Log.v("tedu", "surfaceTexture time stamp is "+surfaceTexture
 // .getTimestamp()/1000000000.0f);
-
+                        mCallback.notifyFrameAvailable();
                     }
                 }
             });
@@ -205,9 +205,9 @@ public class ChangbaVideoCamera {
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private CameraConfigInfo setUpCamera(final int id) throws CameraParamSettingException {
-//		 forcePreviewSize_640_480();
+        forcePreviewSize_1280_720();
 //        forcePreviewSize_1280_720();
-        forcePreviewSize_864_480();
+//        forcePreviewSize_1280_720();
         // printStackTrace(CameraLoader.class);
         try {
             // 1、开启Camera
@@ -239,22 +239,23 @@ public class ChangbaVideoCamera {
 
             boolean isSupportPreviewSize = isSupportPreviewSize(supportedPreviewSizes, previewWidth,
                     previewHeight);
+            parameters.setPreviewSize(previewWidth, previewHeight);
 
-            if (isSupportPreviewSize) {
-                parameters.setPreviewSize(previewWidth, previewHeight);
-            } else {
-                previewWidth = DEFAULT_VIDEO_H;
-                previewHeight = DEFAULT_VIDEO_W;
-                isSupportPreviewSize = isSupportPreviewSize(
-                        supportedPreviewSizes, previewWidth, previewHeight);
-                if (isSupportPreviewSize) {
-                    VIDEO_WIDTH = DEFAULT_VIDEO_H;
-                    VIDEO_HEIGHT = DEFAULT_VIDEO_W;
-                    parameters.setPreviewSize(previewWidth, previewHeight);
-                } else {
-                    throw new CameraParamSettingException("视频参数设置错误:设置预览的尺寸异常");
-                }
-            }
+//            if (isSupportPreviewSize) {
+//                parameters.setPreviewSize(previewWidth, previewHeight);
+//            } else {
+//                previewWidth = DEFAULT_VIDEO_H;
+//                previewHeight = DEFAULT_VIDEO_W;
+//                isSupportPreviewSize = isSupportPreviewSize(
+//                        supportedPreviewSizes, previewWidth, previewHeight);
+//                if (isSupportPreviewSize) {
+//                    VIDEO_WIDTH = DEFAULT_VIDEO_H;
+//                    VIDEO_HEIGHT = DEFAULT_VIDEO_W;
+//                    parameters.setPreviewSize(previewWidth, previewHeight);
+//                } else {
+//                    throw new CameraParamSettingException("视频参数设置错误:设置预览的尺寸异常");
+//                }
+//            }
             //下面这行设置 有可能导致 返回的图像尺寸和预期不一致
 //			parameters.setRecordingHint(true);
 
@@ -315,17 +316,15 @@ public class ChangbaVideoCamera {
         } else {
             mMultiTrack106.Update(mTmpBuffer, VIDEO_HEIGHT, VIDEO_WIDTH);
         }
-        Log.d("tedu", "handleDrawPoints: "+(System.currentTimeMillis()-cur));
+        Log.d("tedu", "handleDrawPoints: " + (System.currentTimeMillis() - cur));
         List<Face> faceActions = mMultiTrack106.getTrackingInfo();
         if (faceActions != null && !faceActions.isEmpty()) {
-            synchronized (lockFace) {
-                firstFace = faceActions.get(0);
-                mCallback.setFaceInfo(firstFace);
-            }
+            firstFace = faceActions.get(0);
+        } else {
+            firstFace = null;
         }
+        mCallback.setFaceInfo(firstFace);
         frameIndex++;
-//        Log.d("tedu", "handleDrawPoints: +++" + (cur - System.currentTimeMillis()));
-        mCallback.notifyFrameAvailable();
 //        testface(faceActions);
     }
 

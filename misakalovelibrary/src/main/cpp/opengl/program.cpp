@@ -82,8 +82,8 @@ void Program::initCoord() {
                 0.0f, 0.0f, //左上
 
                 //逆时针 270
-                0.0f, 1.0f, //左下
-                1.0f, 1.0f, //右下
+                0.0f, 0.8f, //左下
+                1.0f, 0.8f, //右下
                 0.0f, 0.0f, //左上
                 1.0f, 0.0f, //右上
 
@@ -117,7 +117,6 @@ void Program::initCoord() {
 
 
         };
-
         Program::VBO = new GLuint[9];
         Program::VAO = new GLuint[8];
         glUseProgram(mGLProgId);

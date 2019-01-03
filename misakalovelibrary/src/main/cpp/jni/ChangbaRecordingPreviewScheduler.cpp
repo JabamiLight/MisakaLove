@@ -195,13 +195,20 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFa
                                                                                        jint bottom,
                                                                                        jint height,
                                                                                        jint width,
-                                                                                       jintArray landmarks) {
-    jint *points = env->GetIntArrayElements(landmarks, JNI_FALSE);
-    if (previewController != nullptr) {
-        previewController->setFaceInfo(ID,left,top,right,bottom,height,width,points);
+                                                                                       jintArray landmarks,
+                                                                                       jboolean isValidate
+
+) {
+
+    if (!previewController) return;
+
+    if (isValidate) {
+
+        jint *points = env->GetIntArrayElements(landmarks, JNI_FALSE);
+        previewController->setFaceInfo(ID, left, top, right, bottom, height, width, points);
+        env->ReleaseIntArrayElements(landmarks, points, 0);
+    } else {
+        previewController->notFoundFaceInfo();
     }
-    env->ReleaseIntArrayElements(landmarks,points,0);
-
-
 }
 

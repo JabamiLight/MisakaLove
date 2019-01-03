@@ -79,6 +79,8 @@ public:
 
     void setFaceInfo();
 
+    void notFoundFaceInfo();
+
 private:
     int screenWidth, screenHeight;
     ANativeWindow *_window;
@@ -92,6 +94,7 @@ private:
 
     //人脸数据互斥锁
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
     void buildRenderInstance();
 

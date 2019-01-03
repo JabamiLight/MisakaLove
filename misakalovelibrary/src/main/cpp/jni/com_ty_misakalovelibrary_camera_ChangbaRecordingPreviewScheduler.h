@@ -186,7 +186,8 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFaceInf
         jint bottom,
         jint height,
         jint width,
-        jintArray landmarks
+        jintArray landmarks,
+        jboolean invalidate
 ) ;
 
 

@@ -13,24 +13,31 @@ void BeautyFilter::initLocation() {
     leftEyeCenterPosition = glGetUniformLocation(mGLProgId, "leftEyeCenterPosition");
     rightEyeCenterPosition = glGetUniformLocation(mGLProgId, "rightEyeCenterPosition");
     aspectRatioLocation = glGetUniformLocation(mGLProgId, "aspectRatio");
+    faceValidateLocation = glGetUniformLocation(mGLProgId, "faceValidate");
 }
 
 
 void BeautyFilter::setFaceInfo(Face *face) {
-    leftEyePoint.x=1.0f-face->points[72].x/face->cameraHeight;
-    leftEyePoint.y=face->points[72].y/face->cameraWidth;
-    RightEyePoint.x=1.0f-face->points[52].x/face->cameraHeight;
-    RightEyePoint.y=face->points[52].y/face->cameraWidth;
-    radius=(face->points[35].x-face->points[72].x)/face->cameraHeight;
-    scale=0.2;
+    if (face->isInvalid) {
+        leftEyePoint.x = 1.0f - face->points[72].x / face->cameraHeight;
+        leftEyePoint.y = face->points[72].y / face->cameraWidth;
+        RightEyePoint.x = 1.0f - face->points[52].x / face->cameraHeight;
+        RightEyePoint.y = face->points[52].y / face->cameraWidth;
+        radius = (face->points[35].x - face->points[72].x) / face->cameraHeight;
+        scale = 0.7;
+        faceValidate=1;
+    } else{
+        faceValidate=0;
+    }
 }
 
 void BeautyFilter::preRender() {
-    glUniform1f(scaleRatioLocation,scale);
+    glUniform1i(faceValidateLocation, faceValidate);
+    glUniform1f(scaleRatioLocation, scale);
     glUniform1f(radiusLocation, radius);
-    glUniform2f(leftEyeCenterPosition, leftEyePoint.x,leftEyePoint.y);
-    glUniform2f(rightEyeCenterPosition, RightEyePoint.x,RightEyePoint.y);
-    glUniform1f(aspectRatioLocation, static_cast<float >(height)/static_cast<float >(width));
+    glUniform2f(leftEyeCenterPosition, leftEyePoint.x, leftEyePoint.y);
+    glUniform2f(rightEyeCenterPosition, RightEyePoint.x, RightEyePoint.y);
+    glUniform1f(aspectRatioLocation, static_cast<float >(height) / static_cast<float >(width));
 }
 
 

@@ -9,7 +9,8 @@ import android.view.SurfaceHolder;
 import zeusees.tracking.Face;
 
 public class ChangbaRecordingPreviewScheduler
-        implements ChangbaVideoCamera.ChangbaVideoCameraCallback, ChangbaRecordingPreviewView.ChangbaRecordingPreviewViewCallback {
+        implements ChangbaVideoCamera.ChangbaVideoCameraCallback, ChangbaRecordingPreviewView
+        .ChangbaRecordingPreviewViewCallback {
     private static final String TAG = "ChangbaRecordingPreviewScheduler";
     private ChangbaRecordingPreviewView mPreviewView;
     private ChangbaVideoCamera mCamera;
@@ -18,7 +19,8 @@ public class ChangbaRecordingPreviewScheduler
         System.loadLibrary("native-lib");
     }
 
-    public ChangbaRecordingPreviewScheduler(ChangbaRecordingPreviewView previewView, ChangbaVideoCamera camera) {
+    public ChangbaRecordingPreviewScheduler(ChangbaRecordingPreviewView previewView, ChangbaVideoCamera
+            camera) {
         isStopped = false;
         this.mPreviewView = previewView;
         this.mCamera = camera;
@@ -30,7 +32,8 @@ public class ChangbaRecordingPreviewScheduler
         isStopped = false;
     }
 
-    public native void startEncoding(int width, int height, int videoBitRate, int frameRate, boolean useHardWareEncoding, int strategy);
+    public native void startEncoding(int width, int height, int videoBitRate, int frameRate, boolean
+            useHardWareEncoding, int strategy);
 
     public native void stopEncoding();
 
@@ -80,12 +83,13 @@ public class ChangbaRecordingPreviewScheduler
 
     @Override
     public void createSurface(Surface surface, AssetManager assetManager, int width, int height) {
-        startPreview(surface,assetManager, width, height, defaultCameraFacingId);
+        startPreview(surface, assetManager, width, height, defaultCameraFacingId);
     }
 
-    private void startPreview(Surface surface,AssetManager assetManager, int width, int height, final int cameraFacingId) {
+    private void startPreview(Surface surface, AssetManager assetManager, int width, int height, final int
+            cameraFacingId) {
         if (isFirst) {
-            prepareEGLContext(surface,assetManager, width, height, cameraFacingId);
+            prepareEGLContext(surface, assetManager, width, height, cameraFacingId);
             isFirst = false;
         } else {
             createWindowSurface(surface);
@@ -100,7 +104,8 @@ public class ChangbaRecordingPreviewScheduler
                 if (null != holder) {
                     Surface surface = holder.getSurface();
                     if (null != surface) {
-//                        startPreview(surface, mPreviewView.getWidth(), mPreviewView.getHeight(), cameraFacingId);
+//                        startPreview(surface, mPreviewView.getWidth(), mPreviewView.getHeight(),
+// cameraFacingId);
                     }
                 }
             }
@@ -109,14 +114,15 @@ public class ChangbaRecordingPreviewScheduler
         }
     }
 
-    public native void prepareEGLContext(Surface surface1, AssetManager assetManager, int width, int height, int cameraFacingId);
+    public native void prepareEGLContext(Surface surface1, AssetManager assetManager, int width, int
+            height, int cameraFacingId);
 
     public native void createWindowSurface(Surface surface);
 
     public native void adaptiveVideoQuality(int maxBitRate, int avgBitRate, int fps);
 
     public native void hotConfigQuality(int maxBitrate, int avgBitrate, int fps);
-    
+
     public native void setFaceInfo(
             int ID,
             int left,
@@ -125,10 +131,9 @@ public class ChangbaRecordingPreviewScheduler
             int bottom,
             int height,
             int width,
-            int[] landmarks
-    );
-    
-    
+            int[] landmarks,
+            boolean b);
+
 
     @Override
     public native void resetRenderSize(Surface surface, int width, int height);
@@ -175,22 +180,37 @@ public class ChangbaRecordingPreviewScheduler
 
     @Override
     public native void updateTexMatrix(float texMatrix[]);
-    
+
     @Override
     public void setFaceInfo(Face faceInfo) {
-        setFaceInfo(
-                faceInfo.ID,
-                faceInfo.left,
-                faceInfo.top,
-                faceInfo.right,
-                faceInfo.bottom,
-                faceInfo.height,
-                faceInfo.width,
-                faceInfo.landmarks
-        );
-    
+        if (faceInfo == null) {
+            setFaceInfo(
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    null,
+                    false
+            );
+        } else {
+            setFaceInfo(
+                    faceInfo.ID,
+                    faceInfo.left,
+                    faceInfo.top,
+                    faceInfo.right,
+                    faceInfo.bottom,
+                    faceInfo.height,
+                    faceInfo.width,
+                    faceInfo.landmarks,
+                    true
+            );
+        }
+
     }
-    
+
     private CameraConfigInfo mConfigInfo;
 
     /**
@@ -215,6 +235,7 @@ public class ChangbaRecordingPreviewScheduler
     public void updateTexImageFromNative() {
         mCamera.updateTexImage();
     }
+
     /**
      * 获取人脸信息
      **/
@@ -237,7 +258,8 @@ public class ChangbaRecordingPreviewScheduler
 //    protected MediaCodecSurfaceEncoder surfaceEncoder;
 //    Surface surface = null;
 //
-//    public void createMediaCodecSurfaceEncoderFromNative(int width, int height, int bitRate, int frameRate) {
+//    public void createMediaCodecSurfaceEncoderFromNative(int width, int height, int bitRate, int
+// frameRate) {
 //        try {
 //            surfaceEncoder = new MediaCodecSurfaceEncoder(width, height, bitRate, frameRate);
 //            surface = surfaceEncoder.getInputSurface();
@@ -282,7 +304,8 @@ public class ChangbaRecordingPreviewScheduler
 //    }
 
     public native void hotConfig(int bitRate, int fps, int gopSize);
+
     public native void setBeautifyParam(int key, float value);
 
-    public native void switchPreviewFilter(int ordinal) ;
+    public native void switchPreviewFilter(int ordinal);
 }

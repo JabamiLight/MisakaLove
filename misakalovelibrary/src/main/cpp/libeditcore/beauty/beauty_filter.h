@@ -23,10 +23,12 @@ private:
     GLint leftEyeCenterPosition;
     GLint rightEyeCenterPosition;
     GLint aspectRatioLocation;
+    GLint faceValidateLocation;
 
     float scale,radius;
     Pointf leftEyePoint;
     Pointf RightEyePoint;
+    int faceValidate;
 
 public:
     BeautyFilter();
