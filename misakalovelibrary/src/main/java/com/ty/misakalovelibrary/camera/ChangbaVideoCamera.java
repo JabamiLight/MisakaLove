@@ -316,7 +316,6 @@ public class ChangbaVideoCamera {
         } else  {
             mMultiTrack106.Update(mTmpBuffer, VIDEO_HEIGHT, VIDEO_WIDTH);
         }
-        Log.v("tedu", "handleDrawPoints: @1 " + (System.currentTimeMillis() - cur));
         List<Face> faceActions = mMultiTrack106.getTrackingInfo();
         if (faceActions != null && !faceActions.isEmpty()) {
             firstFace = faceActions.get(0);
@@ -325,7 +324,6 @@ public class ChangbaVideoCamera {
         }
         mCallback.setFaceInfo(firstFace);
         mCallback.notifyFrameAvailable();
-        Log.i("tedu", "handleDrawPoints: " + (System.currentTimeMillis() - cur));
         frameIndex++;
 
 //        testface(faceActions);

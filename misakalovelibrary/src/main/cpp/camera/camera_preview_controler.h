@@ -82,9 +82,11 @@ public:
 
     void notFoundFaceInfo();
 
-    void setBeautyPara(int i);
+    void setEyePara(int i);
 
     void setBeautyPara();
+
+    void setFacePara(jint i);
 
 private:
     int screenWidth, screenHeight;

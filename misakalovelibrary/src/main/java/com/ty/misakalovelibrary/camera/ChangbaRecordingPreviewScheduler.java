@@ -77,7 +77,9 @@ public class ChangbaRecordingPreviewScheduler
     public native void switchCameraFacing();
 
 
-    public native void setBeautyParams(int eyeProgress);
+    public native void setEyePara(int eyeProgress);
+
+    public native void setFacePara(int faceProgress);
 
     private boolean isFirst = true;
     private boolean isSurfaceExsist = false;
@@ -311,4 +313,5 @@ public class ChangbaRecordingPreviewScheduler
     public native void setBeautifyParam(int key, float value);
 
     public native void switchPreviewFilter(int ordinal);
+
 }

@@ -4,6 +4,7 @@
 
 #include "video_effect_core.h"
 #include "filter/cool_filter.h"
+#include "../camera/camera_preview_render.h"
 
 
 VideoEffectCore::~VideoEffectCore() {
@@ -91,10 +92,11 @@ void VideoEffectCore::setFaceInfo(Face *face) {
 
 }
 
-void VideoEffectCore::setBeautyPara(float i) {
+void VideoEffectCore::setBeautyPara(BeautyPara para) {
     map<int, Program *>::iterator iter = filterPrograms.find(EFFECT_BEAUTY);
     if (iter->second){
-        static_cast<BeautyFilter *>(iter->second)->scale= i;
+        static_cast<BeautyFilter *>(iter->second)->eyeScale=para.eyeScale ;
+        static_cast<BeautyFilter *>(iter->second)->delta= para.faceDelta;
     }
 }
 

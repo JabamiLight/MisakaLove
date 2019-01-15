@@ -8,8 +8,8 @@
 
 #include "../../opengl/program.h"
 #include "../../3rdparty/facedet/face.h"
-
-class BeautyFilter : public Program{
+#define LOG_TAG "BeautyFilter"
+class BeautyFilter : public Program {
 
 
 //    float scaleRatio;// 缩放系数，0无缩放，大于0则放大
@@ -25,14 +25,33 @@ public:
     GLint aspectRatioLocation;
     GLint faceValidateLocation;
 
-    float scale,radius;
+    float eyeScale, eyeRadius;
     Pointf leftEyePoint;
     Pointf RightEyePoint;
     int faceValidate;
 
+
+    GLint faceRadiusLocations;
+    GLint faceAspectRatioLocation;
+    GLint leftContourPointsLocation;
+    GLint rightContourPointsLocation;
+    GLint deltaArrayLocation;
+    GLint arraySizeLocation;
+
+    float faceRadius,faceAspectRatio;
+    float* leftContourPoints = nullptr;
+    float* rightContourPoints = nullptr;
+    float* deltaArray= nullptr;
+    float delta;
+    int arraySize=10;
+
+
+
     BeautyFilter();
+
     void initLocation() override;
-    void setFaceInfo(Face* face);
+
+    void setFaceInfo(Face *face);
 
 protected:
     void preRender() override;

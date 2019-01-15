@@ -61,7 +61,7 @@ void CameraPreviewRender::setFaceInfo(Face *pFace) {
     videoEffectCore->setFaceInfo(pFace);
 }
 
-void CameraPreviewRender::setBeautyPara(float i) {
+void CameraPreviewRender::setBeautyPara(BeautyPara i) {
     videoEffectCore->setBeautyPara(i);
 
 }

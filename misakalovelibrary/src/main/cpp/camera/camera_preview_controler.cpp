@@ -443,13 +443,19 @@ void CameraPreviewControler::notFoundFaceInfo() {
     renderer->setFaceInfo(face);
 }
 
-void CameraPreviewControler::setBeautyPara(int i) {
-    para.eyeScale=0.2f*i/100;
+void CameraPreviewControler::setEyePara(int i) {
+    para.eyeScale=0.3f*i/100;
     if (handler)
         handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
 }
 
 void CameraPreviewControler::setBeautyPara() {
-    renderer->setBeautyPara(para.eyeScale);
+    renderer->setBeautyPara(para);
+}
+
+void CameraPreviewControler::setFacePara(jint i) {
+    para.faceDelta=0.5f-0.4f*i/100f;
+    if (handler)
+        handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
 }
 

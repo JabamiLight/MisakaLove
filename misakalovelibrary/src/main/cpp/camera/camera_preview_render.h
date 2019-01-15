@@ -19,6 +19,7 @@
 
 struct BeautyPara{
     float eyeScale=0;
+    float faceDelta=0;
 };
 
 class CameraPreviewRender: public BaseRender {
@@ -41,7 +42,7 @@ public:
 
     void setFaceInfo(Face *pFace);
 
-    void setBeautyPara(float i);
+    void setBeautyPara(BeautyPara i);
 };
 
 

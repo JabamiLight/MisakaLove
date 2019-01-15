@@ -42,7 +42,7 @@ class RecorderActivity : AppCompatActivity(), View.OnClickListener {
         tv_beauty.setOnClickListener(this)
         sb_eyes.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                previewScheduler?.setBeautyParams(progress)
+                previewScheduler?.setEyePara(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -51,6 +51,22 @@ class RecorderActivity : AppCompatActivity(), View.OnClickListener {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+        sb_face.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                previewScheduler?.setFacePara(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+
+
+
+
+
 //        types = arrayOf<MagicFilterType>(MagicFilterType.NONE, MagicFilterType.FAIRYTALE, MagicFilterType.SUNRISE, MagicFilterType.SUNSET, MagicFilterType.WHITECAT, MagicFilterType.BLACKCAT, MagicFilterType.SKINWHITEN, MagicFilterType.HEALTHY, MagicFilterType.SWEETS, MagicFilterType.ROMANCE, MagicFilterType.SAKURA, MagicFilterType.WARM, MagicFilterType.ANTIQUE, MagicFilterType.NOSTALGIA, MagicFilterType.CALM, MagicFilterType.LATTE, MagicFilterType.TENDER, MagicFilterType.COOL, MagicFilterType.EMERALD, MagicFilterType.EVERGREEN, MagicFilterType.CRAYON, MagicFilterType.SKETCH, MagicFilterType.AMARO, MagicFilterType.BRANNAN, MagicFilterType.BROOKLYN, MagicFilterType.EARLYBIRD, MagicFilterType.FREUD, MagicFilterType.HEFE, MagicFilterType.HUDSON, MagicFilterType.INKWELL, MagicFilterType.KEVIN, MagicFilterType.LOMO, MagicFilterType.N1977, MagicFilterType.NASHVILLE, MagicFilterType.PIXAR, MagicFilterType.RISE, MagicFilterType.SIERRA, MagicFilterType.SUTRO, MagicFilterType.TOASTER2, MagicFilterType.VALENCIA, MagicFilterType.WALDEN, MagicFilterType.XPROII)
         types = arrayOf<MagicFilterType>(MagicFilterType.NONE, MagicFilterType.AMARO, MagicFilterType.WHITECAT, MagicFilterType.FAIRYTALE);
         adapter = FilterAdapter(this, types)

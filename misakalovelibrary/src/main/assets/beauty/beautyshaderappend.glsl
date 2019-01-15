@@ -15,10 +15,10 @@ uniform int faceValidate;//人脸数据是否有效
 
 
 
-int MAX_CONTOUR_POINT_COUNT=1;
 //瘦脸数据
+int MAX_CONTOUR_POINT_COUNT=1;
 uniform highp float faceRadius;
-uniform highp float aspectRatio;
+uniform highp float faceAspectRatio;
 uniform float leftContourPoints[MAX_CONTOUR_POINT_COUNT*2];
 uniform float rightContourPoints[MAX_CONTOUR_POINT_COUNT*2];
 uniform float deltaArray[MAX_CONTOUR_POINT_COUNT];
@@ -42,8 +42,7 @@ highp vec2 warpEyeToUse(vec2 centerPostion, vec2 currentPosition, float radius, 
 
     float r = distance(currentPositionToUse, centerPostionToUse);
 
-    if(r < radius)
-    {
+    if(r < radius) {
         float alpha = 1.0 - scaleRatio * pow(r / radius - 1.0, 2.0);
         positionToUse = centerPostion + alpha * (currentPosition - centerPostion);
     }else{
@@ -51,7 +50,6 @@ highp vec2 warpEyeToUse(vec2 centerPostion, vec2 currentPosition, float radius, 
 
     return positionToUse;
 }
-
 
 
 highp vec2 warpFaceToUse(vec2 currentPoint, vec2 contourPointA,  vec2 contourPointB, float radius, float delta, float aspectRatio)
@@ -62,8 +60,7 @@ highp vec2 warpFaceToUse(vec2 currentPoint, vec2 contourPointA,  vec2 contourPoi
      vec2 contourPointAToUse = vec2(contourPointA.x, contourPointA.y * aspectRatio + 0.5 - 0.5 * aspectRatio);
 
      float r = distance(currentPointToUse, contourPointAToUse);
-     if(r < radius)
-     {
+     if(r < radius) {
          vec2 dir = normalize(contourPointB - contourPointA);
          float dist = radius * radius - r * r;
          float alpha = dist / (dist + (r-delta) * (r-delta));
@@ -77,16 +74,14 @@ highp vec2 warpFaceToUse(vec2 currentPoint, vec2 contourPointA,  vec2 contourPoi
 
 
 
-
 void main() {
 
     if(faceValidate==1){
         vec2 positionToUse = warpEyeToUse(leftEyeCenterPosition, textureCoordinate, radius, scaleRatio, aspectRatio);
         positionToUse = warpEyeToUse(rightEyeCenterPosition, positionToUse, radius, scaleRatio, aspectRatio);
-        for(int i = 0; i < arraySize; i++)
-            {
-                 positionToUse = warpPositionToUse(positionToUse, vec2(leftContourPoints[i * 2], leftContourPoints[i * 2 + 1]), vec2(rightContourPoints[i * 2], rightContourPoints[i * 2 + 1]), radius, deltaArray[i], aspectRatio);
-                 positionToUse = warpPositionToUse(positionToUse, vec2(rightContourPoints[i * 2], rightContourPoints[i * 2 + 1]), vec2(leftContourPoints[i * 2], leftContourPoints[i * 2 + 1]), radius, deltaArray[i], aspectRatio);
+        for(int i = 0; i < arraySize; i++) {
+                 positionToUse = warpFaceToUse(positionToUse, vec2(leftContourPoints[i * 2], leftContourPoints[i * 2 + 1]), vec2(rightContourPoints[i * 2], rightContourPoints[i * 2 + 1]), faceRadius, deltaArray[i], aspectRatio);
+                 positionToUse = warpFaceToUse(positionToUse, vec2(rightContourPoints[i * 2], rightContourPoints[i * 2 + 1]), vec2(leftContourPoints[i * 2], leftContourPoints[i * 2 + 1]), faceRadius, deltaArray[i], aspectRatio);
         }
         FragColor = texture(inputImageTexture, positionToUse);
     }else if(faceValidate==0){

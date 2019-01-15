@@ -190,10 +190,17 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFaceInf
         jboolean invalidate
 ) ;
 JNIEXPORT void JNICALL
-Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setBeautyParams(
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setEyePara(
         JNIEnv *env,
         jobject instance,
         jint eyeProgress
+) ;
+
+JNIEXPORT void JNICALL
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFacePara(
+        JNIEnv *env,
+        jobject instance,
+        jint faceProgress
 ) ;
 
 

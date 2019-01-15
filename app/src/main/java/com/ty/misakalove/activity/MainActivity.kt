@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.ty.misakalove.R
+import com.ty.misakalove.R.id.tv_record
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
