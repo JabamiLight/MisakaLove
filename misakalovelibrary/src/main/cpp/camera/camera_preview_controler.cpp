@@ -259,7 +259,7 @@ void CameraPreviewControler::destroy() {
     LOGI("enter MVRecordingPreviewController::destroy...");
     this->destroyPreviewSurface();
     if (renderer) {
-        renderer->destory();
+        renderer->destroy();
         delete renderer;
         renderer = NULL;
     }
@@ -454,7 +454,7 @@ void CameraPreviewControler::setBeautyPara() {
 }
 
 void CameraPreviewControler::setFacePara(jint i) {
-    para.faceDelta=0.5f-0.4f*i/100f;
+    para.faceDelta=0.5f-0.22f*i/100;
     if (handler)
         handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
 }

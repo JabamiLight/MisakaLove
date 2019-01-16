@@ -5,6 +5,11 @@
 #ifndef MISAKALOVE_FACE_H
 #define MISAKALOVE_FACE_H
 
+struct BeautyPara{
+    float eyeScale=0;
+    float faceDelta=0.5f;
+};
+
 struct Pointf{
 public:
     Pointf(int i, int i1);

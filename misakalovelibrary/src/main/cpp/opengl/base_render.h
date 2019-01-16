@@ -14,7 +14,7 @@ class BaseRender {
 public:
     void resetSize(int screenWidth,int screenHeigth);
 
-    virtual void destory();
+    virtual void destroy();
     void setDegree(int ,bool);
 
 protected:

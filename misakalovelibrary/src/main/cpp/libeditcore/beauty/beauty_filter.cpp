@@ -43,7 +43,7 @@ void BeautyFilter::setFaceInfo(Face *face) {
         //配置人脸轮廓
         //102  80  76  左边
         // 56  98  97  右边
-        faceRadius = 0.09;
+        faceRadius = 0.08;
         if (!leftContourPoints) {
             leftContourPoints = new float[20];
         }
@@ -96,7 +96,7 @@ void BeautyFilter::setFaceInfo(Face *face) {
             deltaArray=new float[10];
         }
         for(size_t i=0;i<10;i++){
-            deltaArray[i]=delta;
+            deltaArray[i]=delta-(9-i)*0.01f;
         }
         faceValidate = 1;
     } else {

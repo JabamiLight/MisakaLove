@@ -35,8 +35,8 @@ GLuint CameraPreviewRender::getCameraTexId() {
     return videoEffectCore->getESTextureId();
 }
 
-void CameraPreviewRender::destory() {
-    BaseRender::destory();
+void CameraPreviewRender::destroy() {
+    BaseRender::destroy();
     delete videoEffectCore;
 }
 

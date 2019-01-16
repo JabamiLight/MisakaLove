@@ -18,6 +18,7 @@ class BeautyFilter : public Program {
 //    vec2 rightEyeCenterPosition; // 右眼控制点
 //    aspectRatio; // 所处理图像的宽高比
 public:
+    //大眼参数和位置
     GLint scaleRatioLocation;
     GLint radiusLocation;
     GLint leftEyeCenterPosition;
@@ -30,7 +31,7 @@ public:
     Pointf RightEyePoint;
     int faceValidate;
 
-
+    //瘦脸参数和位置
     GLint faceRadiusLocations;
     GLint faceAspectRatioLocation;
     GLint leftContourPointsLocation;
@@ -42,8 +43,14 @@ public:
     float* leftContourPoints = nullptr;
     float* rightContourPoints = nullptr;
     float* deltaArray= nullptr;
-    float delta;
+    float delta=0.5f;
     int arraySize=10;
+
+    //磨皮参数和位置
+
+
+
+
 
 
 

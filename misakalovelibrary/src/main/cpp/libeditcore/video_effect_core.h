@@ -16,7 +16,6 @@
 #include "filter/cool_filter.h"
 #include "../3rdparty/facedet/face.h"
 #include "beauty/beauty_filter.h"
-#include "../camera/camera_preview_render.h"
 
 #include <map>
 #define EFFECT_FILTER 1
@@ -24,7 +23,6 @@
 using namespace std;
 
 class VideoEffectCore {
-
 
 
 private:

@@ -8,7 +8,7 @@ void BaseRender::resetSize(int screenWidth, int screenHeigth) {
     showProgram->resetSize(screenWidth,screenHeigth);
 }
 
-void BaseRender::destory() {
+void BaseRender::destroy() {
     showProgram->destory();
     delete showProgram;
     showProgram= nullptr;

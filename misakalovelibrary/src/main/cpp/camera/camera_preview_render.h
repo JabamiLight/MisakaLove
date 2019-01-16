@@ -5,7 +5,6 @@
 #ifndef MISAKALOVE_CAMERA_PREVIEW_RENDER_H
 #define MISAKALOVE_CAMERA_PREVIEW_RENDER_H
 
-
 #include "../opengl/base_render.h"
 #include "../libeditcore/filter/white_cat_filter.h"
 #include "../libeditcore/common/camera_preview_program.h"
@@ -16,15 +15,7 @@
 #include "../3rdparty/facedet/face.h"
 
 
-
-struct BeautyPara{
-    float eyeScale=0;
-    float faceDelta=0;
-};
-
-class CameraPreviewRender: public BaseRender {
-
-
+class CameraPreviewRender : public BaseRender {
 
 
 public:
@@ -36,14 +27,14 @@ public:
                   int cameraHeight, int i, int i1) override;
     GLuint getCameraTexId();
 
-    void destory() override;
+    void destroy() override;
 
     void switchFilter(uint index);
 
     void setFaceInfo(Face *pFace);
 
     void setBeautyPara(BeautyPara i);
-};
 
+};
 
 #endif //MISAKALOVE_CAMERA_PREVIEW_RENDER_H
