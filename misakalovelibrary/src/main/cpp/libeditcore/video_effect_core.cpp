@@ -92,11 +92,17 @@ void VideoEffectCore::setFaceInfo(Face *face) {
 
 }
 
-void VideoEffectCore::setBeautyPara(BeautyPara para) {
+void VideoEffectCore::setBeautyPara(BeautyPara &para) {
     map<int, Program *>::iterator iter = filterPrograms.find(EFFECT_BEAUTY);
     if (iter->second){
-        static_cast<BeautyFilter *>(iter->second)->eyeScale=para.eyeScale ;
-        static_cast<BeautyFilter *>(iter->second)->delta= para.faceDelta;
+        BeautyFilter *filter = static_cast<BeautyFilter *>(iter->second);
+        filter->eyeScale=para.eyeScale;
+        filter->delta= para.faceDelta;
+        filter->texelWidthOffset= para.texelOffset;
+        filter->texelHeightOffset= para.texelOffset;
+        filter->toneLevel= para.toneLevel;
+        filter->beautyLevel= para.beautyLevel;
+        filter->brightLevel= para.brightLevel;
     }
 }
 

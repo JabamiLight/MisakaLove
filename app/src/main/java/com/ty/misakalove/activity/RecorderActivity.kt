@@ -62,7 +62,17 @@ class RecorderActivity : AppCompatActivity(), View.OnClickListener {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+        sb_beauty.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                previewScheduler?.setBeauty(progress)
+            }
 
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
 
 
 

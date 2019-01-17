@@ -8,7 +8,9 @@
 
 #include "../../opengl/program.h"
 #include "../../3rdparty/facedet/face.h"
+
 #define LOG_TAG "BeautyFilter"
+
 class BeautyFilter : public Program {
 
 
@@ -26,7 +28,7 @@ public:
     GLint aspectRatioLocation;
     GLint faceValidateLocation;
 
-    float eyeScale, eyeRadius;
+    float eyeScale=.0, eyeRadius;
     Pointf leftEyePoint;
     Pointf RightEyePoint;
     int faceValidate;
@@ -39,19 +41,28 @@ public:
     GLint deltaArrayLocation;
     GLint arraySizeLocation;
 
-    float faceRadius,faceAspectRatio;
-    float* leftContourPoints = nullptr;
-    float* rightContourPoints = nullptr;
-    float* deltaArray= nullptr;
-    float delta=0.5f;
-    int arraySize=10;
+    float faceRadius, faceAspectRatio;
+    float *leftContourPoints = nullptr;
+    float *rightContourPoints = nullptr;
+    float *deltaArray = nullptr;
+    float delta = 0.5f;
+    int arraySize = 10;
 
     //磨皮参数和位置
+    GLint singleStepOffsetLocation;
+    GLint paramsLocation;
+    GLint brightnessLocation;
+    GLint texelWidthOffsetLocation;
+    GLint texelHeightOffsetLocation;
 
-
-
-
-
+    float* singleStepOffset=nullptr;
+    float* params= nullptr;
+    float brightness=0.47f;
+    float texelWidthOffset=2.0f;
+    float texelHeightOffset=2.0f;
+    float toneLevel=-0.5;
+    float beautyLevel =1.2;
+    float brightLevel  =0.47;
 
 
     BeautyFilter();

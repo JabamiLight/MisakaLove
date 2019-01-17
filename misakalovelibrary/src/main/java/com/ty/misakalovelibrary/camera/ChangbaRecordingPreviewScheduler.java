@@ -76,10 +76,13 @@ public class ChangbaRecordingPreviewScheduler
      **/
     public native void switchCameraFacing();
 
-
+    //设置大眼
     public native void setEyePara(int eyeProgress);
-
+    //设置人脸
     public native void setFacePara(int faceProgress);
+    //设置美白
+    public native void setBeauty(int progress) ;
+
 
     private boolean isFirst = true;
     private boolean isSurfaceExsist = false;
@@ -313,5 +316,6 @@ public class ChangbaRecordingPreviewScheduler
     public native void setBeautifyParam(int key, float value);
 
     public native void switchPreviewFilter(int ordinal);
+
 
 }

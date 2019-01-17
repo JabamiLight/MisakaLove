@@ -212,8 +212,8 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFa
 
 void
 Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setEyePara(JNIEnv *env,
-                                                                                      jobject instance,
-                                                                                      jint eyeProgress) {
+                                                                                 jobject instance,
+                                                                                 jint eyeProgress) {
     if (!previewController) return;
     previewController->setEyePara(eyeProgress);
 
@@ -224,5 +224,12 @@ void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFa
                                                                                        jint faceProgress) {
     if (!previewController) return;
     previewController->setFacePara(faceProgress);
+}
+
+void Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setBeauty(JNIEnv *env,
+                                                                                     jobject instance,
+                                                                                     jint faceProgress) {
+    if (!previewController) return;
+    previewController->setBeauty(faceProgress);
 }
 

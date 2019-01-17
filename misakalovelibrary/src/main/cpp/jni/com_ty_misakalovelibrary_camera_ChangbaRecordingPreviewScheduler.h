@@ -201,6 +201,13 @@ Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setFacePar
         JNIEnv *env,
         jobject instance,
         jint faceProgress
+);
+
+JNIEXPORT void JNICALL
+Java_com_ty_misakalovelibrary_camera_ChangbaRecordingPreviewScheduler_setBeauty(
+        JNIEnv *env,
+        jobject instance,
+        jint faceProgress
 ) ;
 
 

@@ -101,7 +101,7 @@ highp float hardLight(highp float color) {
     return color;
 }
 
-highp float processColor(vec4 textureColor){
+highp vec4 processColor(vec4 textureColor){
     highp vec3 centralColor = textureColor.rgb;
     vec2 singleStepOffset=vec2(texelWidthOffset,texelHeightOffset);
     blurCoordinates[0] = textureCoordinate.xy + singleStepOffset * vec2(0.0, -10.0);
@@ -129,30 +129,30 @@ highp float processColor(vec4 textureColor){
     blurCoordinates[22] = textureCoordinate.xy + singleStepOffset * vec2(2.0, -2.0);
     blurCoordinates[23] = textureCoordinate.xy + singleStepOffset * vec2(2.0, 2.0);
     highp float sampleColor = centralColor.g * 22.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[0]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[1]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[2]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[3]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[4]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[5]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[6]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[7]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[8]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[9]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[10]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[11]).g;
-    sampleColor += texture2D(vTexture, blurCoordinates[12]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[13]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[14]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[15]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[16]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[17]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[18]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[19]).g * 2.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[20]).g * 3.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[21]).g * 3.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[22]).g * 3.0;
-    sampleColor += texture2D(vTexture, blurCoordinates[23]).g * 3.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[0]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[1]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[2]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[3]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[4]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[5]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[6]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[7]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[8]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[9]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[10]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[11]).g;
+    sampleColor += texture(inputImageTexture, blurCoordinates[12]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[13]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[14]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[15]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[16]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[17]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[18]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[19]).g * 2.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[20]).g * 3.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[21]).g * 3.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[22]).g * 3.0;
+    sampleColor += texture(inputImageTexture, blurCoordinates[23]).g * 3.0;
     sampleColor = sampleColor / 62.0;
     highp float highPass = centralColor.g - sampleColor + 0.5;
     for (int i = 0; i < 5; i++) {
@@ -167,6 +167,7 @@ highp float processColor(vec4 textureColor){
     highp vec3 lvse = vec3(1.0)-(vec3(1.0)-smoothColor)*(vec3(1.0)-centralColor);
     highp vec3 bianliang = max(smoothColor, centralColor);
     highp vec3 rouguang = 2.0*centralColor*smoothColor + centralColor*centralColor - 2.0*centralColor*centralColor*smoothColor;
+
     highp vec4 processedColor;
     processedColor = vec4(mix(centralColor, lvse, alpha), 1.0);
     processedColor.rgb = mix(processedColor.rgb, bianliang, alpha);
@@ -174,7 +175,7 @@ highp float processColor(vec4 textureColor){
     highp vec3 satcolor = processedColor.rgb * saturateMatrix;
     processedColor.rgb = mix(processedColor.rgb, satcolor, params.a);
     processedColor.rgb = vec3(processedColor.rgb + vec3(brightness));
-    return processColor;
+    return processedColor;
 }
 
 
@@ -184,14 +185,12 @@ void main() {
     if(faceValidate==1){
         vec2 positionToUse = warpEyeToUse(leftEyeCenterPosition, textureCoordinate, radius, scaleRatio, aspectRatio);
         positionToUse = warpEyeToUse(rightEyeCenterPosition, positionToUse, radius, scaleRatio, aspectRatio);
-
         for(int i = 0; i < arraySize; i++) {
              positionToUse = warpFaceToUse(positionToUse, vec2(leftContourPoints[i * 2], leftContourPoints[i * 2 + 1]), vec2(rightContourPoints[i * 2], rightContourPoints[i * 2 + 1]), faceRadius, deltaArray[i], aspectRatio);
              positionToUse = warpFaceToUse(positionToUse, vec2(rightContourPoints[i * 2], rightContourPoints[i * 2 + 1]), vec2(leftContourPoints[i * 2], leftContourPoints[i * 2 + 1]), faceRadius, deltaArray[i], aspectRatio);
         }
-
         FragColor = processColor(texture(inputImageTexture, positionToUse));
-
+//       FragColor =texture(inputImageTexture, positionToUse);
     }else if(faceValidate==0){
          FragColor = texture(inputImageTexture, textureCoordinate);
     }

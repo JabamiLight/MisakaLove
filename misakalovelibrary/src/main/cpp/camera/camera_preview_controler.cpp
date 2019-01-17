@@ -459,3 +459,12 @@ void CameraPreviewControler::setFacePara(jint i) {
         handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
 }
 
+void CameraPreviewControler::setBeauty(jint i) {
+    para.texelOffset=para.range(i,para.minstepoffset,para.maxstepoffset);
+    para.toneLevel=para.range(i,para.minToneValue,para.maxToneValue);
+    para.beautyLevel=para.range(i,para.minbeautyValue,para.maxbeautyValue);
+    para.brightLevel=para.range(i,para.minbrightValue,para.maxbrightValue);
+    if (handler)
+        handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
+}
+

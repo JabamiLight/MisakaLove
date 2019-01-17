@@ -57,13 +57,14 @@ void CameraPreviewRender::switchFilter(uint index) {
 
 }
 
+void CameraPreviewRender::setBeautyPara(BeautyPara &i) {
+    videoEffectCore->setBeautyPara(i);
+}
+
+
 void CameraPreviewRender::setFaceInfo(Face *pFace) {
     videoEffectCore->setFaceInfo(pFace);
 }
 
-void CameraPreviewRender::setBeautyPara(BeautyPara i) {
-    videoEffectCore->setBeautyPara(i);
-
-}
 
 

@@ -33,7 +33,7 @@ public:
 
     void setFaceInfo(Face *pFace);
 
-    void setBeautyPara(BeautyPara i);
+    void setBeautyPara(BeautyPara &i);
 
 };
 

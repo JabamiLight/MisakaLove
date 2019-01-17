@@ -87,6 +87,8 @@ public:
     void setBeautyPara();
 
     void setFacePara(jint i);
+    //单独美白参数
+    void setBeauty(jint i);
 
 private:
     int screenWidth, screenHeight;
