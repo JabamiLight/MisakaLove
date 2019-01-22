@@ -20,6 +20,7 @@
 #include <map>
 #define EFFECT_FILTER 1
 #define EFFECT_BEAUTY 2
+#define EFFECT_STICKER 3
 using namespace std;
 
 class VideoEffectCore {

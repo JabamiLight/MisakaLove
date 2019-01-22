@@ -11,7 +11,7 @@
 class OpenglUtils {
 
 public:
-    static GLuint loadTexture(const char* path);
+    static GLuint loadTextureFromAssets(const char *path);
 
 
 

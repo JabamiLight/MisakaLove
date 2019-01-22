@@ -5,6 +5,7 @@
 #ifndef MISAKALOVE_PROGRAM_H
 #define MISAKALOVE_PROGRAM_H
 #define COMMON_VERTEX_SHADER "common/vertexshader.glsl"
+#define COMMON_FRAG_SHADER "common/commonfragmentshader.glsl"
 
 #include "../libcommon/egl_core/gl_tools.h"
 #include "../libcommon/assetsutil/assets_reader.h"
@@ -30,6 +31,7 @@ public:
     virtual void initLocation();
     static GLuint* VAO;
     static GLuint* VBO;
+    bool overlay= false;
 protected:
     GLuint mGLProgId;
     bool mIsInitialized;

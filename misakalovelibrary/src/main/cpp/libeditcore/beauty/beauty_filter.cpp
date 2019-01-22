@@ -4,7 +4,7 @@
 
 #include "beauty_filter.h"
 
-BeautyFilter::BeautyFilter() : Program(COMMON_VERTEX_SHADER, "beauty/beautyshader.glsl") {}
+BeautyFilter::BeautyFilter() : Program(COMMON_VERTEX_SHADER, "beauty/beautyfragshader.glsl") {}
 
 void BeautyFilter::initLocation() {
     glUseProgram(mGLProgId);
@@ -145,7 +145,7 @@ void BeautyFilter::preRender() {
         params[3] = 0.1f + 0.3f * toneLevel;
     }
     glUniform4fv(paramsLocation, 1, params);
-    glUniform1f(brightnessLocation, brightness);
+    glUniform1f(brightnessLocation, 0.6f * (-0.5f + brightLevel));
     glUniform1f(texelWidthOffsetLocation, texelWidthOffset/width);
     glUniform1f(texelHeightOffsetLocation, texelHeightOffset/height);
 

@@ -5,7 +5,7 @@
 #include "opengl_utils.h"
 #include "../libeditcore/decoder/png_decoder.h"
 
-GLuint OpenglUtils::loadTexture(const char *path) {
+GLuint OpenglUtils::loadTextureFromAssets(const char *path) {
 
     PngDecoder *decoder = new PngDecoder();
     GLuint textureId;

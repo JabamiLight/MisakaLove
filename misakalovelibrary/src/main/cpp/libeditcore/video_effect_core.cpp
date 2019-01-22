@@ -5,6 +5,7 @@
 #include "video_effect_core.h"
 #include "filter/cool_filter.h"
 #include "../camera/camera_preview_render.h"
+#include "beauty/stick_filter.h"
 
 
 VideoEffectCore::~VideoEffectCore() {
@@ -53,13 +54,22 @@ void VideoEffectCore::init(jint degress, bool isVFlip, int textureWidth, int tex
 
 void VideoEffectCore::process() {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+    //    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA,GL_SRC_ALPHA);
+    //    glBlendEquation(GL_FUNC_ADD);
     copyCommonProgram->render();
     map<int, Program *>::iterator iter;
     for (iter = filterPrograms.begin(); iter != filterPrograms.end(); iter++) {
-        iter->second->setTextureId(processTextureIds[processTextureIndex]);
-        processTextureIndex = static_cast<uint8_t>((processTextureIndex + 1) % 2);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                               processTextureIds[processTextureIndex], 0);
+        if (!iter->second->overlay) {
+            glDisable(GL_BLEND);
+            iter->second->setTextureId(processTextureIds[processTextureIndex]);
+            processTextureIndex = static_cast<uint8_t>((processTextureIndex + 1) % 2);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                   processTextureIds[processTextureIndex], 0);
+        } else{
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
         iter->second->render();
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -86,23 +96,32 @@ void VideoEffectCore::clearFilter() {
 
 void VideoEffectCore::setFaceInfo(Face *face) {
     map<int, Program *>::iterator iter = filterPrograms.find(EFFECT_BEAUTY);
-    if (iter->second){
+    if (iter->second) {
         static_cast<BeautyFilter *>(iter->second)->setFaceInfo(face);
     }
-
+    map<int, Program *>::iterator iterStick = filterPrograms.find(EFFECT_STICKER);
+    if (iterStick->second) {
+        StickFilter *filter = static_cast<StickFilter *>(iterStick->second);
+        if(face->isInvalid){
+            filter->setMouth( 1.0f -face->points[45].x/face->cameraHeight,face->points[45].y/face->cameraWidth);
+        }
+    }
 }
 
 void VideoEffectCore::setBeautyPara(BeautyPara &para) {
     map<int, Program *>::iterator iter = filterPrograms.find(EFFECT_BEAUTY);
-    if (iter->second){
+    if (iter->second) {
         BeautyFilter *filter = static_cast<BeautyFilter *>(iter->second);
-        filter->eyeScale=para.eyeScale;
-        filter->delta= para.faceDelta;
-        filter->texelWidthOffset= para.texelOffset;
-        filter->texelHeightOffset= para.texelOffset;
-        filter->toneLevel= para.toneLevel;
-        filter->beautyLevel= para.beautyLevel;
-        filter->brightLevel= para.brightLevel;
+        filter->eyeScale = para.eyeScale;
+        filter->delta = para.faceDelta;
+        filter->texelWidthOffset = para.texelOffset;
+        filter->texelHeightOffset = para.texelOffset;
+        filter->toneLevel = para.toneLevel;
+        filter->beautyLevel = para.beautyLevel;
+        filter->brightLevel = para.brightLevel;
     }
+
+
+
 }
 

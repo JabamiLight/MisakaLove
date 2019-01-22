@@ -3,6 +3,7 @@
 //
 
 #include "camera_preview_render.h"
+#include "../libeditcore/beauty/stick_filter.h"
 
 void CameraPreviewRender::render() {
     videoEffectCore->process();
@@ -11,23 +12,24 @@ void CameraPreviewRender::render() {
 }
 
 
-void CameraPreviewRender::init(jint degress, bool isVFlip, int textureWidth, int textureHeight, int cameraWidth,
+void CameraPreviewRender::init(jint degress, bool isVFlip, int textureWidth, int textureHeight,
+                               int cameraWidth,
                                int cameraHeight, int screenWidth, int screenHeight) {
     showProgram->init(degress, isVFlip, screenWidth, screenHeight);
-//    Program* p=new FilterProgram("common/vertexshader.glsl","filter/gray.glsl");
-//    p->init(degress,isVFlip,screenWidth,screenHeight);
     videoEffectCore->init(degress, isVFlip, screenWidth, screenHeight);
-//    previewProgram->init(degress,isVFlip,screenWidth,screenHeight);
-//    videoEffectCore->addFilter(previewProgram);
+    //美颜
+//    videoEffectCore->addFilter(new BeautyFilter(), EFFECT_BEAUTY);
 
-    videoEffectCore->addFilter(new BeautyFilter(), EFFECT_BEAUTY);
+    //贴纸
+    StickFilter *f = new StickFilter();
+    f->overlay = true;
+    videoEffectCore->addFilter(f, EFFECT_STICKER);
 }
 
 CameraPreviewRender::CameraPreviewRender() {
 //    previewProgram=new CoolFilter();
-    showProgram=new ShowProgram();
-    videoEffectCore=new VideoEffectCore();
-
+    showProgram = new ShowProgram();
+    videoEffectCore = new VideoEffectCore();
 
 }
 
@@ -41,7 +43,7 @@ void CameraPreviewRender::destroy() {
 }
 
 void CameraPreviewRender::switchFilter(uint index) {
-    switch (index){
+    switch (index) {
         case 0:
             videoEffectCore->clearFilter();
             break;

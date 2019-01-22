@@ -7,9 +7,9 @@
 AmaroFilter::AmaroFilter() : Program(COMMON_VERTEX_SHADER, "filter/amaro.glsl") {}
 
 int AmaroFilter::initTexture() {
-    inputTexture[0] = OpenglUtils::loadTexture("filterpic/brannan_blowout.png");
-    inputTexture[1] = OpenglUtils::loadTexture("filterpic/overlaymap.png");
-    inputTexture[2] = OpenglUtils::loadTexture("filterpic/amaromap.png");
+    inputTexture[0] = OpenglUtils::loadTextureFromAssets("filterpic/brannan_blowout.png");
+    inputTexture[1] = OpenglUtils::loadTextureFromAssets("filterpic/overlaymap.png");
+    inputTexture[2] = OpenglUtils::loadTextureFromAssets("filterpic/amaromap.png");
     for (int i = 0; i < 3; i++) {
         glActiveTexture(GL_TEXTURE0 + i + 1);
         glBindTexture(GL_TEXTURE_2D, inputTexture[i]);

@@ -60,7 +60,7 @@ public:
     float brightness=0.47f;
     float texelWidthOffset=2.0f;
     float texelHeightOffset=2.0f;
-    float toneLevel=-0.5;
+    float toneLevel=-0.5f;
     float beautyLevel =1.2;
     float brightLevel  =0.47;
 
