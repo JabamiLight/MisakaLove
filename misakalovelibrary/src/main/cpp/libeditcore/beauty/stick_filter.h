@@ -8,18 +8,18 @@
 
 #include "../../opengl/program.h"
 #include "../../3rdparty/facedet/face.h"
-
+#define LOG_TAG "StickFilter"
 class StickFilter : public Program {
 
 
 public:
     GLint inputImageTexture=-1;
-    GLint mousePointLocation;
+    GLint mousePointLocation=-1;
 
 
 
     float **mouthPoint;
-    float *mouthPoints;
+    float *mouthPoints= nullptr;
     float mouthX,mouthY;
 
     StickFilter();
@@ -28,7 +28,6 @@ public:
 
     void initLocation() override;
 
-    void setMouth(float x, float y);
 
     void setFaceInfo(Face *face);
 

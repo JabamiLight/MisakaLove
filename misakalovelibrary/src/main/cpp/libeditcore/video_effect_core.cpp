@@ -103,7 +103,8 @@ void VideoEffectCore::setFaceInfo(Face *face) {
     if (iterStick->second) {
         StickFilter *filter = static_cast<StickFilter *>(iterStick->second);
         if(face->isInvalid){
-            filter->setMouth( 1.0f -face->points[45].x/face->cameraHeight,face->points[45].y/face->cameraWidth);
+
+            filter->setFaceInfo(face);
         }
     }
 }
