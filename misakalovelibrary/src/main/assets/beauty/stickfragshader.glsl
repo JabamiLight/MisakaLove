@@ -16,13 +16,9 @@ void main() {
 //        return;
 //
 //    }
-//    vec4 textureColor = texture(inputImageTexture, textureCoordinate);
-//    FragColor=textureColor;
-
-//    if(mousePoint[1].y>0.0){
-//         FragColor=vec4(0.9,1.0,0.5,1.0);
-//         return;
-//    }
+    vec4 textureColor = texture(inputImageTexture, textureCoordinate);
+    FragColor=textureColor;
+    return;
 
     vec2 mouthO=vec2(1.0-312.0/800.0,719.0/1067.0);
     float minDis=distance(textureCoordinate, mousePoint[0]);

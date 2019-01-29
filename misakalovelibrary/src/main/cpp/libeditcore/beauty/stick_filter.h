@@ -18,9 +18,14 @@ public:
 
 
 
-    float **mouthPoint;
+//    float **mouthPoint;
     float *mouthPoints= nullptr;
     float mouthX,mouthY;
+
+
+    int frameIndex=0;
+
+    GLuint VaoMouth,VboTexture,VboCoord;
 
     StickFilter();
 
@@ -31,6 +36,8 @@ public:
 
     void setFaceInfo(Face *face);
 
+
+    void initCoord() override;
 
 protected:
     void preInit() override;

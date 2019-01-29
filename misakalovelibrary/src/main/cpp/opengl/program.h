@@ -24,7 +24,8 @@ public:
 
     virtual void chooseVertex(int degress, bool flip);
     void setTextureId(GLuint textureId);
-    void initCoord();
+
+    virtual void initCoord();
 
     virtual int initTexture();
 

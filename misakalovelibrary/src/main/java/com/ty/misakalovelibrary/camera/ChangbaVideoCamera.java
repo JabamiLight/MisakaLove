@@ -400,7 +400,7 @@ public class ChangbaVideoCamera {
 //                        if (i == 72) {
 //                            canvas.drawText("" + p.x + " " + p.y, p.x, p.y, mPaint);
 //                        }
-                        canvas.drawText("" + i, p.x, p.y, mPaint);
+                        canvas.drawText("" + i, p.x-15, p.y, mPaint);
 
                     }
                 }
