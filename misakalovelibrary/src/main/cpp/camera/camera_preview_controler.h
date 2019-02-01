@@ -11,6 +11,7 @@
 #include "../libcommon/CommonTools.h"
 #include "../libcommon/egl_core/egl_core.h"
 #include "camera_preview_render.h"
+#include "../libcommon/face/face_constant.h"
 
 #define CAMERA_FACING_BACK                                        0
 #define CAMERA_FACING_FRONT                                        1
@@ -144,6 +145,8 @@ private:
 
 
     void readCurFaceInfo();
+
+    int getIndex(int i) const;
 };
 
 

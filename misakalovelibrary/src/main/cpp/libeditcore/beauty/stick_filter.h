@@ -8,6 +8,7 @@
 
 #include "../../opengl/program.h"
 #include "../../3rdparty/facedet/face.h"
+#include "../../libcommon/face/face_constant.h"
 #define LOG_TAG "StickFilter"
 class StickFilter : public Program {
 
@@ -21,11 +22,12 @@ public:
 //    float **mouthPoint;
     float *mouthPoints= nullptr;
     float mouthX,mouthY;
+    Face* face= nullptr;
 
 
     int frameIndex=0;
 
-    GLuint VaoMouth,VboTexture,VboCoord;
+    GLuint vaoMouth,vboTexture,VboCoord,eboCoord;
 
     StickFilter();
 

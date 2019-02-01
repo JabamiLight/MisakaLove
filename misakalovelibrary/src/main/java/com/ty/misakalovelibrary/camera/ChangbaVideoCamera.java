@@ -140,12 +140,13 @@ public class ChangbaVideoCamera {
             mCamera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback() {
                 @Override
                 public void onPreviewFrame(byte[] data, Camera camera) {
-                    synchronized (mNv21Data) {
-                        System.arraycopy(data, 0, mNv21Data, 0, data.length);
-                    }
-                    mHandler.removeMessages(MESSAGE_DRAW_POINTS);
+//                    synchronized (mNv21Data) {
+//                        System.arraycopy(data, 0, mNv21Data, 0, data.length);
+//                    }
+                    mTmpBuffer=data;
                     mHandler.sendEmptyMessage(MESSAGE_DRAW_POINTS);
                     mCamera.addCallbackBuffer(mPreBuffer);
+//                    mCallback.notifyFrameAvailable();
                 }
             });
             mCamera.startPreview();
@@ -305,11 +306,12 @@ public class ChangbaVideoCamera {
 
     private void handleDrawPoints() {
 
-        synchronized (mNv21Data) {
+//        synchronized (mNv21Data) {
 //            System.arraycopy(NV21_mirror(mNv21Data, PREVIEW_WIDTH, PREVIEW_HEIGHT), 0, mTmpBuffer, 0,
 // mNv21Data.length);
-            System.arraycopy(mNv21Data, 0, mTmpBuffer, 0, mNv21Data.length);
-        }
+//            System.arraycopy(mNv21Data, 0, mTmpBuffer, 0, mNv21Data.length);
+//        }
+
         long cur = System.currentTimeMillis();
         if (frameIndex == 0) {
             mMultiTrack106.FaceTrackingInit(mTmpBuffer, VIDEO_HEIGHT, VIDEO_WIDTH);
@@ -326,7 +328,7 @@ public class ChangbaVideoCamera {
         mCallback.notifyFrameAvailable();
         frameIndex++;
 
-//        testface(faceActions);
+        testface(faceActions);
     }
 
     private void handleDrawPointsDirec(byte[] mTmpBuffer) {
@@ -386,7 +388,7 @@ public class ChangbaVideoCamera {
 //                        VIDEO_HEIGHT, true);
                 if (canvas != null) {
                     int strokeWidth = Math.max(VIDEO_WIDTH / 240, 2);
-                    mPaint.setTextSize(25);
+                    mPaint.setTextSize(12);
                     for (int i = 0; i < points.length; ++i) {
                         PointF p = points[i];
                         if (true) {

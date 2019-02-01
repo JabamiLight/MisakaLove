@@ -35,6 +35,7 @@ public:
 
     float x;
     float y;
+    char index=-1;
 
 };
 

@@ -267,9 +267,9 @@ void CameraPreviewControler::destroy() {
     eglCore->release();
     delete eglCore;
     eglCore = NULL;
-    if(face){
+    if (face) {
         delete face;
-        face= nullptr;
+        face = nullptr;
     }
     LOGI("leave MVRecordingPreviewController::destroy...");
 }
@@ -393,18 +393,26 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
     face->points = new Pointf[106];
     face->isInvalid = true;
     for (int i = 0; i < 106; i++) {
-        face->points[i].x = landmarks[i * 2];
-        face->points[i].y = landmarks[i * 2 + 1];
+        int index = 0;
+        index = getIndex(i);
+        face->points[i].x = landmarks[index * 2];
+        face->points[i].y = landmarks[index * 2 + 1];
     }
     if (degress == 270) {
-        for (int i = 0; i < 106; i++) {
-            face->points[i].x = face->points[i].x;
-        }
+//        for (int i = 0; i < 106; i++) {
+//            face->points[i].x = face->points[i].x;
+//        }
+
+
     } else {
 
     }
     renderer->setFaceInfo(face);
+}
 
+int CameraPreviewControler::getIndex(int i) const {
+    return faceConstant::convert2FacePPIndex[i];
+//    return i;
 }
 
 void CameraPreviewControler::setFaceInfo() {
@@ -444,7 +452,7 @@ void CameraPreviewControler::notFoundFaceInfo() {
 }
 
 void CameraPreviewControler::setEyePara(int i) {
-    para.eyeScale=0.3f*i/100;
+    para.eyeScale = 0.3f * i / 100;
     if (handler)
         handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
 }
@@ -454,16 +462,16 @@ void CameraPreviewControler::setBeautyPara() {
 }
 
 void CameraPreviewControler::setFacePara(jint i) {
-    para.faceDelta=0.5f-0.22f*i/100;
+    para.faceDelta = 0.5f - 0.22f * i / 100;
     if (handler)
         handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
 }
 
 void CameraPreviewControler::setBeauty(jint i) {
-    para.texelOffset=para.range(i,para.minstepoffset,para.maxstepoffset);
-    para.toneLevel=para.range(i,para.minToneValue,para.maxToneValue);
-    para.beautyLevel=para.range(i,para.minbeautyValue,para.maxbeautyValue);
-    para.brightLevel=para.range(i,para.minbrightValue,para.maxbrightValue);
+    para.texelOffset = para.range(i, para.minstepoffset, para.maxstepoffset);
+    para.toneLevel = para.range(i, para.minToneValue, para.maxToneValue);
+    para.beautyLevel = para.range(i, para.minbeautyValue, para.maxbeautyValue);
+    para.brightLevel = para.range(i, para.minbrightValue, para.maxbrightValue);
     if (handler)
         handler->postMessage(new Message(MSG_SET_BEAUTY_PARA));
 }

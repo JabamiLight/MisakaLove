@@ -63,38 +63,53 @@ void StickFilter::render() {
 //    glEnableVertexAttribArray(1);
 
     if (mouthPoints) {
-        glBindVertexArray(VaoMouth);
-//    float vertices[] = {
-//            0.5f, 0.5f, 0.0f, // top
-//            -0.5f, -0.5f, 0.0f, // bottom left
-//            0.5f, -0.5f, 0.0f  // bottom right
-//    };
-
-//        float vertices[] = {
-//                mouthPoints[0], mouthPoints[1], 0.0f,
-//                mouthPoints[20], mouthPoints[21], 0.0f,
-//                mouthPoints[18], mouthPoints[19], 0.0f,
-//        };
-        float vertices[] = {
-                (1.0f-mouthPoints[0]* 2 ), (mouthPoints[1]  * 2 - 1.0f),0.0f,//45//0
-                (1.0f-mouthPoints[20]* 2), (mouthPoints[21]  * 2 - 1.0f),0.0f,//37
-                (1.0f-mouthPoints[18]* 2), (mouthPoints[19]  * 2 - 1.0f),0.0f,//40  //0 1 2
-                (1.0f-mouthPoints[22]* 2), (mouthPoints[23]  * 2 - 1.0f),0.0f,//39  //2 1 3
-                (1.0f-mouthPoints[16]* 2), (mouthPoints[17]  * 2 - 1.0f),0.0f,//36  //2 3 4
-                (1.0f-mouthPoints[24]* 2), (mouthPoints[25]  * 2 - 1.0f),0.0f,//38  //4 3 5
-                (1.0f-mouthPoints[30]* 2), (mouthPoints[31]  * 2 - 1.0f),0.0f,//25  //4 5 6
-                (1.0f-mouthPoints[26]* 2), (mouthPoints[27]  * 2 - 1.0f),0.0f,//26  //6 5 7
-                (1.0f-mouthPoints[36]* 2), (mouthPoints[37]  * 2 - 1.0f),0.0f, //42
-                (1.0f-mouthPoints[28]* 2), (mouthPoints[29]  * 2 - 1.0f),0.0f,//33
-
+        glBindVertexArray(vaoMouth);
+        float vertices1[] = {
+                0.5f, -0.5f, 0.0f,  // bottom right
+                0.5f, 0.5f, 0.0f, // top
+                -0.5f, -0.5f, 0.0f, // bottom left
         };
+//        mouthPoints[16] = 1.0f - face->points[36].x / face->cameraHeight;
+//        mouthPoints[17] = face->points[36].y / face->cameraWidth;
+//
+//        float vertices1[] = {
+//                (1.0f-mouthPoints[0]* 2 ), (mouthPoints[1]  * 2 - 1.0f),0.0f,//45  //0
+//                (1.0f-mouthPoints[20]* 2), (mouthPoints[21]  * 2 - 1.0f),0.0f,//37 //1
+//                (1.0f-mouthPoints[18]* 2), (mouthPoints[19]  * 2 - 1.0f),0.0f,//40 //2
+//                (1.0f-mouthPoints[22]* 2), (mouthPoints[23]  * 2 - 1.0f),0.0f,//39 //3
+//                (1.0f-mouthPoints[16]* 2), (mouthPoints[17]  * 2 - 1.0f),0.0f,//36 //4
+//                (1.0f-mouthPoints[24]* 2), (mouthPoints[25]  * 2 - 1.0f),0.0f,//38 //5
+//                (1.0f-mouthPoints[30]* 2), (mouthPoints[31]  * 2 - 1.0f),0.0f,//25 //6
+//                (1.0f-mouthPoints[26]* 2), (mouthPoints[27]  * 2 - 1.0f),0.0f,//26 //7
+//                (1.0f-mouthPoints[28]* 2), (mouthPoints[29]  * 2 - 1.0f),0.0f,//33 //8
+//                (1.0f-mouthPoints[36]* 2), (mouthPoints[37]  * 2 - 1.0f),0.0f, //42//9
+//                (1.0f-mouthPoints[38]* 2), (mouthPoints[39]  * 2 - 1.0f),0.0f,//50 //10
+//                (1.0f-mouthPoints[14]* 2), (mouthPoints[15]  * 2 - 1.0f),0.0f,//2  //11
+//                (1.0f-mouthPoints[12]* 2), (mouthPoints[13]  * 2 - 1.0f),0.0f,//4  //12
+//                (1.0f-mouthPoints[10]* 2), (mouthPoints[11]  * 2 - 1.0f),0.0f,//30//13
+//                (1.0f-mouthPoints[32]* 2), (mouthPoints[33]  * 2 - 1.0f),0.0f,//103//14
+//                (1.0f-mouthPoints[8]* 2),  (mouthPoints[9]  * 2 - 1.0f),0.0f,//32  //15
+//                (1.0f-mouthPoints[34]* 2), (mouthPoints[35]  * 2 - 1.0f),0.0f,//63 //16
+//                (1.0f-mouthPoints[6]* 2),  (mouthPoints[7]  * 2 - 1.0f),0.0f,//64  //17
+//                (1.0f-mouthPoints[4]* 2),  (mouthPoints[5]  * 2 - 1.0f),0.0f,//65  //18
+//                (1.0f-mouthPoints[40]* 2), (mouthPoints[41]  * 2 - 1.0f),0.0f,//61 //19
+//
+//        };
+
+        float *vertices = new float[106 * 3];
+        for (int i = 0; i < 318; i += 3) {
+            vertices[i] = (1.0f - (1.0f - face->points[i / 3].x / face->cameraHeight) * 2);
+            vertices[i + 1] = (1.0f - ((face->points[36].y / face->cameraWidth) * 2 - 1.0f) * 2);
+            vertices[i + 2] = 0.0f;
+        }
 
         glBindBuffer(GL_ARRAY_BUFFER, VboCoord);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
         glEnableVertexAttribArray(0);
-
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 10);
+//        glBindVertexArray(VAO[vaoIndex]);
+//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glDrawElements(GL_TRIANGLES, 44*3, GL_UNSIGNED_INT, 0);
 
     }
 }
@@ -102,149 +117,70 @@ void StickFilter::render() {
 
 void StickFilter::setFaceInfo(Face *face) {
     if (face->isInvalid) {
-//        if(!mouthPoint){
-//            mouthPoint=new float*[18];
+        this->face = face;
+//        if (!mouthPoints) {
+//            mouthPoints = new float[42];
 //        }
-//        mouthPoint[0]=new float[2]{1.0f-face->points[45].x/face->cameraHeight,face->points[45].y/face->cameraWidth};
-//        mouthPoint[1]=new float[2]{1.0f-face->points[50].x/face->cameraHeight,face->points[50].y/face->cameraWidth};
-//        mouthPoint[2]=new float[2]{1.0f-face->points[65].x/face->cameraHeight,face->points[65].y/face->cameraWidth};
-//        mouthPoint[3]=new float[2]{1.0f-face->points[64].x/face->cameraHeight,face->points[64].y/face->cameraWidth};
-//        mouthPoint[4]=new float[2]{1.0f-face->points[32].x/face->cameraHeight,face->points[32].y/face->cameraWidth};
-//        mouthPoint[5]=new float[2]{1.0f-face->points[30].x/face->cameraHeight,face->points[30].y/face->cameraWidth};
-//        mouthPoint[6]=new float[2]{1.0f-face->points[4].x/face->cameraHeight,face->points[4].y/face->cameraWidth};
-//        mouthPoint[7]=new float[2]{1.0f-face->points[2].x/face->cameraHeight,face->points[2].y/face->cameraWidth};
-//        mouthPoint[8]=new float[2]{1.0f-face->points[36].x/face->cameraHeight,face->points[36].y/face->cameraWidth};
-//        mouthPoint[9]=new float[2]{1.0f-face->points[40].x/face->cameraHeight,face->points[40].y/face->cameraWidth};
-//        mouthPoint[10]=new float[2]{1.0f-face->points[37].x/face->cameraHeight,face->points[37].y/face->cameraWidth};
-//        mouthPoint[11]=new float[2]{1.0f-face->points[39].x/face->cameraHeight,face->points[39].y/face->cameraWidth};
-//        mouthPoint[12]=new float[2]{1.0f-face->points[38].x/face->cameraHeight,face->points[38].y/face->cameraWidth};
-//        mouthPoint[13]=new float[2]{1.0f-face->points[26].x/face->cameraHeight,face->points[26].y/face->cameraWidth};
-//        mouthPoint[14]=new float[2]{1.0f-face->points[33].x/face->cameraHeight,face->points[33].y/face->cameraWidth};
-//        mouthPoint[15]=new float[2]{1.0f-face->points[25].x/face->cameraHeight,face->points[25].y/face->cameraWidth};
-//        mouthPoint[16]=new float[2]{1.0f-face->points[103].x/face->cameraHeight,face->points[103].y/face->cameraWidth};
-//        mouthPoint[17]=new float[2]{1.0f-face->points[63].x/face->cameraHeight,face->points[63].y/face->cameraWidth};
-
-        if (!mouthPoints) {
-            mouthPoints = new float[38];
-        }
-//        mouthPoints[0] = 1.0f - face->points[45].x / face->cameraHeight;
-//        mouthPoints[1] = face->points[45].y / face->cameraWidth;
-//        mouthPoints[2] = 1.0f - face->points[50].x / face->cameraHeight;
-//        mouthPoints[3] = face->points[50].y / face->cameraWidth;
-//        mouthPoints[4] = 1.0f - face->points[65].x / face->cameraHeight;
-//        mouthPoints[5] = face->points[65].y / face->cameraWidth;
-//        mouthPoints[6] = 1.0f - face->points[64].x / face->cameraHeight;
-//        mouthPoints[7] = face->points[64].y / face->cameraWidth;
-//        mouthPoints[8] = 1.0f - face->points[32].x / face->cameraHeight;
-//        mouthPoints[9] = face->points[32].y / face->cameraWidth;
-//        mouthPoints[10] = 1.0f - face->points[30].x / face->cameraHeight;
-//        mouthPoints[11] = face->points[30].y / face->cameraWidth;
-//        mouthPoints[12] = 1.0f - face->points[4].x / face->cameraHeight;
-//        mouthPoints[13] = face->points[4].y / face->cameraWidth;
-//        mouthPoints[14] = 1.0f - face->points[2].x / face->cameraHeight;
-//        mouthPoints[15] = face->points[2].y / face->cameraWidth;
-//        mouthPoints[16] = 1.0f - face->points[36].x / face->cameraHeight;
-//        mouthPoints[17] = face->points[36].y / face->cameraWidth;
-//        mouthPoints[18] = 1.0f - face->points[40].x / face->cameraHeight;
-//        mouthPoints[19] = face->points[40].y / face->cameraWidth;
-//        mouthPoints[20] = 1.0f - face->points[37].x / face->cameraHeight;
-//        mouthPoints[21] = face->points[37].y / face->cameraWidth;
-//        mouthPoints[22] = 1.0f - face->points[39].x / face->cameraHeight;
-//        mouthPoints[23] = face->points[39].y / face->cameraWidth;
-//        mouthPoints[24] = 1.0f - face->points[38].x / face->cameraHeight;
-//        mouthPoints[25] = face->points[38].y / face->cameraWidth;
-//        mouthPoints[26] = 1.0f - face->points[26].x / face->cameraHeight;
-//        mouthPoints[27] = face->points[26].y / face->cameraWidth;
-//        mouthPoints[28] = 1.0f - face->points[33].x / face->cameraHeight;
-//        mouthPoints[29] = face->points[33].y / face->cameraWidth;
-//        mouthPoints[30] = 1.0f - face->points[25].x / face->cameraHeight;
-//        mouthPoints[31] = face->points[25].y / face->cameraWidth;
-//        mouthPoints[32] = 1.0f - face->points[103].x / face->cameraHeight;
-//        mouthPoints[33] = face->points[103].y / face->cameraWidth;
-//        mouthPoints[34] = 1.0f - face->points[63].x / face->cameraHeight;
-//        mouthPoints[35] = face->points[63].y / face->cameraWidth;
-
-
-        mouthPoints[0] =  face->points[45].x / face->cameraHeight;
-        mouthPoints[1] = face->points[45].y / face->cameraWidth;
-        mouthPoints[2] =  face->points[50].x / face->cameraHeight;
-        mouthPoints[3] = face->points[50].y / face->cameraWidth;
-        mouthPoints[4] =  face->points[65].x / face->cameraHeight;
-        mouthPoints[5] = face->points[65].y / face->cameraWidth;
-        mouthPoints[6] =  face->points[64].x / face->cameraHeight;
-        mouthPoints[7] = face->points[64].y / face->cameraWidth;
-        mouthPoints[8] =  face->points[32].x / face->cameraHeight;
-        mouthPoints[9] = face->points[32].y / face->cameraWidth;
-        mouthPoints[10] =  face->points[30].x / face->cameraHeight;
-        mouthPoints[11] = face->points[30].y / face->cameraWidth;
-        mouthPoints[12] =  face->points[4].x / face->cameraHeight;
-        mouthPoints[13] = face->points[4].y / face->cameraWidth;
-        mouthPoints[14] =  face->points[2].x / face->cameraHeight;
-        mouthPoints[15] = face->points[2].y / face->cameraWidth;
-        mouthPoints[16] =  face->points[36].x / face->cameraHeight;
-        mouthPoints[17] = face->points[36].y / face->cameraWidth;
-        mouthPoints[18] =  face->points[40].x / face->cameraHeight;
-        mouthPoints[19] = face->points[40].y / face->cameraWidth;
-        mouthPoints[20] =  face->points[37].x / face->cameraHeight;
-        mouthPoints[21] = face->points[37].y / face->cameraWidth;
-        mouthPoints[22] =  face->points[39].x / face->cameraHeight;
-        mouthPoints[23] = face->points[39].y / face->cameraWidth;
-        mouthPoints[24] =  face->points[38].x / face->cameraHeight;
-        mouthPoints[25] = face->points[38].y / face->cameraWidth;
-        mouthPoints[26] =  face->points[26].x / face->cameraHeight;
-        mouthPoints[27] = face->points[26].y / face->cameraWidth;
-        mouthPoints[28] =  face->points[33].x / face->cameraHeight;
-        mouthPoints[29] = face->points[33].y / face->cameraWidth;
-        mouthPoints[30] =  face->points[25].x / face->cameraHeight;
-        mouthPoints[31] = face->points[25].y / face->cameraWidth;
-        mouthPoints[32] =  face->points[103].x / face->cameraHeight;
-        mouthPoints[33] = face->points[103].y / face->cameraWidth;
-        mouthPoints[34] =  face->points[63].x / face->cameraHeight;
-        mouthPoints[35] = face->points[63].y / face->cameraWidth;
-        mouthPoints[36] = face->points[42].x / face->cameraHeight;
-        mouthPoints[37] = face->points[42].y / face->cameraWidth;
-
-
     }
 
 }
 
 void StickFilter::initCoord() {
-    glGenVertexArrays(1, &VaoMouth);
-    glBindVertexArray(VaoMouth);
+    glGenVertexArrays(1, &vaoMouth);
+    glBindVertexArray(vaoMouth);
     glGenBuffers(1, &VboCoord);
-    glGenBuffers(1, &VboTexture);
+    glGenBuffers(1, &vboTexture);
+    glGenBuffers(1, &eboCoord);
+//    float textCoord[]={
+//            0.0f,0.0f,
+//            1.0f,1.0f,
+//            0.0f,1.0f
+//    };
+
+//    float textCoord1[] = {
+//            312.0f / 800.0f, 719.0f / 1067.0f,//45
+//            346.0f / 800.0f, 713.0f / 1067.0f,//37
+//            354.0f / 800.0f, 727.0f / 1067.0f,//40
+//            379.0f / 800.0f, 710.0f / 1067.0f,//39
+//            400.0f / 800.0f, 731.0f / 1067.0f,//36
+//            401.0f / 800.0f, 714.0f / 1067.0f,//38
+//            442.0f / 800.0f, 729.0f / 1067.0f,//25
+//            421.0f / 800.0f, 713.0f / 1067.0f,//26
+//            454.0f / 800.0f, 713.0f / 1067.0f,//33
+//            489.0f / 800.0f, 717.0f / 1067.0f,//42
+//            489.0f / 800.0f, 717.0f / 1067.0f,//50
+//            442.0f / 800.0f, 736.0f / 1067.0f,//2
+//            464.0f / 800.0f, 741.0f / 1067.0f,//4
+//            434.0f / 800.0f, 758.0f / 1067.0f,//30
+//            401.0f / 800.0f, 741.0f / 1067.0f,//103
+//            399.0f / 800.0f, 766.0f / 1067.0f,//32
+//            352.0f / 800.0f, 736.0f / 1067.0f,//63
+//            364.0f / 800.0f, 759.0f / 1067.0f,//64
+//            335.0f / 800.0f, 743.0f / 1067.0f,//65
+//            312.0f / 800.0f, 719.0f / 1067.0f,//61
+//
+//    };
+    float *texCoord = new float[106 * 2];
+    for (int i = 0; i < 212; i += 2) {
+        texCoord[i]=faceConstant::textureCoord[faceConstant::colorIndex[i]]/800.0f;
+        texCoord[i+1]=faceConstant::textureCoord[faceConstant::colorIndex[i]+1]/1067.0f;
+    }
 
 
-    float textCoord[] = {
-            1.0f-312.0f/800.0f,719.0f/1067.0f,//0
-            1.0f-346.0f/800.0f,713.0f/1067.0f,//37
-            1.0f-354.0f/800.0f,727.0f/1067.0f,//40
-            1.0f-379.0f/800.0f,710.0f/1067.0f,//39
-            1.0f-400.0f/800.0f,731.0f/1067.0f,//36
-            1.0f-401.0f/800.0f,714.0f/1067.0f,//38
-            1.0f-442.0f/800.0f,729.0f/1067.0f,//25
-            1.0f-421.0f/800.0f,713.0f/1067.0f,//26
-            1.0f-489.0f/800.0f,717.0f/1067.0f,//42
-            1.0f-454.0f/800.0f,713.0f/1067.0f,//33
-    };
-    glBindBuffer(GL_ARRAY_BUFFER, VboTexture);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(textCoord), textCoord, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, vboTexture);
+    glBufferData(GL_ARRAY_BUFFER, 106*2* sizeof(float), texCoord,
+                 GL_STATIC_DRAW);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(1);
 
-//    float vertices[] = {
-//            0.5f, 0.5f, 0.0f, // top
-//            -0.5f, -0.5f, 0.0f, // bottom left
-//            0.5f, -0.5f, 0.0f  // bottom right
-//    };
-//    glBindBuffer(GL_ARRAY_BUFFER, VboCoord);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-//    glEnableVertexAttribArray(0);
 
+    // 3. 复制我们的索引数组到一个索引缓冲中，供OpenGL使用
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboCoord);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 44* sizeof(int),
+                 faceConstant::mouthIndex, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
 }
+
 
