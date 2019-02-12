@@ -403,7 +403,6 @@ CameraPreviewControler::setFaceInfo(int ID, int left, int top, int right, int bo
 //            face->points[i].x = face->points[i].x;
 //        }
 
-
     } else {
 
     }

@@ -19,15 +19,13 @@ import com.google.gson.Gson
 class ImageDrawView(context: Context) : ImageView(context) {
 
 
-
-
     var testBean: TestBean
     var paint: Paint = Paint()
 
 
     init {
-        paint.color= Color.RED
-        paint.textSize= 15F
+        paint.color = Color.RED
+        paint.textSize = 40F
 
         testBean = Gson().fromJson("{\n" +
                 "    \"minAppVersion\": 400,\n" +
@@ -337,7 +335,12 @@ class ImageDrawView(context: Context) : ImageView(context) {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         for (i in testBean.facePoints.indices step 2) {
-            canvas?.drawText("${i/2}", testBean.facePoints[i].toFloat()*width/800, testBean.facePoints[i+1].toFloat()*height/1067,paint)
+            if ((i/2) % 2 == 0) {
+                paint.color = Color.BLACK
+            } else {
+                paint.color = Color.RED
+            }
+            canvas?.drawText("${i / 2}", testBean.facePoints[i].toFloat() * width / 800, testBean.facePoints[i + 1].toFloat() * height / 1067, paint)
         }
     }
 

@@ -327,8 +327,7 @@ public class ChangbaVideoCamera {
         mCallback.setFaceInfo(firstFace);
         mCallback.notifyFrameAvailable();
         frameIndex++;
-
-        testface(faceActions);
+//        testface(faceActions);
     }
 
     private void handleDrawPointsDirec(byte[] mTmpBuffer) {

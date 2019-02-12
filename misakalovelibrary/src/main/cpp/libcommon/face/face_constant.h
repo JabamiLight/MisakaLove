@@ -7,18 +7,26 @@
 
 namespace faceConstant {
 
+
+    extern int convert2FacePPSize;
     extern unsigned char convert2FacePPIndex[];
 
+
+    //颜色对应下标
+    extern int colorIndexSize;
     extern char colorIndex[] ;
 
+
+    //纹理坐标数组大小
+    extern int textureCoordSize;
     extern float textureCoord[];
-
-
+    //嘴部大小
+    extern int mouseIndexSize;
     extern  int mouthIndex[];
 
-
-    extern unsigned char triangleIndex[] ;
-
+    //整体大小
+    extern int triangleIndexSize;
+    extern int triangleIndex[] ;
 
 }
 //

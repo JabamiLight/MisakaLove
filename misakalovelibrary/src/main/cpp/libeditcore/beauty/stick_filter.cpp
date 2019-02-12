@@ -62,13 +62,14 @@ void StickFilter::render() {
 //    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, textCoord);
 //    glEnableVertexAttribArray(1);
 
-    if (mouthPoints) {
+    if (face&&face->isInvalid) {
         glBindVertexArray(vaoMouth);
-        float vertices1[] = {
-                0.5f, -0.5f, 0.0f,  // bottom right
-                0.5f, 0.5f, 0.0f, // top
-                -0.5f, -0.5f, 0.0f, // bottom left
-        };
+//        float vertices[] = {
+//                0.5f, -0.5f, 0.0f,  // bottom right
+//                0.5f, 0.5f, 0.0f, // top
+//                -0.5f, -0.5f, 0.0f, // bottom left
+//                1.0f, 0.0f, 0.0f, // bottom left
+//        };
 //        mouthPoints[16] = 1.0f - face->points[36].x / face->cameraHeight;
 //        mouthPoints[17] = face->points[36].y / face->cameraWidth;
 //
@@ -96,20 +97,27 @@ void StickFilter::render() {
 //
 //        };
 
-        float *vertices = new float[106 * 3];
+//        mouthPoints[0] = 1.0f - face->points[45].x / face->cameraHeight;
+//        mouthPoints[1] = face->points[45].y / face->cameraWidth;
+        if(!vertices){
+            vertices = new float[106 * 3];
+        }
         for (int i = 0; i < 318; i += 3) {
-            vertices[i] = (1.0f - (1.0f - face->points[i / 3].x / face->cameraHeight) * 2);
-            vertices[i + 1] = (1.0f - ((face->points[36].y / face->cameraWidth) * 2 - 1.0f) * 2);
+            float pointX=face->points[i / 3].x / face->cameraHeight;
+            float pointY=face->points[i / 3].y / face->cameraWidth;
+            vertices[i] = 1.0f-pointX* 2;
+            vertices[i + 1] = (pointY  * 2 - 1.0f);
             vertices[i + 2] = 0.0f;
         }
-
         glBindBuffer(GL_ARRAY_BUFFER, VboCoord);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, 106* 3 * sizeof(float), vertices, GL_DYNAMIC_DRAW);
+//        glBufferData(GL_ARRAY_BUFFER,  sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
         glEnableVertexAttribArray(0);
 //        glBindVertexArray(VAO[vaoIndex]);
 //        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glDrawElements(GL_TRIANGLES, 44*3, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, faceConstant::mouseIndexSize, GL_UNSIGNED_INT, 0);
+//        glDrawElements(GL_TRIANGLES, 2*3, GL_UNSIGNED_INT, 0);
 
     }
 }
@@ -162,8 +170,8 @@ void StickFilter::initCoord() {
 //    };
     float *texCoord = new float[106 * 2];
     for (int i = 0; i < 212; i += 2) {
-        texCoord[i]=faceConstant::textureCoord[faceConstant::colorIndex[i]]/800.0f;
-        texCoord[i+1]=faceConstant::textureCoord[faceConstant::colorIndex[i]+1]/1067.0f;
+        texCoord[i]=faceConstant::textureCoord[faceConstant::colorIndex[i/2]*2]/800.0f;
+        texCoord[i+1]=faceConstant::textureCoord[faceConstant::colorIndex[i/2]*2+1]/1067.0f;
     }
 
 
@@ -176,11 +184,12 @@ void StickFilter::initCoord() {
 
     // 3. 复制我们的索引数组到一个索引缓冲中，供OpenGL使用
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboCoord);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 44* sizeof(int),
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, faceConstant::mouseIndexSize*sizeof(int),
                  faceConstant::mouthIndex, GL_STATIC_DRAW);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2*3*sizeof(int),
+//                 faceConstant::mouthIndex+54, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
 }
 
 

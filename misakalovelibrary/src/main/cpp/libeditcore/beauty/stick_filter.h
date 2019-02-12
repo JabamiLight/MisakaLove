@@ -23,7 +23,7 @@ public:
     float *mouthPoints= nullptr;
     float mouthX,mouthY;
     Face* face= nullptr;
-
+    float *vertices= nullptr;
 
     int frameIndex=0;
 
@@ -48,6 +48,7 @@ protected:
 
 public:
     void render() override;
+
 };
 
 
